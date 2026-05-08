@@ -29,6 +29,7 @@ ENV/
 .idea/
 *.swp
 *.swo
+*
 
 # Logs
 *.log
@@ -45,19 +46,15 @@ keys.json
 .DS_Store
 Thumbs.db
 
-# Exclude large external projects
-mcp_master/external/claude-code/
-mcp_master/external/claude-code-info/
-mcp_master/external/claude-code-leaked/
-mcp_master/external/claude-code0/
-mcp_master/external/claude-code1/
-mcp_master/external/claude-code2/
-mcp_master/external/claude-code4/
-mcp_master/external/claude-code5/
-mcp_master/external/collection-claude-code-source-code/
-mcp_master/external/LMCache/
-mcp_master/external/other-s/
-mcp_master/external/pc-pilot-pro/
-mcp_master/external/pearai-app/
-mcp_master/external/PikoClaw/
-mcp_master/external/rotorquant/
+# Exclude embedded Git repositories
+mcp_master/custom_tools/metoro
+mcp_master/database_tools/db-universal
+mcp_master/database_tools/mongodb
+mcp_master/devops_tools/kubernetes
+mcp_master/mcp_tools/fastmcp
+mcp_master/system/snapshot_initial/custom_tools/metoro
+mcp_master/system/snapshot_initial/database_tools/db-universal
+mcp_master/system/snapshot_initial/database_tools/mongodb
+mcp_master/system/snapshot_initial/devops_tools/kubernetes
+mcp_master/web_tools/firecrawl
+mcp_master/web_tools/playwright
