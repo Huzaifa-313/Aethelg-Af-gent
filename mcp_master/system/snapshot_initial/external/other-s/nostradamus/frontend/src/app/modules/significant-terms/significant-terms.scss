@@ -1,0 +1,40 @@
+@import "../../styles/colors";
+$selectHeight: 30px;
+
+.significant-terms {
+	padding-top: 20px;
+	color: $darkGray;
+
+	height: 100%;
+	position: relative;
+	margin: auto;
+	width: 100%;
+
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-content: center;
+	align-items: center;
+
+	&__select-wrapper {
+		position: absolute;
+		height: $selectHeight;
+		right: -10px;
+		top: -10px;
+		border-radius: 1000px;
+		padding: 5px 15px;
+		background-color: $veryLightGray;
+		display: flex;
+		align-items: center;
+
+		cursor: pointer; 
+
+		.dropdown-element__select{
+			border: none;
+			height: $selectHeight;
+		}
+		.dropdown-element-wrapper{
+			max-height: 180px;
+		}
+	}
+}

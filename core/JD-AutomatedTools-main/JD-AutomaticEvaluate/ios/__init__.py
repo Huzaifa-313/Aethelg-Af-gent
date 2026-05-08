@@ -1,0 +1,30 @@
+# AETHELGARD MERGED FILE
+# Origin Repository: other s
+# Original Path: JD-AutomatedTools-main\JD-AutomaticEvaluate\ios\__init__.py
+# Merge Date: 2026-05-07T19:29:36.514180
+# ---
+
+"""
+Author: HDJ @https://github.com/Goodnameisfordoggy
+Time@IDE: 2025-07-10 00:29:23 @PyCharm
+Description: 
+
+				|   早岁已知世事艰，仍许飞鸿荡云间；
+				|   曾恋嘉肴香绕案，敲键弛张荡波澜。
+				|
+				|   功败未成身无畏，坚持未果心不悔；
+				|   皮囊终作一抔土，独留屎山贯寰宇。
+
+Copyright (c) 2024-2025 by HDJ, All Rights Reserved.
+"""
+from .src.automaticEvaluate import JDAppAutomaticEvaluate
+from .src.logger import get_logger, init_logger
+from .src.test import test_auto_func
+from .src.selector import WaitForSelector
+LOG = init_logger("DEBUG")
+
+JDAppAutomaticEvaluate().run()
+# JDAppAutomaticEvaluate().auto_test()
+
+
+print("运行结束！！！")

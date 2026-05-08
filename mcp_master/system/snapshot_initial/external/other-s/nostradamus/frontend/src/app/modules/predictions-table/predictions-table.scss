@@ -1,0 +1,131 @@
+@import "src/app/styles/colors";
+
+.predictions-table {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+
+	&__pagination {
+	}
+
+	&__scrollable-container {
+		overflow-y: scroll;
+	}
+
+	&__table-cell-title {
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	&__table {
+		width: 100%;
+
+		th {
+			position: sticky;
+			top: 0;
+			z-index: 5;
+			background: $white;
+			transform: translateY(-5px);
+
+			font-size: 16px;
+			line-height: 20px;
+			color: $darkGray;
+			text-align: start;
+
+			padding: 20px 18px 5px 18px;
+
+			&:first-child {
+				padding-left: 0;
+			}
+
+			&:first-child,
+			&:last-child {
+				text-align: left;
+			}
+		}
+
+		td {
+			max-width: 400px;
+			text-align: center;
+			padding: 20px 18px 0;
+
+			font-size: 16px;
+			line-height: 20px;
+			font-weight: 500;
+			color: $darkGray;
+			text-align: start;
+
+			@media screen and (max-width: 1280px) {
+				font-size: 13px;
+				font-weight: 400;
+			}
+
+			&:first-child {
+				padding-left: 0;
+			}
+
+			&:first-child,
+			&:last-child {
+				text-align: left;
+			}
+		}
+	}
+}
+
+.predictions-table-pagination {
+	display: flex;
+	justify-content: flex-end;
+
+	&__field {
+		display: flex;
+		align-items: center;
+
+		&:not(:last-child) {
+			margin-right: 40px;
+		}
+
+		.dropdown-element {
+			width: 60px;
+
+			&__select {
+				background: transparent;
+				padding: 0;
+				border: none;
+			}
+
+			&-wrapper {
+				transform: translateX(-10px);
+				max-width: min-content;
+			}
+		}
+	}
+
+	&__button {
+		margin: 0 5px;
+		background-color: transparent;
+
+		&__icon {
+			color: $darkGray;
+		}
+
+		&:disabled {
+			color: $grayDisabled;
+		}
+	}
+
+	&__label {
+		margin: 0 10px;
+
+		font-size: 16px;
+		line-height: 20px;
+		font-weight: 500;
+		color: $grayDisabledText;
+	}
+
+	&__value {
+		font-size: 16px;
+		line-height: 20px;
+		color: $darkGray;
+	}
+}

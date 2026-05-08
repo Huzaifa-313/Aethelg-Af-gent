@@ -1,0 +1,8 @@
+{
+  "name": "time",
+  "description": "Time and date utilities",
+  "category": "productivity_tools",
+  "keywords": ["time", "date", "now", "timestamp"],
+  "server": "node",
+  "args": ["index.js"]
+}

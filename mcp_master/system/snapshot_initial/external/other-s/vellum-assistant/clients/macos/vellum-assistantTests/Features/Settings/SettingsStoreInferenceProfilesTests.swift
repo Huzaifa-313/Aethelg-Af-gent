@@ -1,0 +1,663 @@
+import XCTest
+@testable import VellumAssistantLib
+@testable import VellumAssistantShared
+
+/// Verifies the inference-profile state and CRUD APIs on `SettingsStore`:
+/// daemon-push parsing into `profiles` / `activeProfile`, profile create/
+/// update via `setProfile`, active selection via `setActiveProfile`,
+/// reference-aware deletion via `deleteProfile`, and the two-step
+/// clear-then-write semantics of `replaceCallSiteOverride` when
+/// assigning a profile.
+@MainActor
+final class SettingsStoreInferenceProfilesTests: XCTestCase {
+
+    private var mockSettingsClient: MockSettingsClient!
+    private var store: SettingsStore!
+
+    override func setUp() {
+        super.setUp()
+        let fixture = SettingsTestFixture.make()
+        store = fixture.store
+        mockSettingsClient = fixture.mockClient
+    }
+
+    override func tearDown() {
+        store = nil
+        mockSettingsClient = nil
+        super.tearDown()
+    }
+
+    // MARK: - Helpers
+
+    /// Returns the most recent `llm.profiles` patch payload captured by
+    /// the mock client, or `nil` if no such patch has been emitted.
+    private func lastProfilesPatch() -> [String: Any]? {
+        for payload in mockSettingsClient.patchConfigCalls.reversed() {
+            if let llm = payload["llm"] as? [String: Any],
+               let profiles = llm["profiles"] as? [String: Any] {
+                return profiles
+            }
+        }
+        return nil
+    }
+
+    /// Returns the most recent `llm.profileOrder` patch payload captured by
+    /// the mock client, or `nil` if no such patch has been emitted.
+    private func lastProfileOrderPatch() -> [String]? {
+        for payload in mockSettingsClient.patchConfigCalls.reversed() {
+            if let llm = payload["llm"] as? [String: Any],
+               let order = llm["profileOrder"] as? [String] {
+                return order
+            }
+        }
+        return nil
+    }
+
+    /// Returns the most recent `llm.activeProfile` value captured by the
+    /// mock client, or `nil` if no such patch has been emitted.
+    private func lastActiveProfilePatch() -> String? {
+        for payload in mockSettingsClient.patchConfigCalls.reversed() {
+            if let llm = payload["llm"] as? [String: Any],
+               let active = llm["activeProfile"] as? String {
+                return active
+            }
+        }
+        return nil
+    }
+
+    // MARK: - Initial state
+
+    func testInitialStateSeedsBalancedActiveProfile() {
+        XCTAssertEqual(store.activeProfile, "balanced")
+        XCTAssertTrue(store.profiles.isEmpty)
+    }
+
+    // MARK: - Daemon push parsing
+
+    func testLoadInferenceProfilesPopulatesPublishedState() {
+        let config: [String: Any] = [
+            "llm": [
+                "activeProfile": "quality-optimized",
+                "profiles": [
+                    "balanced": [
+                        "provider": "anthropic",
+                        "model": "claude-sonnet-4-6",
+                        "maxTokens": 16000,
+                        "effort": "high",
+                        "thinking": ["enabled": true, "streamThinking": true],
+                    ],
+                    "quality-optimized": [
+                        "provider": "anthropic",
+                        "model": "claude-opus-4-7",
+                        "maxTokens": 32000,
+                        "effort": "max",
+                        "thinking": ["enabled": true, "streamThinking": true],
+                    ],
+                    "cost-optimized": [
+                        "provider": "anthropic",
+                        "model": "claude-haiku-4-5-20251001",
+                        "maxTokens": 8192,
+                        "effort": "low",
+                        "thinking": ["enabled": false, "streamThinking": false],
+                    ],
+                ],
+            ]
+        ]
+
+        store.loadInferenceProfiles(config: config)
+
+        XCTAssertEqual(store.activeProfile, "quality-optimized")
+        XCTAssertEqual(store.profiles.count, 3)
+
+        // Profiles render in alphabetical order so the UI list is stable
+        // across config refreshes.
+        XCTAssertEqual(store.profiles.map(\.name), ["balanced", "cost-optimized", "quality-optimized"])
+
+        let balanced = store.profiles.first(where: { $0.name == "balanced" })
+        XCTAssertEqual(balanced?.provider, "anthropic")
+        XCTAssertEqual(balanced?.model, "claude-sonnet-4-6")
+        XCTAssertEqual(balanced?.maxTokens, 16000)
+        XCTAssertEqual(balanced?.effort, "high")
+        XCTAssertEqual(balanced?.thinkingEnabled, true)
+        XCTAssertEqual(balanced?.thinkingStreamThinking, true)
+    }
+
+    func testLoadInferenceProfilesUsesExplicitOrderAndNormalizesStaleEntries() {
+        store.loadInferenceProfiles(config: [
+            "llm": [
+                "activeProfile": "fast",
+                "profileOrder": ["fast", "missing", "fast"],
+                "profiles": [
+                    "balanced": ["model": "claude-sonnet-4-6"],
+                    "fast": ["model": "claude-haiku-4-5"],
+                    "quality-optimized": ["model": "claude-opus-4-7"],
+                ],
+            ]
+        ])
+
+        XCTAssertEqual(store.activeProfile, "fast")
+        XCTAssertEqual(store.profiles.map(\.name), ["fast", "balanced", "quality-optimized"])
+        XCTAssertEqual(store.profileOrder, ["fast", "balanced", "quality-optimized"])
+    }
+
+    func testLoadInferenceProfilesEmptyConfigKeepsDefaultActiveProfile() {
+        store.loadInferenceProfiles(config: [:])
+        XCTAssertEqual(store.activeProfile, "balanced", "Empty config must not clobber the seeded default")
+        XCTAssertTrue(store.profiles.isEmpty)
+    }
+
+    func testLoadInferenceProfilesReplacesPriorState() {
+        store.loadInferenceProfiles(config: [
+            "llm": [
+                "activeProfile": "fast",
+                "profiles": ["fast": ["model": "claude-haiku-4-5"]],
+            ]
+        ])
+        XCTAssertEqual(store.activeProfile, "fast")
+        XCTAssertEqual(store.profiles.map(\.name), ["fast"])
+
+        // Reload against a config with different profiles — old entries
+        // must be evicted, not merged.
+        store.loadInferenceProfiles(config: [
+            "llm": [
+                "activeProfile": "balanced",
+                "profiles": ["balanced": ["model": "claude-sonnet-4-6"]],
+            ]
+        ])
+        XCTAssertEqual(store.activeProfile, "balanced")
+        XCTAssertEqual(store.profiles.map(\.name), ["balanced"])
+    }
+
+    // MARK: - setActiveProfile
+
+    func testSetActiveProfileRoundTrips() async {
+        let success = await store.setActiveProfile("quality-optimized")
+        XCTAssertTrue(success)
+        XCTAssertEqual(store.activeProfile, "quality-optimized")
+        XCTAssertEqual(lastActiveProfilePatch(), "quality-optimized")
+    }
+
+    func testSetActiveProfileFailureLeavesLocalStateUntouched() async {
+        mockSettingsClient.patchConfigResponse = false
+        let success = await store.setActiveProfile("quality-optimized")
+        XCTAssertFalse(success)
+        XCTAssertEqual(
+            store.activeProfile,
+            "balanced",
+            "Local state must not advance when the daemon PATCH fails"
+        )
+    }
+
+    // MARK: - setProfile
+
+    func testSetProfileRoundTripsAndUpdatesPublishedState() async {
+        let fragment = InferenceProfile(
+            name: "fast",
+            provider: "anthropic",
+            model: "claude-haiku-4-5",
+            maxTokens: 4096,
+            effort: "low",
+            thinkingEnabled: false,
+            thinkingStreamThinking: false
+        )
+        let success = await store.setProfile(name: "fast", fragment: fragment)
+        XCTAssertTrue(success)
+
+        let profiles = lastProfilesPatch()
+        XCTAssertNotNil(profiles)
+        let fast = profiles?["fast"] as? [String: Any]
+        XCTAssertEqual(fast?["provider"] as? String, "anthropic")
+        XCTAssertEqual(fast?["model"] as? String, "claude-haiku-4-5")
+        XCTAssertEqual(fast?["maxTokens"] as? Int, 4096)
+        XCTAssertEqual(fast?["effort"] as? String, "low")
+        let thinking = fast?["thinking"] as? [String: Any]
+        XCTAssertEqual(thinking?["enabled"] as? Bool, false)
+        XCTAssertEqual(thinking?["streamThinking"] as? Bool, false)
+
+        // Local cache reflects the new profile.
+        XCTAssertEqual(store.profiles.map(\.name), ["fast"])
+        let stored = store.profiles.first(where: { $0.name == "fast" })
+        XCTAssertEqual(stored?.model, "claude-haiku-4-5")
+    }
+
+    func testSetProfileAppendsToExplicitProfileOrder() async {
+        store.loadInferenceProfiles(config: [
+            "llm": [
+                "profileOrder": ["fast", "balanced"],
+                "profiles": [
+                    "balanced": ["model": "claude-sonnet-4-6"],
+                    "fast": ["model": "claude-haiku-4-5"],
+                ],
+            ]
+        ])
+
+        let fragment = InferenceProfile(name: "custom", model: "gpt-5.5")
+        let success = await store.setProfile(name: "custom", fragment: fragment)
+
+        XCTAssertTrue(success)
+        XCTAssertEqual(store.profiles.map(\.name), ["fast", "balanced", "custom"])
+        XCTAssertEqual(lastProfileOrderPatch(), ["fast", "balanced", "custom"])
+    }
+
+    func testSetProfileRenameReplacesOldNameInExplicitProfileOrder() async {
+        store.loadInferenceProfiles(config: [
+            "llm": [
+                "profileOrder": ["other", "old-name"],
+                "profiles": [
+                    "old-name": ["model": "claude-sonnet-4-6"],
+                    "other": ["model": "claude-haiku-4-5"],
+                ],
+            ]
+        ])
+
+        let fragment = InferenceProfile(name: "new-name", model: "gpt-5.5")
+        let success = await store.setProfile(
+            name: "new-name",
+            fragment: fragment,
+            replacingOrderName: "old-name"
+        )
+
+        XCTAssertTrue(success)
+        XCTAssertEqual(store.profiles.map(\.name), ["other", "new-name"])
+        XCTAssertEqual(lastProfileOrderPatch(), ["other", "new-name"])
+    }
+
+    func testSetProfileUpdatesExistingEntry() async {
+        store.loadInferenceProfiles(config: [
+            "llm": [
+                "profiles": [
+                    "balanced": [
+                        "provider": "anthropic",
+                        "model": "claude-sonnet-4-6",
+                        "maxTokens": 16000,
+                    ]
+                ]
+            ]
+        ])
+        XCTAssertEqual(store.profiles.count, 1)
+
+        // Partial fragment — only the model changes. The daemon deep-merges,
+        // so `provider` and `maxTokens` must remain set locally as well.
+        let updated = InferenceProfile(
+            name: "balanced",
+            model: "gpt-5"
+        )
+        let success = await store.setProfile(name: "balanced", fragment: updated)
+        XCTAssertTrue(success)
+
+        XCTAssertEqual(store.profiles.count, 1, "Updating an existing profile must not duplicate the entry")
+        let stored = store.profiles.first(where: { $0.name == "balanced" })
+        XCTAssertEqual(stored?.model, "gpt-5")
+        XCTAssertEqual(stored?.provider, "anthropic", "Local cache must mirror the daemon's deep-merge — fields absent from the fragment must persist")
+        XCTAssertEqual(stored?.maxTokens, 16000, "Local cache must mirror the daemon's deep-merge — fields absent from the fragment must persist")
+    }
+
+    func testReplaceProfileDropsHiddenLeavesFromPayloadAndLocalCache() async {
+        store.loadInferenceProfiles(config: [
+            "llm": [
+                "profiles": [
+                    "balanced": [
+                        "provider": "anthropic",
+                        "model": "claude-opus-4-7",
+                        "maxTokens": 32000,
+                        "effort": "max",
+                        "speed": "fast",
+                        "verbosity": "high",
+                        "temperature": 0.7,
+                        "thinking": ["enabled": true, "streamThinking": true],
+                    ]
+                ]
+            ]
+        ])
+
+        let replacement = InferenceProfile(
+            name: "balanced",
+            provider: "openai",
+            model: "gpt-5.5",
+            maxTokens: 128000,
+            effort: "high",
+            verbosity: "medium"
+        )
+        let success = await store.replaceProfile(name: "balanced", fragment: replacement)
+        XCTAssertTrue(success)
+
+        XCTAssertEqual(mockSettingsClient.replaceInferenceProfileCalls.count, 1)
+        let call = mockSettingsClient.replaceInferenceProfileCalls[0]
+        XCTAssertEqual(call.name, "balanced")
+        XCTAssertEqual(call.fragment["provider"] as? String, "openai")
+        XCTAssertEqual(call.fragment["model"] as? String, "gpt-5.5")
+        XCTAssertEqual(call.fragment["maxTokens"] as? Int, 128000)
+        XCTAssertEqual(call.fragment["effort"] as? String, "high")
+        XCTAssertEqual(call.fragment["verbosity"] as? String, "medium")
+        XCTAssertNil(call.fragment["speed"])
+        XCTAssertNil(call.fragment["temperature"])
+        XCTAssertNil(call.fragment["thinking"])
+
+        let stored = store.profiles.first(where: { $0.name == "balanced" })
+        XCTAssertEqual(stored?.provider, "openai")
+        XCTAssertEqual(stored?.model, "gpt-5.5")
+        XCTAssertEqual(stored?.maxTokens, 128000)
+        XCTAssertEqual(stored?.effort, "high")
+        XCTAssertEqual(stored?.verbosity, "medium")
+        XCTAssertNil(stored?.speed)
+        XCTAssertEqual(stored?.temperature, .some(.unset))
+        XCTAssertNil(stored?.thinkingEnabled)
+        XCTAssertNil(stored?.thinkingStreamThinking)
+    }
+
+    func testReplaceProfileRoundTripsContextWindowOverride() async {
+        store.loadInferenceProfiles(config: [
+            "llm": [
+                "profiles": [
+                    "long-context": [
+                        "provider": "openai",
+                        "model": "gpt-5.5",
+                        "contextWindow": [
+                            "maxInputTokens": 150000,
+                            "summaryBudgetRatio": 0.05,
+                        ],
+                    ]
+                ]
+            ]
+        ])
+
+        var replacement = store.profiles.first(where: { $0.name == "long-context" })!
+        replacement.contextWindowMaxInputTokens = 175000
+        let success = await store.replaceProfile(name: "long-context", fragment: replacement)
+        XCTAssertTrue(success)
+
+        let call = mockSettingsClient.replaceInferenceProfileCalls[0]
+        let contextWindow = call.fragment["contextWindow"] as? [String: Any]
+        XCTAssertEqual(contextWindow?["maxInputTokens"] as? Int, 175000)
+        XCTAssertEqual(contextWindow?["summaryBudgetRatio"] as? Double, 0.05)
+
+        let stored = store.profiles.first(where: { $0.name == "long-context" })
+        XCTAssertEqual(stored?.contextWindowMaxInputTokens, 175000)
+    }
+
+    // MARK: - deleteProfile blocked-by-active
+
+    func testDeleteProfileBlockedByActive() async {
+        store.loadInferenceProfiles(config: [
+            "llm": [
+                "activeProfile": "balanced",
+                "profiles": [
+                    "balanced": ["model": "claude-sonnet-4-6"],
+                    "fast": ["model": "claude-haiku-4-5"],
+                ],
+            ]
+        ])
+        XCTAssertEqual(store.activeProfile, "balanced")
+
+        let result = await store.deleteProfile(name: "balanced")
+        XCTAssertEqual(result, .blockedByActive("balanced"))
+        // Must not emit a PATCH when blocked.
+        XCTAssertNil(lastProfilesPatch())
+        // Profile must still be present locally.
+        XCTAssertTrue(store.profiles.contains(where: { $0.name == "balanced" }))
+    }
+
+    // MARK: - deleteProfile blocked-by-call-sites
+
+    func testDeleteProfileBlockedByCallSites() async {
+        store.loadInferenceProfiles(config: [
+            "llm": [
+                "activeProfile": "balanced",
+                "profiles": [
+                    "balanced": ["model": "claude-sonnet-4-6"],
+                    "fast": ["model": "claude-haiku-4-5"],
+                ],
+            ]
+        ])
+        store.loadCallSiteOverrides(config: [
+            "llm": [
+                "callSites": [
+                    "memoryRetrieval": ["profile": "fast"],
+                    "mainAgent": ["profile": "fast"],
+                    "trustRuleSuggestion": ["provider": "openai"],
+                ]
+            ]
+        ])
+
+        let result = await store.deleteProfile(name: "fast")
+        if case .blockedByCallSites(let ids) = result {
+            XCTAssertEqual(Set(ids), ["memoryRetrieval", "mainAgent"])
+        } else {
+            XCTFail("Expected .blockedByCallSites, got \(result)")
+        }
+        XCTAssertNil(lastProfilesPatch())
+        XCTAssertTrue(store.profiles.contains(where: { $0.name == "fast" }))
+    }
+
+    func testDeleteProfileBlockedByRawCallSitesWhenCatalogUnavailable() async {
+        CallSiteCatalog.shared.clearForTesting()
+        store.loadInferenceProfiles(config: [
+            "llm": [
+                "activeProfile": "balanced",
+                "profiles": [
+                    "balanced": ["model": "claude-sonnet-4-6"],
+                    "fast": ["model": "claude-haiku-4-5"],
+                ],
+            ]
+        ])
+        store.loadCallSiteOverrides(config: [
+            "llm": [
+                "callSites": [
+                    "futureCallSite": ["profile": "fast"],
+                ]
+            ]
+        ])
+        XCTAssertTrue(store.callSiteOverrides.isEmpty)
+
+        let result = await store.deleteProfile(name: "fast")
+        if case .blockedByCallSites(let ids) = result {
+            XCTAssertEqual(ids, ["futureCallSite"])
+        } else {
+            XCTFail("Expected .blockedByCallSites, got \(result)")
+        }
+        XCTAssertNil(lastProfilesPatch())
+        XCTAssertTrue(store.profiles.contains(where: { $0.name == "fast" }))
+    }
+
+    // MARK: - deleteProfile success
+
+    func testDeleteProfileSucceedsWhenUnreferenced() async {
+        store.loadInferenceProfiles(config: [
+            "llm": [
+                "activeProfile": "balanced",
+                "profiles": [
+                    "balanced": ["model": "claude-sonnet-4-6"],
+                    "experimental": ["model": "experimental-model"],
+                ],
+            ]
+        ])
+
+        let result = await store.deleteProfile(name: "experimental")
+        XCTAssertEqual(result, .deleted)
+
+        let profiles = lastProfilesPatch()
+        XCTAssertNotNil(profiles?["experimental"])
+        XCTAssertTrue(profiles?["experimental"] is NSNull, "Delete must PATCH NSNull at the profile key")
+
+        // Local cache reflects the deletion.
+        XCTAssertFalse(store.profiles.contains(where: { $0.name == "experimental" }))
+        XCTAssertTrue(store.profiles.contains(where: { $0.name == "balanced" }))
+    }
+
+    func testDeleteProfileRemovesNameFromExplicitProfileOrder() async {
+        store.loadInferenceProfiles(config: [
+            "llm": [
+                "activeProfile": "balanced",
+                "profileOrder": ["experimental", "balanced"],
+                "profiles": [
+                    "balanced": ["model": "claude-sonnet-4-6"],
+                    "experimental": ["model": "experimental-model"],
+                ],
+            ]
+        ])
+
+        let result = await store.deleteProfile(name: "experimental")
+
+        XCTAssertEqual(result, .deleted)
+        XCTAssertEqual(store.profiles.map(\.name), ["balanced"])
+        XCTAssertEqual(store.profileOrder, ["balanced"])
+        XCTAssertEqual(lastProfileOrderPatch(), ["balanced"])
+    }
+
+    func testDeleteProfileFailureSurfacedAsFailed() async {
+        store.loadInferenceProfiles(config: [
+            "llm": [
+                "activeProfile": "balanced",
+                "profiles": [
+                    "balanced": ["model": "claude-sonnet-4-6"],
+                    "experimental": ["model": "x"],
+                ],
+            ]
+        ])
+        mockSettingsClient.patchConfigResponse = false
+
+        let result = await store.deleteProfile(name: "experimental")
+        XCTAssertEqual(result, .failed)
+        // Local cache must remain intact when the daemon PATCH fails.
+        XCTAssertTrue(store.profiles.contains(where: { $0.name == "experimental" }))
+    }
+
+    // MARK: - profileOrder reordering
+
+    func testMoveProfilePersistsPresentationOrder() async {
+        store.loadInferenceProfiles(config: [
+            "llm": [
+                "profiles": [
+                    "balanced": ["model": "claude-sonnet-4-6"],
+                    "cost-optimized": ["model": "claude-haiku-4-5"],
+                    "quality-optimized": ["model": "claude-opus-4-7"],
+                ],
+            ]
+        ])
+
+        let success = await store.moveProfile(
+            sourceName: "quality-optimized",
+            targetName: "balanced",
+            insertAfterTarget: false
+        )
+
+        XCTAssertTrue(success)
+        XCTAssertEqual(
+            store.profiles.map(\.name),
+            ["quality-optimized", "balanced", "cost-optimized"]
+        )
+        XCTAssertEqual(
+            lastProfileOrderPatch(),
+            ["quality-optimized", "balanced", "cost-optimized"]
+        )
+    }
+
+    func testMoveProfileFailureRevertsLocalOrder() async {
+        store.loadInferenceProfiles(config: [
+            "llm": [
+                "profileOrder": ["balanced", "cost-optimized", "quality-optimized"],
+                "profiles": [
+                    "balanced": ["model": "claude-sonnet-4-6"],
+                    "cost-optimized": ["model": "claude-haiku-4-5"],
+                    "quality-optimized": ["model": "claude-opus-4-7"],
+                ],
+            ]
+        ])
+        mockSettingsClient.patchConfigResponse = false
+
+        let success = await store.moveProfile(
+            sourceName: "quality-optimized",
+            targetName: "balanced",
+            insertAfterTarget: false
+        )
+
+        XCTAssertFalse(success)
+        XCTAssertEqual(
+            store.profiles.map(\.name),
+            ["balanced", "cost-optimized", "quality-optimized"]
+        )
+        XCTAssertEqual(store.profileOrder, ["balanced", "cost-optimized", "quality-optimized"])
+    }
+
+    // MARK: - replaceCallSiteOverride profile-only path
+
+    /// When `replaceCallSiteOverride` is invoked with `profile` set and
+    /// no raw `provider`/`model`, the entry-level clear PATCH (first
+    /// step) already removes any stale fragment leaves, so the second
+    /// PATCH writes only the `profile` field — no leaf-level NSNull
+    /// blanket is needed.
+    func testReplaceCallSiteOverrideWritesProfileOnlyAfterEntryClear() async {
+        _ = store.replaceCallSiteOverride("memoryRetrieval", profile: "fast")
+        // Wait for both the clear and set PATCHes to flush.
+        let predicate = NSPredicate { _, _ in
+            self.mockSettingsClient.patchConfigCalls.count >= 2
+        }
+        let expectation = XCTNSPredicateExpectation(predicate: predicate, object: nil)
+        await fulfillment(of: [expectation], timeout: 2.0)
+
+        // Locate the SET payload — second of the two callSites PATCHes
+        // emitted by replaceCallSiteOverride. The first clears the
+        // entry; the second writes the new fragment.
+        var setPayloadEntry: [String: Any]?
+        var sawClear = false
+        for payload in mockSettingsClient.patchConfigCalls {
+            guard let llm = payload["llm"] as? [String: Any],
+                  let sites = llm["callSites"] as? [String: Any],
+                  let entry = sites["memoryRetrieval"] else { continue }
+            if entry is NSNull {
+                sawClear = true
+                continue
+            }
+            if let dict = entry as? [String: Any] {
+                setPayloadEntry = dict
+            }
+        }
+        XCTAssertTrue(sawClear, "replaceCallSiteOverride must first NSNull-clear the entry")
+        XCTAssertNotNil(setPayloadEntry, "replaceCallSiteOverride must follow the clear with a set PATCH")
+        XCTAssertEqual(setPayloadEntry?["profile"] as? String, "fast")
+        // The entry-level clear handles stale leaves; the SET payload
+        // should contain only `profile` and no fragment fields.
+        XCTAssertNil(setPayloadEntry?["provider"])
+        XCTAssertNil(setPayloadEntry?["model"])
+        XCTAssertNil(setPayloadEntry?["maxTokens"])
+        XCTAssertNil(setPayloadEntry?["effort"])
+        XCTAssertNil(setPayloadEntry?["speed"])
+        XCTAssertNil(setPayloadEntry?["verbosity"])
+        XCTAssertNil(setPayloadEntry?["temperature"])
+        XCTAssertNil(setPayloadEntry?["thinking"])
+        XCTAssertNil(setPayloadEntry?["contextWindow"])
+    }
+
+    /// Sanity-check that the stale-clear behavior does NOT trigger when
+    /// the caller passes a raw provider/model fragment ("Custom" path):
+    /// the SET payload must contain the raw fields verbatim, no NSNull
+    /// clears.
+    func testReplaceCallSiteOverrideDoesNotInjectNullsForRawFragmentWrite() async {
+        _ = store.replaceCallSiteOverride(
+            "memoryRetrieval",
+            provider: "openai",
+            model: "gpt-4.1"
+        )
+        let predicate = NSPredicate { _, _ in
+            self.mockSettingsClient.patchConfigCalls.count >= 2
+        }
+        let expectation = XCTNSPredicateExpectation(predicate: predicate, object: nil)
+        await fulfillment(of: [expectation], timeout: 2.0)
+
+        var setPayloadEntry: [String: Any]?
+        for payload in mockSettingsClient.patchConfigCalls {
+            guard let llm = payload["llm"] as? [String: Any],
+                  let sites = llm["callSites"] as? [String: Any],
+                  let entry = sites["memoryRetrieval"] as? [String: Any] else { continue }
+            setPayloadEntry = entry
+        }
+        XCTAssertNotNil(setPayloadEntry)
+        XCTAssertEqual(setPayloadEntry?["provider"] as? String, "openai")
+        XCTAssertEqual(setPayloadEntry?["model"] as? String, "gpt-4.1")
+        XCTAssertNil(setPayloadEntry?["profile"])
+        // No NSNull-clear should leak into the raw-fragment path.
+        XCTAssertNil(setPayloadEntry?["maxTokens"])
+        XCTAssertNil(setPayloadEntry?["effort"])
+        XCTAssertNil(setPayloadEntry?["thinking"])
+    }
+}

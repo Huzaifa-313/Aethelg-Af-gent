@@ -1,0 +1,32 @@
+AETHELGARD SAFETY MANIFEST
+==========================
+Project: Aethelgard Autonomous AI Agent Core
+Created: 2026-05-07T14:02:29Z
+Operator: Hashmi
+
+PROTECTED ZONES (READ-ONLY):
+- c:\Users\Hashmi\Desktop\mycoder\core\ (GOLD ZONE - additive only)
+- c:\Users\Hashmi\Desktop\mycoder\mcp_master\ (REFERENCE ONLY - never modify)
+
+SAFETY DIRECTORIES:
+- _aethelgard_safety\ (tracking & logs)
+- _aethelgard_safety\hunter_staging\ (temp download sandbox)
+- _aethelgard_safety\quarantine\ (infected files)
+- _aethelgard_safety\quarantine_critical\ (critical system files flagged)
+
+MERGE POLICY:
+- Additive only - never delete or overwrite existing core files
+- All new files must pass syntax check before integration
+- Conflicts resolved with _v2 suffix
+- All merges logged in merge_report.md
+
+SCAN POLICY:
+- All external code scanned for malware before analysis
+- High-entropy blobs flagged as suspicious
+- System-critical exploits preserved but quarantined for human review
+- Text content (swear words, political topics, etc.) NOT filtered
+
+RECOVERY POLICY:
+- Accidental deletions recovered from git history or backups
+- All recovery actions logged in recovery_log.md
+- Integrity verification after each recovery

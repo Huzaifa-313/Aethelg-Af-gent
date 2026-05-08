@@ -1,0 +1,55 @@
+# MCP Master Configuration
+# All configurable settings for the mcp_master ecosystem
+
+# API Keys (placeholders - never commit actual keys)
+api_keys:
+  openai: "${OPENAI_API_KEY}"
+  anthropic: "${ANTHROPIC_API_KEY}"
+  google: "${GOOGLE_API_KEY}"
+  deepseek: "${DEEPSEEK_API_KEY}"
+
+# Server Configuration
+server:
+  host: "localhost"
+  port: 3000
+  port_range_start: 3000
+  port_range_end: 3100
+  timeout: 30
+  log_level: "INFO"
+
+# Tool Registry
+tools:
+  enabled:
+    - core_tools
+    - database_tools
+    - web_tools
+    - file_tools
+    - git_tools
+    - terminal_tools
+    - search_tools
+    - agent_tools
+    - productivity_tools
+    - security_tools
+  disabled: []
+
+# Feature Flags
+features:
+  auto_heal: true
+  verbose_logging: false
+  strict_mode: false
+  cache_enabled: true
+
+# Paths (relative to mcp_master root)
+paths:
+  tools_dir: "./"
+  logs_dir: "./logs"
+  temp_dir: "./temp"
+  config_dir: "./config"
+
+# Logging
+logging:
+  level: "INFO"
+  file: "./logs/mcp_master.log"
+  max_size: "10MB"
+  max_files: 5
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"

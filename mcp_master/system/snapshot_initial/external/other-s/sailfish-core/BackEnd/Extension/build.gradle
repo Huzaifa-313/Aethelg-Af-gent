@@ -1,0 +1,22 @@
+// Setting this property to true will make the publish tasks
+// skip this module (in our case, the root module):
+tasks.withType(PublishToMavenRepository).all { publishTask ->
+    publishTask.enabled = false
+}
+allprojects {
+	checkCompatibility.enabled = false
+}
+
+subprojects {
+
+    checkCompatibility {
+        dependsOn.add('writeFile')
+        cfgDirs = [file("${mainWorkspaceDir}/cfg"), 
+                   file("${genWorkspaceDir}/cfg"), 
+                   file("${externalWorkspaceDir}/cfg"),
+                   file("${mainPluginDir}/cfg"), 
+                   file("${genPluginDir}/cfg"), 
+                   file("${externalPluginDir}/cfg")]
+        silent = silent_check
+    }
+}

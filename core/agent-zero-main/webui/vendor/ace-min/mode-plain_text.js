@@ -1,0 +1,14 @@
+# AETHELGARD MERGED FILE
+# Origin Repository: other s
+# Original Path: agent-zero-main\webui\vendor\ace-min\mode-plain_text.js
+# Merge Date: 2026-05-07T19:28:51.939471
+# ---
+
+define("ace/mode/plain_text",["require","exports","module","ace/lib/oop","ace/mode/text","ace/mode/text_highlight_rules","ace/mode/behaviour"],function(e,t,n){"use strict";var r=e("../lib/oop"),i=e("./text").Mode,s=e("./text_highlight_rules").TextHighlightRules,o=e("./behaviour").Behaviour,u=function(){this.HighlightRules=s,this.$behaviour=new o};r.inherits(u,i),function(){this.type="text",this.getNextLineIndent=function(e,t,n){return""},this.$id="ace/mode/plain_text"}.call(u.prototype),t.Mode=u});                (function() {
+                    window.require(["ace/mode/plain_text"], function(m) {
+                        if (typeof module == "object" && typeof exports == "object" && module) {
+                            module.exports = m;
+                        }
+                    });
+                })();
+            

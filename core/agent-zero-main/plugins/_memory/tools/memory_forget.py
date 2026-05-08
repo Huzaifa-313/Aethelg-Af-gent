@@ -1,0 +1,20 @@
+# AETHELGARD MERGED FILE
+# Origin Repository: other s
+# Original Path: agent-zero-main\plugins\_memory\tools\memory_forget.py
+# Merge Date: 2026-05-07T19:27:42.609393
+# ---
+
+from helpers.tool import Tool, Response
+from plugins._memory.helpers.memory import Memory
+
+from tools.memory_load import DEFAULT_THRESHOLD
+
+
+class MemoryForget(Tool):
+
+    async def execute(self, query="", threshold=DEFAULT_THRESHOLD, filter="", **kwargs):
+        db = await Memory.get(self.agent)
+        dels = await db.delete_documents_by_query(query=query, threshold=threshold, filter=filter)
+
+        result = self.agent.read_prompt("fw.memories_deleted.md", memory_count=len(dels))
+        return Response(message=result, break_loop=False)

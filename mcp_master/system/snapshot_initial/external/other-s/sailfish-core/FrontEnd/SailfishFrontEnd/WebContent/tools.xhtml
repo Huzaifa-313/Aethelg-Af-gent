@@ -1,0 +1,426 @@
+<!--
+  ~ Copyright 2009-2019 Exactpro (Exactpro Systems Limited)
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~  Unless required by applicable law or agreed to in writing, software
+  ~  distributed under the License is distributed on an "AS IS" BASIS,
+  ~  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~  See the License for the specific language governing permissions and
+  ~  limitations under the License.
+  -->
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+        "http://www.w3.org/TR/html4/strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:o="http://omnifaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+    <link rel="shortcut icon" href="#{resource['sf:images/SFicon.ico']}" type="image/x-icon"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>Configuration :: Exactpro Systems LLC :: Sailfish #{generalBean.version}</title>
+
+    <h:outputStylesheet library="sf" name="css/reset.css"/>
+    <h:outputStylesheet library="sf" name="css/estyles.css"/>
+    <h:outputStylesheet library="sf" name="css/menu.css"/>
+    <h:outputStylesheet library="sf" name="css/configuration.css"/>
+    <h:outputStylesheet library="sf" name="css/sf.css"/>
+    <h:outputStylesheet library="sf" name="css/jqueryui/theme.css"/>
+    <h:outputStylesheet library="sf" name="css/custom.css"/>
+    <h:outputStylesheet library="sf" name="css/tools.css"/>
+
+    <script>
+
+		function getContextPath() {
+			return "#{request.contextPath}";
+		};
+
+		window.onload = function(){
+		    let currentSection = window.localStorage.getItem('selectedSection');
+		    if (currentSection == undefined) {
+		        currentSection = 'matrixMerger'
+            }
+		    setSectionVisible(currentSection);
+		}
+
+		function changeSection(section){
+		    setSectionVisible(section);
+		    if (typeof(Storage) !== "undefined") {
+                window.localStorage.setItem('selectedSection', section);
+            } else {
+                console.log('Local storage unsupported');
+            }
+		}
+
+		function reload() {
+		    window.location.reload();
+		}
+
+        function showDVProgress(status) {
+            const mainFormId = 'dictionaryValidatorMainForm';
+            const progressId = 'dictionaryValidatorProgress';
+            const component = document.getElementById(mainFormId + ':' + progressId);
+            component.style.display = (status)? 'block': 'none';
+        }
+    </script>
+
+
+</h:head>
+<h:body styleClass="eps-application">
+
+    <ui:insert name="menu">
+        <ui:include src="template/menu.xhtml"/>
+    </ui:insert>
+
+    <div class="eps-container">
+
+
+        <h:form prependId="false">
+
+        </h:form>
+
+        <div class="eps-content-panel">
+            <div class="eps-config-navigation">
+                <ul>
+                    <div onclick="changeSection('matrixMerger');" class="eps-dot">
+                        <li id="matrixMergerNavItem">Matrix Merger</li>
+                    </div>
+                    <div onclick="changeSection('matrixConverter');" class="eps-dot">
+                        <li id="matrixConverterNavItem">Matrix Converter</li>
+                    </div>
+                    <div onclick="changeSection('dictionaryValidator');" class="eps-dot">
+                        <li id="dictionaryValidatorNavItem">Dictionary Validator</li>
+                    </div>
+                </ul>
+            </div>
+
+            <div class="eps-config-content-wrapper">
+                <div class="eps-config-content-inner">
+                    <div id="matrixMergerConfig" class="eps-config-container">
+
+                        <p:tooltip />
+                        <h:form id="messagesForm">
+                            <p:messages id="messages" showDetail="true" closable="true" autoupdate="true"/>
+                        </h:form>
+
+                        <h:form>
+                            <p:fileUpload fileUploadListener="#{toolsBean.handleFileUpload}" mode="advanced" dragDropSupport="true"
+                                          multiple="true" update="@(#filesToConvert)" allowTypes="/(\.|\/)(xls?x|csv)$/" />
+                        </h:form>
+                        <p:dataTable id="filesToConvert" var="file" value="#{toolsBean.uploadedFiles}">
+                            <p:column headerText="name">
+                                <h:outputText value="#{file.name}" />
+                            </p:column>
+                        </p:dataTable>
+                        <h:form id="convertForm">
+                            <p:remoteCommand name="stop" update=":filesToConvert"/>
+                            <p:commandButton value="convert" ajax="false" style="margin-right:20px;" styleClass="ui-priority-primary" onclick="PrimeFaces.monitorDownload(null, stop)">
+                                <p:fileDownload value="#{toolsBean.converted}"/>
+                            </p:commandButton>
+                            <p:commandButton value="clear" style="margin-right:20px;" styleClass="ui-priority-primary" update="@(#filesToConvert)" actionListener="#{toolsBean.clearUploads}"/>
+                        </h:form>
+
+                    </div>
+
+                    <div id="matrixConverterConfig" class="eps-config-container">
+                        <h:form id="convertMenuSelectForm">
+                            <p:menubar id="convertMenuSelectMenu">
+                                <p:menuitem id="convertMenuSelectButton"
+                                        value="Upload"
+                                        icon="ui-icon-arrowrefresh-1-n"
+                                        update="readyToUploadFilesForm uploadTemporaryFilesForm"
+                                        onclick="PF('uploadMatrixDialog').show()" />
+                                <p:menuitem id="convertMenuConvertButton"
+                                        value="Convert Matrices"
+                                        icon="ui-icon-play"
+                                        disabled="#{convertMatrixBean.selectedFilesEmpty}"
+                                        ajax="false"
+                                        immediate="true">
+                                    <p:fileDownload value="#{convertMatrixBean.convertToZip()}" />
+                                </p:menuitem>
+                                <p:menuitem id="convertMenuDeleteButton"
+                                        value="Delete Matrices"
+                                        icon="ui-icon-trash"
+                                        onclick="PF('convertMenuSelectFormDialog').show()"
+                                        disabled="#{convertMatrixBean.selectedFilesEmpty}" />
+                            </p:menubar>
+
+                            <p:tooltip value="Select Matrices to Upload" for="convertMenuSelectButton"/>
+                            <p:tooltip value="Convert Selected Matrices" for="convertMenuConvertButton"/>
+                            <p:tooltip value="Delete Selected Matrices" for="convertMenuDeleteButton"/>
+                        </h:form>
+
+                        <h:form>
+                            <p:confirmDialog widgetVar="convertMenuSelectFormDialog"
+                                        severity="alert"
+                                        header="Confirm Deletion"
+                                        message="Do you want to delete selected matrices?">
+                                <p:commandButton value="Yes" icon="ui-icon-check"
+                                            action="#{convertMatrixBean.deleteSelectedFiles}"
+                                            oncomplete="PF('convertMenuSelectFormDialog').hide(); reload()" />
+                                <p:commandButton value="No" icon="ui-icon-close"
+                                            update="matrixConvertMainTableForm"
+                                            oncomplete="PF('convertMenuSelectFormDialog').hide()" />
+                            </p:confirmDialog>
+                        </h:form>
+
+                        <h:form id="matrixConvertMainTableForm">
+                            <p:dataTable id="matrixConvertMainTable"
+                                        widgetVar="matrixConvertMainTable"
+                                        styleClass="borderless"
+                                        var="file"
+                                        rowKey="#{file.index}"
+                                        selection="#{convertMatrixBean.selectedFiles}"
+                                        value="#{convertMatrixBean.uploadedFiles}">
+                                <p:ajax event="rowSelect" update="convertMenuSelectForm" />
+                                <p:ajax event="rowUnselect" update="convertMenuSelectForm" />
+                                <p:ajax event="rowSelectCheckbox" update="convertMenuSelectForm" />
+                                <p:ajax event="rowUnselectCheckbox" update="convertMenuSelectForm" />
+                                <p:ajax event="toggleSelect" update="convertMenuSelectForm" />
+
+                                <p:column selectionMode="multiple" style="width:20px; text-align:center;"/>
+                                <p:column headerText="Source File Name">
+                                    <h:outputText value="#{file.sourceFileName}" />
+                                </p:column>
+                                <p:column headerText="File Name to Convert">
+                                    <p:inputText value="#{file.newFileName}" style="width: 90%;">
+                                        <p:ajax event="keyup" execute="@this" />
+                                    </p:inputText>
+                                </p:column>
+                                <p:column headerText="File Type to Convert" style="width: 120px;">
+                                    <p:selectOneMenu value="#{file.newFileType}" style="width: 80px;">
+                                        <p:ajax event="change" />
+                                        <f:selectItems value="#{file.possibleFileTypes}"
+                                                    var="ft"
+                                                    itemValue="#{ft}"
+                                                    itemLabel="#{ft.extension}" />
+                                    </p:selectOneMenu>
+                                </p:column>
+                                <p:column style="width: 40px;">
+                                    <p:commandButton icon="ui-icon-play"
+                                                    title="Convert the matrix and download the result"
+                                                    ajax="false"
+                                                    immediate="true"
+                                                    style="float: center;">
+                                        <p:fileDownload value="#{file.convertWithDownload()}" />
+                                    </p:commandButton>
+                                </p:column>
+                            </p:dataTable>
+                        </h:form>
+                    </div>
+
+                    <p:dialog id="temporaryFilesUploadDialog"
+                            header="Add matrices"
+                            widgetVar="uploadMatrixDialog"
+                            modal="true" resizable="false" width="1000">
+                        <h:form id="uploadFewLocalButtonForm">
+                            <h:panelGrid columns="2">
+                                <p:tooltip value="Add one or more matrix files for upload" for="temporaryFilesUploadButton"/>
+                                <p:tooltip value="Clear all matrices" for="temporaryFilesClearAllButton"/>
+
+                                <p:fileUpload id="temporaryFilesUploadButton"
+                                        fileUploadListener="#{convertMatrixBean.handleTemporaryFileUpload}"
+                                        allowTypes="#{convertMatrixBean.allowedTypesRegex}"
+                                        invalidFileMessage="#{convertMatrixBean.allowedTypesMessage}"
+                                        mode="advanced"
+                                        multiple="true"
+                                        update="readyToUploadFilesForm uploadTemporaryFilesForm"
+                                        auto="true"/>
+                                <p:commandButton id="temporaryFilesClearAllButton"
+                                        value="Clear"
+                                        icon="ui-icon-trash"
+                                        immediate="true"
+                                        update="readyToUploadFilesForm uploadTemporaryFilesForm"
+                                        action="#{convertMatrixBean.clearTemporaryFiles}" />
+                            </h:panelGrid>
+                        </h:form>
+
+                        <h:form id="readyToUploadFilesForm">
+                            <p:dataTable var="file"
+                                    value="#{convertMatrixBean.temporaryFiles}">
+                                <p:column headerText="Files to Upload">
+                                    <h:outputText value="#{file.sourceFileName}" />
+                                </p:column>
+                                <p:column style="width: 35px">
+                                    <p:commandButton icon="ui-icon-trash"
+                                                    immediate="true"
+                                                    update="readyToUploadFilesForm uploadTemporaryFilesForm"
+                                                    action="#{convertMatrixBean.removeTemporaryFile(file)}"/>
+                                </p:column>
+                            </p:dataTable>
+                        </h:form>
+
+                        <h:form id="uploadTemporaryFilesForm">
+                            <div style="text-align: center;">
+                                <p:commandButton value="Upload" icon="ui-icon-arrowrefresh-1-n"
+                                                disabled="#{convertMatrixBean.temporaryFilesEmpty}"
+                                                action="#{convertMatrixBean.uploadTemporaryFiles}"
+                                                update="matrixConvertMainTableForm:matrixConvertMainTable"
+                                                oncomplete="if (!args.errorFound) PF('uploadMatrixDialog').hide(); reload()" />
+                            </div>
+                        </h:form>
+                    </p:dialog>
+
+                    <div id="dictionaryValidatorConfig" class="eps-config-container">
+                        <h:form id="dictionaryValidatorMainForm" enctype="multipart/form-data">
+                            <p:messages id="dictionaryValidatorMessages"
+                                        showDetail="true"
+                                        autoUpdate="true"
+                                        closable="true" />
+
+                            <div class="dictionaryValidatorToolsWrapper">
+                                <h:panelGrid columns="3">
+                                    <p:fileUpload styleClass="dictionaryValidatorFileUploadButton"
+                                                  allowTypes="#{dictionaryValidatorBean.allowedTypesRegex}"
+                                                  invalidFileMessage="#{dictionaryValidatorBean.allowedTypesMessage}"
+                                                  fileUploadListener="#{dictionaryValidatorBean.handleFileUpload}"
+                                                  label="Choose a dictionary"
+                                                  mode="advanced"
+                                                  multiple="false"
+                                                  update="dictionaryValidatorFileUploadResult dictionaryValidatorClearButton"
+                                                  auto="true" />
+                                    <p:commandButton id="dictionaryValidatorClearButton"
+                                                     styleClass="dictionaryValidatorClearButton"
+                                                     value="Clear" icon="ui-icon-trash"
+                                                     disabled="#{!(dictionaryValidatorBean.fileChosen)}"
+                                                     update="dictionaryValidatorFileUploadResult @this"
+                                                     action="#{dictionaryValidatorBean.clearState()}" />
+                                    <h:graphicImage id="dictionaryValidatorProgress"
+                                                    styleClass="dictionaryValidatorProgress"
+                                                    library="sf"
+                                                    name="images/ajaxloader.gif" />
+                                </h:panelGrid>
+
+                                <p:selectOneMenu value="#{dictionaryValidatorBean.validatorSelection}"
+                                                 styleClass="dictionaryValidatorAvailableServices">
+                                    <p:ajax update="dictionaryValidatorFileUploadResult"
+                                            listener="#{dictionaryValidatorBean.validatorSelectionListener}" />
+                                    <f:selectItem itemLabel="Default Validator"
+                                                  itemValue="#{dictionaryValidatorBean.defaultValidatorUri}" />
+                                    <f:selectItems value="#{dictionaryValidatorBean.validatorSelections}" />
+                                </p:selectOneMenu>
+                            </div>
+
+                            <h:panelGroup id="dictionaryValidatorFileUploadResult"
+                                          styleClass="dictionaryValidatorFileUploadResult"
+                                          layout="block">
+                                <p class="dictionaryValidatorFileStatus">
+                                    <h:panelGroup rendered="#{dictionaryValidatorBean.fileChosen}">
+                                        <i>Dictionary to validate</i> <b><h:outputText value="#{dictionaryValidatorBean.fileName}" /></b>
+                                    </h:panelGroup>
+                                </p>
+
+                                <p:commandButton id="dictionaryValidatorValidateButton"
+                                                 value="Validate" icon="ui-icon-refresh"
+                                                 rendered="#{dictionaryValidatorBean.fileChosen and not dictionaryValidatorBean.validated}"
+                                                 action="#{dictionaryValidatorBean.validate}"
+                                                 onstart="showDVProgress(true)"
+                                                 update="dictionaryValidatorFileUploadResult"
+                                                 oncomplete="showDVProgress(false)" />
+
+                                <h:panelGroup styleClass="dictionaryValidatorResultMsg"
+                                              rendered="#{dictionaryValidatorBean.fileChosen and dictionaryValidatorBean.validated}">
+                                    <h:panelGroup style="color: green;" rendered="#{dictionaryValidatorBean.success()}">
+                                        Validation Succeeded
+                                    </h:panelGroup>
+                                    <h:panelGroup style="color: red;" rendered="#{not dictionaryValidatorBean.success()}">
+                                        Validation Failed
+                                    </h:panelGroup>
+                                </h:panelGroup>
+
+                                <p:panel header="#{dictionaryValidatorBean.validationException.fullMessage}"
+                                         styleClass="dictionaryValidatorExceptionOutput"
+                                         rendered="#{dictionaryValidatorBean.fileChosen and dictionaryValidatorBean.validationException != null}"
+                                         toggleable="true"
+                                         toggleableHeader="true">
+                                    <h:outputText value="#{dictionaryValidatorBean.validationException.stacktrace}" />
+                                </p:panel>
+
+                                <div class="dictionaryValidatorErrorTableWrapper">
+                                <p:panelGrid styleClass="dictionaryValidatorErrorTable"
+                                             rendered="#{dictionaryValidatorBean.fileChosen and dictionaryValidatorBean.validationErrorsExist}">
+                                    <colgroup>
+                                        <col width="20%" />
+                                        <col width="20%" />
+                                        <col width="10%" />
+                                        <col width="50%" />
+                                    </colgroup>
+
+                                    <f:facet name="header">
+                                        <tr class="table-header">
+                                            <th>Message</th>
+                                            <th>Field</th>
+                                            <th>Type</th>
+                                            <th>Error</th>
+                                        </tr>
+                                    </f:facet>
+
+                                    <ui:repeat var="group"
+                                               value="#{dictionaryValidatorBean.validationErrorsByLevel}">
+                                        <tr>
+                                            <td colspan="4" class="group-header">
+                                                <h:outputText value="#{group.levelName}" />
+                                            </td>
+                                        </tr>
+
+                                        <ui:repeat var="msg" value="#{group.messageNames}">
+                                            <ui:repeat var="err" value="#{group.getErrorsFor(msg)}">
+                                                <tr>
+                                                    <ui:fragment rendered="#{err.index == 0}">
+                                                        <td rowspan="#{group.getErrorsLengthFor(msg)}"
+                                                            class="message-column group-row">
+                                                            <h:outputText value="#{msg}" />
+                                                        </td>
+                                                    </ui:fragment>
+                                                    <td class="field-column">
+                                                        <h:outputText value="#{err.value.field}" />
+                                                    </td>
+                                                    <td class="type-column">
+                                                        <h:outputText value="#{err.value.type}" />
+                                                    </td>
+                                                    <td class="error-column">
+                                                        <h:outputText value="#{err.value.error}" escape="false" />
+                                                    </td>
+                                                </tr>
+                                            </ui:repeat>
+                                        </ui:repeat>
+                                    </ui:repeat>
+
+                                    <tr>
+                                        <td colspan="4" class="group-header" />
+                                    </tr>
+                                </p:panelGrid>
+                                </div>
+                            </h:panelGroup>
+                        </h:form>
+                    </div>
+
+                <!--div id="testConfig" class="eps-config-container">
+
+                    <h2>test management</h2>
+
+
+                </div-->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <ui:insert name="footer">
+        <ui:include src="template/footer.xhtml"/>
+    </ui:insert>
+
+    <h:outputScript library="sf" name="js/menu.js"/>
+    <h:outputScript library="sf" name="js/configuration.js"/>
+
+</h:body>
+</html>

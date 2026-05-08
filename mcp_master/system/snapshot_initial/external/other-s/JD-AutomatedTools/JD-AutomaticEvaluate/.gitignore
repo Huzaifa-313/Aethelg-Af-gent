@@ -1,0 +1,10 @@
+# project
+.idea/
+.vscode/
+ignore/
+temp/
+resources/
+*[0-9].*
+commit.bat
+cookies.json
+authenticate.py

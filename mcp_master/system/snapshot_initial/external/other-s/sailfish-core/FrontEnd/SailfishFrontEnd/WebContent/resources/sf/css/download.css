@@ -1,0 +1,130 @@
+/******************************************************************************
+ * Copyright 2009-2020 Exactpro (Exactpro Systems Limited)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ******************************************************************************/
+
+    .highlight {
+        background-color: #FFFF88;
+    }
+
+
+.eps-download-form {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+}
+
+.eps-download-header {
+	height: 80px;
+	width: 1024px;
+	margin: 0 auto;
+	box-sizing: border-box;
+}
+
+.eps-path-wrapper {
+	width: 60%;
+	float: left;
+	box-sizing: border-box;
+	padding: 26px;
+    height: 100%;
+    position: relative;
+}
+
+.eps-download-header .eps-download-toolbar {
+	float: right;
+	box-sizing: border-box;
+	text-align: right;
+	padding: 21px;
+}
+
+.eps-download-toolbar > ul > li.ui-menuitem {
+	margin: 0 5px;
+	box-sizing: border-box;
+}
+
+.eps-path-wrapper .eps-go-button {
+	position: absolute;
+	right: 0;
+	top: 12pt;
+}
+
+.eps-path-label {
+	display: inline-block;
+	margin-top: 6px;
+    margin-right: 10px;
+    vertical-align: top;
+}
+
+.eps-path-input {
+	margin-right: 5px;
+	vertical-align: top;
+}
+
+.eps-download-table thead#folderContent_head th {
+	text-align: left;
+	background-color: #b7bdc6;
+}
+
+.eps-download-row.ui-state-highlight {
+	border: none;
+}
+
+.eps-download-table {
+	position:absolute;
+	top: 80px;
+	bottom: 0;
+	left:0;
+	right:0;
+	margin-left:auto;
+	margin-right:auto;
+	width: 1024px;
+	box-sizing: border-box;
+}
+
+.ui-datatable-scrollable-body {
+    max-height: 90%;
+    width: 100%;
+    box-sizing: border-box;
+    overflow-x: hidden;
+    border-bottom: 1px solid #cdcdcd;
+    border-left: 1px solid #cdcdcd;
+    border-right: 1px solid #cdcdcd;
+}
+
+.eps-delete-files-list-wrap {
+  margin: 10px auto;
+}
+
+ul.eps-delete-files-list {
+    height: auto;
+    width: 100%;
+    box-sizing: border-box;
+    margin: 10px auto 0 auto;
+    padding: 4px 30px;
+    list-style: square;
+}
+
+ul.eps-delete-files-list li {
+    height: auto;
+    width: 100%;
+    padding: 2px;
+    margin: 1px 0;
+    border-bottom: 1px solid #eee;
+}
+
+ul.eps-delete-files-list li:last-child {
+  border: none;
+}

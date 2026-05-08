@@ -1,0 +1,4351 @@
+{
+  "audit_metadata": {
+    "timestamp": "2026-05-07T11:13:00Z",
+    "auditor": "MCP Architect",
+    "version": "1.0",
+    "total_tools_found": 472,
+    "categories": {
+      "agent_tools": 1,
+      "code_analysis_tools": 0,
+      "core_tools": 7,
+      "custom_tools": 1,
+      "database_tools": 10,
+      "devops_tools": 3,
+      "file_tools": 0,
+      "git_tools": 0,
+      "mcp_tools": 423,
+      "monitor": 0,
+      "productivity_tools": 8,
+      "registry": 0,
+      "router": 0,
+      "search_tools": 2,
+      "security_tools": 0,
+      "switcher": 0,
+      "terminal_tools": 0,
+      "web_tools": 17,
+      "ecosystem": 0,
+      "integrations": 0,
+      "launch": 0,
+      "connector": 0,
+      "compatibility": 0
+    }
+  },
+  "tools": [
+    {
+      "name": "ruflo-main",
+      "path": "agent_tools\\ruflo-main\\index.js",
+      "category": "agent_tools",
+      "entry_point": "index.js",
+      "files_count": 2,
+      "status": "unknown",
+      "quality": "unknown",
+      "description": "Agent coordination and workflow management tool",
+      "inputs": [],
+      "outputs": [],
+      "dependencies": []
+    },
+    {
+      "name": "everything",
+      "path": "core_tools\\everything\\index.js",
+      "category": "core_tools",
+      "entry_point": "index.js",
+      "files_count": 2,
+      "status": "unknown",
+      "quality": "unknown",
+      "description": "Universal file search tool using Everything (Windows)",
+      "inputs": [],
+      "outputs": [],
+      "dependencies": []
+    },
+    {
+      "name": "fetch",
+      "path": "core_tools\\fetch\\index.js",
+      "category": "core_tools",
+      "entry_point": "index.js",
+      "files_count": 2,
+      "status": "unknown",
+      "quality": "unknown",
+      "description": "Web fetch and scraping tool",
+      "inputs": [],
+      "outputs": [],
+      "dependencies": []
+    },
+    {
+      "name": "filesystem",
+      "path": "core_tools\\filesystem\\index.js",
+      "category": "core_tools",
+      "entry_point": "index.js",
+      "files_count": 2,
+      "status": "unknown",
+      "quality": "unknown",
+      "description": "File system operations (read, write, list, delete)",
+      "inputs": [],
+      "outputs": [],
+      "dependencies": []
+    },
+    {
+      "name": "git",
+      "path": "core_tools\\git\\index.js",
+      "category": "core_tools",
+      "entry_point": "index.js",
+      "files_count": 2,
+      "status": "unknown",
+      "quality": "unknown",
+      "description": "Git operations (clone, commit, push, pull, branch)",
+      "inputs": [],
+      "outputs": [],
+      "dependencies": []
+    },
+    {
+      "name": "memory",
+      "path": "core_tools\\memory\\index.js",
+      "category": "core_tools",
+      "entry_point": "index.js",
+      "files_count": 2,
+      "status": "unknown",
+      "quality": "unknown",
+      "description": "Memory management and recall for agents",
+      "inputs": [],
+      "outputs": [],
+      "dependencies": []
+    },
+    {
+      "name": "sequentialthinking",
+      "path": "core_tools\\sequentialthinking\\index.js",
+      "category": "core_tools",
+      "entry_point": "index.js",
+      "files_count": 2,
+      "status": "unknown",
+      "quality": "unknown",
+      "description": "Sequential thinking and task breakdown for agents",
+      "inputs": [],
+      "outputs": [],
+      "dependencies": []
+    },
+    {
+      "name": "time",
+      "path": "core_tools\\time\\index.js",
+      "category": "core_tools",
+      "entry_point": "index.js",
+      "files_count": 2,
+      "status": "unknown",
+      "quality": "unknown",
+      "description": "Time and date utilities",
+      "inputs": [],
+      "outputs": [],
+      "dependencies": []
+    },
+    {
+      "name": "metoro",
+      "path": "custom_tools\\metoro\\index.js",
+      "category": "custom_tools",
+      "entry_point": "index.js",
+      "files_count": 9,
+      "status": "unknown",
+      "quality": "unknown",
+      "description": "Custom metrics and observability tool",
+      "inputs": [],
+      "outputs": [],
+      "dependencies": []
+    },
+    {
+      "name": "db-universal",
+      "path": "database_tools\\db-universal\\index.js",
+      "category": "database_tools",
+      "entry_point": "index.js",
+      "files_count": 32,
+      "status": "unknown",
+      "quality": "unknown",
+      "description": "Universal database adapter supporting multiple database systems",
+      "inputs": [],
+      "outputs": [],
+      "dependencies": []
+    },
+    {
+      "name": "mcp_server_duckdb",
+      "path": "database_tools\\duckdb\\src\\mcp_server_duckdb\\server.py",
+      "category": "database_tools",
+      "entry_point": "server.py",
+      "files_count": 3,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "mongodb",
+      "path": "database_tools\\mongodb\\index.js",
+      "category": "database_tools",
+      "entry_point": "index.js",
+      "files_count": 16,
+      "status": "unknown",
+      "quality": "unknown",
+      "description": "MongoDB operations (query, insert, update, delete)",
+      "inputs": [],
+      "outputs": [],
+      "dependencies": []
+    },
+    {
+      "name": "src",
+      "path": "database_tools\\mongodb\\src\\index.ts",
+      "category": "database_tools",
+      "entry_point": "index.ts",
+      "files_count": 3,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "mysql_mcp_server",
+      "path": "database_tools\\mysql\\src\\mysql_mcp_server\\server.py",
+      "category": "database_tools",
+      "entry_point": "server.py",
+      "files_count": 2,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "mcp_neo4j_aura_manager",
+      "path": "database_tools\\neo4j\\servers\\mcp-neo4j-cloud-aura-api\\src\\mcp_neo4j_aura_manager\\server.py",
+      "category": "database_tools",
+      "entry_point": "server.py",
+      "files_count": 5,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "mcp-neo4j-cypher",
+      "path": "database_tools\\neo4j\\servers\\mcp-neo4j-cypher\\manifest.json",
+      "category": "database_tools",
+      "entry_point": "manifest.json",
+      "files_count": 15,
+      "status": "unknown",
+      "quality": "unknown",
+      "description": "Execute read and write Cypher queries on your Neo4j database.",
+      "inputs": [],
+      "outputs": [],
+      "dependencies": []
+    },
+    {
+      "name": "mcp_neo4j_cypher",
+      "path": "database_tools\\neo4j\\servers\\mcp-neo4j-cypher\\src\\mcp_neo4j_cypher\\server.py",
+      "category": "database_tools",
+      "entry_point": "server.py",
+      "files_count": 3,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "mcp_neo4j_data_modeling",
+      "path": "database_tools\\neo4j\\servers\\mcp-neo4j-data-modeling\\src\\mcp_neo4j_data_modeling\\server.py",
+      "category": "database_tools",
+      "entry_point": "server.py",
+      "files_count": 6,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "mcp_neo4j_memory",
+      "path": "database_tools\\neo4j\\servers\\mcp-neo4j-memory\\src\\mcp_neo4j_memory\\server.py",
+      "category": "database_tools",
+      "entry_point": "server.py",
+      "files_count": 4,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "src",
+      "path": "devops_tools\\cloudflare\\packages\\mcp-observability\\src\\index.ts",
+      "category": "devops_tools",
+      "entry_point": "index.ts",
+      "files_count": 3,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "mcp_server_docker",
+      "path": "devops_tools\\docker\\src\\mcp_server_docker\\server.py",
+      "category": "devops_tools",
+      "entry_point": "server.py",
+      "files_count": 5,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "kubernetes",
+      "path": "devops_tools\\kubernetes\\index.js",
+      "category": "devops_tools",
+      "entry_point": "index.js",
+      "files_count": 10,
+      "status": "unknown",
+      "quality": "unknown",
+      "description": "Kubernetes management and diagnostics tool",
+      "inputs": [],
+      "outputs": [],
+      "dependencies": []
+    },
+    {
+      "name": "dynamic-orchestrator",
+      "path": "mcp_tools\\dynamic-orchestrator\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 13,
+      "status": "unknown",
+      "quality": "unknown",
+      "description": "Dynamic tool orchestration and management system",
+      "inputs": [],
+      "outputs": [],
+      "dependencies": []
+    },
+    {
+      "name": "dist",
+      "path": "mcp_tools\\dynamic-orchestrator\\dist\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 32,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "lib",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@babel\\code-frame\\lib\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 2,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "lib",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@babel\\core\\lib\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 12,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "config",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@babel\\core\\lib\\config\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 28,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "files",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@babel\\core\\lib\\config\\files\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 18,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "parser",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@babel\\core\\lib\\parser\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 2,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "transformation",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@babel\\core\\lib\\transformation\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 10,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "files",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@babel\\core\\src\\config\\files\\index.ts",
+      "category": "mcp_tools",
+      "entry_point": "index.ts",
+      "files_count": 2,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "lib",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@babel\\generator\\lib\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 12,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "generators",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@babel\\generator\\lib\\generators\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 26,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "node",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@babel\\generator\\lib\\node\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 4,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "lib",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@babel\\helper-compilation-targets\\lib\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 14,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "lib",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@babel\\helper-module-imports\\lib\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 8,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "lib",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@babel\\helper-module-transforms\\lib\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 14,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "lib",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@babel\\helper-plugin-utils\\lib\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 2,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "lib",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@babel\\helper-string-parser\\lib\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 2,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "lib",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@babel\\helper-validator-identifier\\lib\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 6,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "lib",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@babel\\helper-validator-option\\lib\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 6,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "lib",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@babel\\helpers\\lib\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 4,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "lib",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@babel\\parser\\lib\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 2,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "lib",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@babel\\plugin-syntax-async-generators\\lib\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 1,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "lib",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@babel\\plugin-syntax-bigint\\lib\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 1,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "lib",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@babel\\plugin-syntax-class-properties\\lib\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 1,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "lib",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@babel\\plugin-syntax-class-static-block\\lib\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 1,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "lib",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@babel\\plugin-syntax-import-attributes\\lib\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 2,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "lib",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@babel\\plugin-syntax-import-meta\\lib\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 1,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "lib",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@babel\\plugin-syntax-json-strings\\lib\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 1,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "lib",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@babel\\plugin-syntax-jsx\\lib\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 2,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "lib",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@babel\\plugin-syntax-logical-assignment-operators\\lib\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 1,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "lib",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@babel\\plugin-syntax-nullish-coalescing-operator\\lib\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 1,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "lib",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@babel\\plugin-syntax-numeric-separator\\lib\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 1,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "lib",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@babel\\plugin-syntax-object-rest-spread\\lib\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 1,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "lib",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@babel\\plugin-syntax-optional-catch-binding\\lib\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 1,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "lib",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@babel\\plugin-syntax-optional-chaining\\lib\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 1,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "lib",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@babel\\plugin-syntax-private-property-in-object\\lib\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 1,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "lib",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@babel\\plugin-syntax-top-level-await\\lib\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 1,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "lib",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@babel\\plugin-syntax-typescript\\lib\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 2,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "lib",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@babel\\template\\lib\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 16,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "lib",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@babel\\traverse\\lib\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 14,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "path",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@babel\\traverse\\lib\\path\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 22,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "inference",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@babel\\traverse\\lib\\path\\inference\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 8,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "scope",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@babel\\traverse\\lib\\scope\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 6,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "lib",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@babel\\types\\lib\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 5,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "generated",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@babel\\types\\lib\\asserts\\generated\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 2,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "generated",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@babel\\types\\lib\\ast-types\\generated\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 2,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "generated",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@babel\\types\\lib\\builders\\generated\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 6,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "constants",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@babel\\types\\lib\\constants\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 2,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "generated",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@babel\\types\\lib\\constants\\generated\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 2,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "definitions",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@babel\\types\\lib\\definitions\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 20,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "generated",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@babel\\types\\lib\\validators\\generated\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 2,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "lib",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@bcoe\\v8-coverage\\dist\\lib\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 29,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "_src",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@bcoe\\v8-coverage\\dist\\lib\\_src\\index.ts",
+      "category": "mcp_tools",
+      "entry_point": "index.ts",
+      "files_count": 8,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "lib",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@bcoe\\v8-coverage\\src\\lib\\index.ts",
+      "category": "mcp_tools",
+      "entry_point": "index.ts",
+      "files_count": 8,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "lib",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@eslint\\eslintrc\\lib\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 5,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "config-array",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@eslint\\eslintrc\\lib\\config-array\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 6,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "brace-expansion",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@eslint\\eslintrc\\node_modules\\brace-expansion\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 4,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "src",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@eslint\\js\\src\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 1,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "eslint-utils",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@eslint-community\\eslint-utils\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 9,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "regexpp",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@eslint-community\\regexpp\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 8,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "brace-expansion",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@humanwhocodes\\config-array\\node_modules\\brace-expansion\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 4,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "src",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@humanwhocodes\\object-schema\\src\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 4,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "load-nyc-config",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@istanbuljs\\load-nyc-config\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 6,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "argparse",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@istanbuljs\\load-nyc-config\\node_modules\\argparse\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 5,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "find-up",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@istanbuljs\\load-nyc-config\\node_modules\\find-up\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 5,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "js-yaml",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@istanbuljs\\load-nyc-config\\node_modules\\js-yaml\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 4,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "locate-path",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@istanbuljs\\load-nyc-config\\node_modules\\locate-path\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 5,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "p-limit",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@istanbuljs\\load-nyc-config\\node_modules\\p-limit\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 5,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "p-locate",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@istanbuljs\\load-nyc-config\\node_modules\\p-locate\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 5,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "resolve-from",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@istanbuljs\\load-nyc-config\\node_modules\\resolve-from\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 5,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "schema",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@istanbuljs\\schema\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 7,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "build",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@jest\\console\\build\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 7,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "build",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@jest\\core\\build\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 28,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "cli",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@jest\\core\\build\\cli\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 1,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "build",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@jest\\environment\\build\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 2,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "build",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@jest\\expect\\build\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 3,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "build",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@jest\\expect-utils\\build\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 6,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "build",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@jest\\fake-timers\\build\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 4,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "build",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@jest\\globals\\build\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 2,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "build",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@jest\\reporters\\build\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 23,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "build",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@jest\\schemas\\build\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 2,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "build",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@jest\\source-map\\build\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 4,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "build",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@jest\\test-result\\build\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 5,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "build",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@jest\\test-sequencer\\build\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 2,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "build",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@jest\\transform\\build\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 7,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "build",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@jest\\types\\build\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 7,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "out",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@nodelib\\fs.scandir\\out\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 6,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "types",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@nodelib\\fs.scandir\\out\\types\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 2,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "utils",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@nodelib\\fs.scandir\\out\\utils\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 4,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "out",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@nodelib\\fs.stat\\out\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 4,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "types",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@nodelib\\fs.stat\\out\\types\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 2,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "out",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@nodelib\\fs.walk\\out\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 4,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "providers",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@nodelib\\fs.walk\\out\\providers\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 8,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "types",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@nodelib\\fs.walk\\out\\types\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 2,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "compiler",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@sinclair\\typebox\\compiler\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 4,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "errors",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@sinclair\\typebox\\errors\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 4,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "system",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@sinclair\\typebox\\system\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 4,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "value",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@sinclair\\typebox\\value\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 26,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "lib",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@sinonjs\\commons\\lib\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 20,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "prototypes",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@sinonjs\\commons\\lib\\prototypes\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 12,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "dist",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@typescript-eslint\\eslint-plugin\\dist\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 2,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "rules",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@typescript-eslint\\eslint-plugin\\dist\\rules\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 282,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "naming-convention-utils",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@typescript-eslint\\eslint-plugin\\dist\\rules\\naming-convention-utils\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 16,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "util",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@typescript-eslint\\eslint-plugin\\dist\\util\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 38,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "dist",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@typescript-eslint\\parser\\dist\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 8,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "dist",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@typescript-eslint\\scope-manager\\dist\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 17,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "definition",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@typescript-eslint\\scope-manager\\dist\\definition\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 50,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "lib",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@typescript-eslint\\scope-manager\\dist\\lib\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 345,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "referencer",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@typescript-eslint\\scope-manager\\dist\\referencer\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 31,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "scope",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@typescript-eslint\\scope-manager\\dist\\scope\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 72,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "variable",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@typescript-eslint\\scope-manager\\dist\\variable\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 15,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "dist",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@typescript-eslint\\type-utils\\dist\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 72,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "dist",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@typescript-eslint\\types\\dist\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 16,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "dist",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@typescript-eslint\\typescript-estree\\dist\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 64,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "parseSettings",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@typescript-eslint\\typescript-estree\\dist\\parseSettings\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 28,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "ts-estree",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@typescript-eslint\\typescript-estree\\dist\\ts-estree\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 12,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "dist",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@typescript-eslint\\utils\\dist\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 12,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "ast-utils",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@typescript-eslint\\utils\\dist\\ast-utils\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 16,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "eslint-utils",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@typescript-eslint\\utils\\dist\\ast-utils\\eslint-utils\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 24,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "eslint-utils",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@typescript-eslint\\utils\\dist\\eslint-utils\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 36,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "ts-eslint",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@typescript-eslint\\utils\\dist\\ts-eslint\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 52,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "ts-utils",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@typescript-eslint\\utils\\dist\\ts-utils\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 8,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "dist",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@typescript-eslint\\visitor-keys\\dist\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 12,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "cjs",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@ungap\\structured-clone\\cjs\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 6,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "esm",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\@ungap\\structured-clone\\esm\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 5,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "acorn-jsx",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\acorn-jsx\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 6,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "compile",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\ajv\\lib\\compile\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 10,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "dotjs",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\ajv\\lib\\dotjs\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 27,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "ansi-escapes",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\ansi-escapes\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 5,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "ansi-regex",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\ansi-regex\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 5,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "ansi-styles",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\ansi-styles\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 5,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "anymatch",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\anymatch\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 5,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "array-union",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\array-union\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 5,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "build",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\babel-jest\\build\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 3,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "lib",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\babel-plugin-istanbul\\lib\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 2,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "src",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\babel-plugin-istanbul\\node_modules\\istanbul-lib-instrument\\src\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 6,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "build",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\babel-plugin-jest-hoist\\build\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 2,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "src",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\babel-preset-current-node-syntax\\src\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 1,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "babel-preset-jest",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\babel-preset-jest\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 4,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "balanced-match",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\balanced-match\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 4,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "dist",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\baseline-browser-mapping\\dist\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 4,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "brace-expansion",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\brace-expansion\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 4,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "braces",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\braces\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 4,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "browserslist",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\browserslist\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 11,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "dist",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\bs-logger\\dist\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 2,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "logger",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\bs-logger\\dist\\logger\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 12,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "testing",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\bs-logger\\dist\\testing\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 4,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "bser",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\bser\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 3,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "buffer-from",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\buffer-from\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 4,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "callsites",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\callsites\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 5,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "camelcase",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\camelcase\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 5,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "unpacker",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\caniuse-lite\\dist\\unpacker\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 6,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "source",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\chalk\\source\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 3,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "char-regex",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\char-regex\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 5,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "ci-info",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\ci-info\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 7,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "lib",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\cliui\\build\\lib\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 2,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "co",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\co\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 5,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "collect-v8-coverage",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\collect-v8-coverage\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 6,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "color-convert",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\color-convert\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 7,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "color-name",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\color-name\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 4,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "concat-map",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\concat-map\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 5,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "convert-source-map",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\convert-source-map\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 4,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "build",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\create-jest\\build\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 8,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "cross-spawn",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\cross-spawn\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 4,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "src",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\debug\\src\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 4,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "deep-is",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\deep-is\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 5,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "deepmerge",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\deepmerge\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 9,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "detect-newline",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\detect-newline\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 5,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "build",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\diff-sequences\\build\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 2,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "dir-glob",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\dir-glob\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 4,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "electron-to-chromium",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\electron-to-chromium\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 12,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "emittery",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\emittery\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 6,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "emoji-regex",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\emoji-regex\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 6,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "es2015",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\emoji-regex\\es2015\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 2,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "error-ex",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\error-ex\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 4,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "es-errors",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\es-errors\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 20,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "test",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\es-errors\\test\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 1,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "dist",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\escalade\\dist\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 2,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "sync",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\escalade\\sync\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 4,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "escape-string-regexp",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\escape-string-regexp\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 5,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "cli-engine",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\eslint\\lib\\cli-engine\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 7,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "eslint",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\eslint\\lib\\eslint\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 4,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "linter",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\eslint\\lib\\linter\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 12,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "rule-tester",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\eslint\\lib\\rule-tester\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 3,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "rules",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\eslint\\lib\\rules\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 292,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "unicode",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\eslint\\lib\\rules\\utils\\unicode\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 5,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "source-code",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\eslint\\lib\\source-code\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 2,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "token-store",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\eslint\\lib\\source-code\\token-store\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 13,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "brace-expansion",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\eslint\\node_modules\\brace-expansion\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 4,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "lib",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\eslint-scope\\lib\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 9,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "lib",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\eslint-visitor-keys\\lib\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 2,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "execa",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\execa\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 5,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "build",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\expect\\build\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 10,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "fast-deep-equal",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\fast-deep-equal\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 7,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "es6",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\fast-deep-equal\\es6\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 4,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "glob-parent",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\fast-glob\\node_modules\\glob-parent\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 5,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "out",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\fast-glob\\out\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 4,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "types",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\fast-glob\\out\\types\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 2,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "utils",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\fast-glob\\out\\utils\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 16,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "fast-json-stable-stringify",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\fast-json-stable-stringify\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 7,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "benchmark",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\fast-json-stable-stringify\\benchmark\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 2,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "fb-watchman",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\fb-watchman\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 3,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "fill-range",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\fill-range\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 4,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "find-up",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\find-up\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 5,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "flatted",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\flatted\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 7,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "cjs",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\flatted\\cjs\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 2,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "esm",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\flatted\\esm\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 1,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "fs.realpath",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\fs.realpath\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 5,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "function-bind",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\function-bind\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 8,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "test",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\function-bind\\test\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 2,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "gensync",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\gensync\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 5,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "get-caller-file",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\get-caller-file\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 6,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "get-stream",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\get-stream\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 6,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "brace-expansion",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\glob\\node_modules\\brace-expansion\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 4,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "glob-parent",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\glob-parent\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 4,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "globals",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\globals\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 6,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "globby",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\globby\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 7,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "lib",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\graphemer\\lib\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 15,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "lib",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\handlebars\\lib\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 5,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "has-flag",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\has-flag\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 5,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "hasown",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\hasown\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 9,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "html-escaper",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\html-escaper\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 5,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "cjs",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\html-escaper\\cjs\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 2,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "esm",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\html-escaper\\esm\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 1,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "test",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\html-escaper\\test\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 2,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "ignore",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\ignore\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 6,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "import-fresh",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\import-fresh\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 5,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "import-local",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\import-local\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 5,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "is-arrayish",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\is-arrayish\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 8,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "is-core-module",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\is-core-module\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 8,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "test",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\is-core-module\\test\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 1,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "is-extglob",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\is-extglob\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 4,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "is-fullwidth-code-point",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\is-fullwidth-code-point\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 5,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "is-generator-fn",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\is-generator-fn\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 5,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "is-glob",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\is-glob\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 4,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "is-number",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\is-number\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 4,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "is-path-inside",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\is-path-inside\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 5,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "is-stream",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\is-stream\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 5,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "isexe",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\isexe\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 7,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "istanbul-lib-coverage",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\istanbul-lib-coverage\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 5,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "src",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\istanbul-lib-instrument\\src\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 6,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "istanbul-lib-report",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\istanbul-lib-report\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 5,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "istanbul-lib-source-maps",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\istanbul-lib-source-maps\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 5,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "istanbul-reports",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\istanbul-reports\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 5,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "clover",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\istanbul-reports\\lib\\clover\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 1,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "cobertura",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\istanbul-reports\\lib\\cobertura\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 1,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "html",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\istanbul-reports\\lib\\html\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 3,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "html-spa",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\istanbul-reports\\lib\\html-spa\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 3,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "src",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\istanbul-reports\\lib\\html-spa\\src\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 9,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "json",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\istanbul-reports\\lib\\json\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 1,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "json-summary",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\istanbul-reports\\lib\\json-summary\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 1,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "lcov",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\istanbul-reports\\lib\\lcov\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 1,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "lcovonly",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\istanbul-reports\\lib\\lcovonly\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 1,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "none",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\istanbul-reports\\lib\\none\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 1,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "teamcity",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\istanbul-reports\\lib\\teamcity\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 1,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "text",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\istanbul-reports\\lib\\text\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 1,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "text-lcov",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\istanbul-reports\\lib\\text-lcov\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 1,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "text-summary",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\istanbul-reports\\lib\\text-summary\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 1,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "build",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\jest\\build\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 2,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "build",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\jest-changed-files\\build\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 6,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "build",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\jest-circus\\build\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 11,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "build",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\jest-cli\\build\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 4,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "build",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\jest-config\\build\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 19,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "build",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\jest-diff\\build\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 11,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "build",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\jest-docblock\\build\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 2,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "build",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\jest-each\\build\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 4,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "build",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\jest-environment-node\\build\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 2,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "build",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\jest-get-type\\build\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 2,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "build",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\jest-haste-map\\build\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 9,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "build",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\jest-leak-detector\\build\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 2,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "build",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\jest-matcher-utils\\build\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 4,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "build",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\jest-message-util\\build\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 3,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "build",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\jest-mock\\build\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 2,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "jest-pnp-resolver",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\jest-pnp-resolver\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 6,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "build",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\jest-regex-util\\build\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 2,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "build",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\jest-resolve\\build\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 11,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "build",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\jest-resolve-dependencies\\build\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 2,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "build",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\jest-runner\\build\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 5,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "build",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\jest-runtime\\build\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 3,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "build",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\jest-snapshot\\build\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 12,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "build",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\jest-util\\build\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 24,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "build",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\jest-validate\\build\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 12,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "camelcase",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\jest-validate\\node_modules\\camelcase\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 5,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "build",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\jest-watcher\\build\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 8,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "build",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\jest-worker\\build\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 7,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "supports-color",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\jest-worker\\node_modules\\supports-color\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 5,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "js-tokens",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\js-tokens\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 5,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "js-yaml",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\js-yaml\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 4,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "json-buffer",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\json-buffer\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 5,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "test",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\json-buffer\\test\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 1,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "json-parse-even-better-errors",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\json-parse-even-better-errors\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 5,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "json-schema-traverse",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\json-schema-traverse\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 6,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "json-stable-stringify-without-jsonify",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\json-stable-stringify-without-jsonify\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 6,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "dist",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\json5\\dist\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 4,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "lib",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\json5\\lib\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 13,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "src",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\keyv\\src\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 2,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "kleur",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\kleur\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 5,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "leven",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\leven\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 5,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "lib",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\levn\\lib\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 3,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "build",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\lines-and-columns\\build\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 2,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "locate-path",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\locate-path\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 5,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "lodash.memoize",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\lodash.memoize\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 4,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "lodash.merge",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\lodash.merge\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 4,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "lru-cache",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\lru-cache\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 4,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "make-dir",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\make-dir\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 5,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "make-error",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\make-error\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 5,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "merge-stream",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\merge-stream\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 4,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "merge2",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\merge2\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 4,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "micromatch",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\micromatch\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 4,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "mimic-fn",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\mimic-fn\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 5,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "cjs",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\minimatch\\dist\\cjs\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 25,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "mjs",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\minimatch\\dist\\mjs\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 25,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "minimist",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\minimist\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 7,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "ms",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\ms\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 4,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "natural-compare",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\natural-compare\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 3,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "normalize-path",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\normalize-path\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 4,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "npm-run-path",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\npm-run-path\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 5,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "onetime",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\onetime\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 5,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "lib",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\optionator\\lib\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 3,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "p-limit",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\p-limit\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 5,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "p-locate",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\p-locate\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 5,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "p-try",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\p-try\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 5,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "parent-module",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\parent-module\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 4,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "parse-json",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\parse-json\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 4,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "path-exists",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\path-exists\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 5,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "path-is-absolute",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\path-is-absolute\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 4,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "path-key",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\path-key\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 5,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "path-parse",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\path-parse\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 4,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "path-type",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\path-type\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 5,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "picomatch",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\picomatch\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 4,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "lib",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\pirates\\lib\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 1,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "pkg-dir",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\pkg-dir\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 5,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "find-up",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\pkg-dir\\node_modules\\find-up\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 5,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "locate-path",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\pkg-dir\\node_modules\\locate-path\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 5,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "p-limit",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\pkg-dir\\node_modules\\p-limit\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 5,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "p-locate",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\pkg-dir\\node_modules\\p-locate\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 5,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "lib",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\prelude-ls\\lib\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 6,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "build",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\pretty-format\\build\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 4,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "ansi-styles",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\pretty-format\\node_modules\\ansi-styles\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 5,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "prompts",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\prompts\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 4,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "dist",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\prompts\\dist\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 2,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "dateparts",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\prompts\\dist\\dateparts\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 10,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "elements",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\prompts\\dist\\elements\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 11,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "util",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\prompts\\dist\\util\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 9,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "lib",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\prompts\\lib\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 2,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "dateparts",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\prompts\\lib\\dateparts\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 10,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "elements",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\prompts\\lib\\elements\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 11,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "util",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\prompts\\lib\\util\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 9,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "queue-microtask",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\queue-microtask\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 5,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "react-is",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\react-is\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 4,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "require-directory",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\require-directory\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 7,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "resolve",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\resolve\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 10,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "dotdot",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\resolve\\test\\dotdot\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 1,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "abc",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\resolve\\test\\dotdot\\abc\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 1,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "aaa",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\resolve\\test\\module_dir\\xmodules\\aaa\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 1,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "aaa",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\resolve\\test\\module_dir\\ymodules\\aaa\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 1,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "aaa",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\resolve\\test\\node_path\\x\\aaa\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 1,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "ccc",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\resolve\\test\\node_path\\x\\ccc\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 1,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "bbb",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\resolve\\test\\node_path\\y\\bbb\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 1,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "ccc",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\resolve\\test\\node_path\\y\\ccc\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 1,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "aaa",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\resolve\\test\\precedence\\aaa\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 2,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "dot_main",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\resolve\\test\\resolver\\dot_main\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 2,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "dot_slash_main",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\resolve\\test\\resolver\\dot_slash_main\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 2,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "false_main",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\resolve\\test\\resolver\\false_main\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 2,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "incorrect_main",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\resolve\\test\\resolver\\incorrect_main\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 2,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "package-a",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\resolve\\test\\resolver\\multirepo\\packages\\package-a\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 2,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "package-b",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\resolve\\test\\resolver\\multirepo\\packages\\package-b\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 2,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "foo",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\resolve\\test\\resolver\\quux\\foo\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 1,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "foo",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\resolve\\test\\resolver\\same_names\\foo\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 1,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "util",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\resolve\\test\\shadowed_core\\node_modules\\util\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 1,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "resolve-cwd",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\resolve-cwd\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 5,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "resolve-from",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\resolve-cwd\\node_modules\\resolve-from\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 5,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "resolve-from",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\resolve-from\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 4,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "dist",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\resolve.exports\\dist\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 2,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "run-parallel",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\run-parallel\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 4,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "semver",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\semver\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 6,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "classes",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\semver\\classes\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 4,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "shebang-command",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\shebang-command\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 4,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "shebang-regex",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\shebang-regex\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 5,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "signal-exit",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\signal-exit\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 5,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "src",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\sisteransi\\src\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 2,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "slash",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\slash\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 5,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "stack-utils",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\stack-utils\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 4,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "escape-string-regexp",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\stack-utils\\node_modules\\escape-string-regexp\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 5,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "string-length",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\string-length\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 5,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "string-width",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\string-width\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 5,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "strip-ansi",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\strip-ansi\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 5,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "strip-bom",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\strip-bom\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 5,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "strip-final-newline",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\strip-final-newline\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 4,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "strip-json-comments",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\strip-json-comments\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 5,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "supports-color",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\supports-color\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 5,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "supports-preserve-symlinks-flag",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\supports-preserve-symlinks-flag\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 8,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "test",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\supports-preserve-symlinks-flag\\test\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 1,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "test-exclude",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\test-exclude\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 8,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "brace-expansion",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\test-exclude\\node_modules\\brace-expansion\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 4,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "text-table",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\text-table\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 5,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "to-regex-range",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\to-regex-range\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 4,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "lib",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\ts-api-utils\\lib\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 4,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "dist",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\ts-jest\\dist\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 8,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "cli",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\ts-jest\\dist\\cli\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 4,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "config",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\ts-jest\\dist\\config\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 6,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "legacy",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\ts-jest\\dist\\legacy\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 4,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "compiler",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\ts-jest\\dist\\legacy\\compiler\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 8,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "utils",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\ts-jest\\dist\\utils\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 26,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "presets",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\ts-jest\\presets\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 2,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "lib",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\type-check\\lib\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 3,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "type-detect",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\type-detect\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 5,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "update-browserslist-db",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\update-browserslist-db\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 8,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "esnext",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\uri-js\\dist\\esnext\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 15,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "v8-to-istanbul",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\v8-to-istanbul\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 6,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "word-wrap",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\word-wrap\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 5,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "wordwrap",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\wordwrap\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 4,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "wrap-ansi",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\wrap-ansi\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 4,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "lib",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\write-file-atomic\\lib\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 1,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "lib",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\y18n\\build\\lib\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 2,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "helpers",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\yargs\\helpers\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 3,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "lib",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\yargs-parser\\build\\lib\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 5,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "yocto-queue",
+      "path": "mcp_tools\\dynamic-orchestrator\\node_modules\\yocto-queue\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 5,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "src",
+      "path": "mcp_tools\\dynamic-orchestrator\\src\\index.ts",
+      "category": "mcp_tools",
+      "entry_point": "index.ts",
+      "files_count": 8,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "fastmcp",
+      "path": "mcp_tools\\fastmcp\\index.js",
+      "category": "mcp_tools",
+      "entry_point": "index.js",
+      "files_count": 12,
+      "status": "unknown",
+      "quality": "unknown",
+      "description": "Fast MCP protocol implementation for high-performance tool execution",
+      "inputs": [],
+      "outputs": [],
+      "dependencies": []
+    },
+    {
+      "name": "auth",
+      "path": "mcp_tools\\fastmcp\\src\\auth\\index.ts",
+      "category": "mcp_tools",
+      "entry_point": "index.ts",
+      "files_count": 8,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "providers",
+      "path": "mcp_tools\\fastmcp\\src\\auth\\providers\\index.ts",
+      "category": "mcp_tools",
+      "entry_point": "index.ts",
+      "files_count": 7,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "edge",
+      "path": "mcp_tools\\fastmcp\\src\\edge\\index.ts",
+      "category": "mcp_tools",
+      "entry_point": "index.ts",
+      "files_count": 3,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "linear",
+      "path": "productivity_tools\\linear\\index.ts",
+      "category": "productivity_tools",
+      "entry_point": "index.ts",
+      "files_count": 7,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "src",
+      "path": "productivity_tools\\notion\\src\\index.ts",
+      "category": "productivity_tools",
+      "entry_point": "index.ts",
+      "files_count": 2,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "client",
+      "path": "productivity_tools\\notion\\src\\client\\index.ts",
+      "category": "productivity_tools",
+      "entry_point": "index.ts",
+      "files_count": 1,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "markdown",
+      "path": "productivity_tools\\notion\\src\\markdown\\index.ts",
+      "category": "productivity_tools",
+      "entry_point": "index.ts",
+      "files_count": 2,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "server",
+      "path": "productivity_tools\\notion\\src\\server\\index.ts",
+      "category": "productivity_tools",
+      "entry_point": "index.ts",
+      "files_count": 1,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "types",
+      "path": "productivity_tools\\notion\\src\\types\\index.ts",
+      "category": "productivity_tools",
+      "entry_point": "index.ts",
+      "files_count": 5,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "utils",
+      "path": "productivity_tools\\notion\\src\\utils\\index.ts",
+      "category": "productivity_tools",
+      "entry_point": "index.ts",
+      "files_count": 1,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "mcp_obsidian",
+      "path": "productivity_tools\\obsidian\\src\\mcp_obsidian\\server.py",
+      "category": "productivity_tools",
+      "entry_point": "server.py",
+      "files_count": 4,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "mcp_server_milvus",
+      "path": "search_tools\\milvus\\src\\mcp_server_milvus\\server.py",
+      "category": "search_tools",
+      "entry_point": "server.py",
+      "files_count": 4,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "mcp_server_qdrant",
+      "path": "search_tools\\qdrant\\src\\mcp_server_qdrant\\main.py",
+      "category": "search_tools",
+      "entry_point": "main.py",
+      "files_count": 6,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "browserbase",
+      "path": "web_tools\\browserbase\\index.js",
+      "category": "web_tools",
+      "entry_point": "index.js",
+      "files_count": 19,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "src",
+      "path": "web_tools\\browserbase\\src\\index.ts",
+      "category": "web_tools",
+      "entry_point": "index.ts",
+      "files_count": 7,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "tools",
+      "path": "web_tools\\browserbase\\src\\tools\\index.ts",
+      "category": "web_tools",
+      "entry_point": "index.ts",
+      "files_count": 7,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "duckduckgo_mcp_server",
+      "path": "web_tools\\duckduckgo\\src\\duckduckgo_mcp_server\\server.py",
+      "category": "web_tools",
+      "entry_point": "server.py",
+      "files_count": 4,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "firecrawl",
+      "path": "web_tools\\firecrawl\\index.js",
+      "category": "web_tools",
+      "entry_point": "index.js",
+      "files_count": 18,
+      "status": "unknown",
+      "quality": "unknown",
+      "description": "Web scraping, search, crawl, and autonomous research toolkit",
+      "inputs": [],
+      "outputs": [],
+      "dependencies": []
+    },
+    {
+      "name": "src",
+      "path": "web_tools\\firecrawl\\src\\index.ts",
+      "category": "web_tools",
+      "entry_point": "index.ts",
+      "files_count": 1,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "src",
+      "path": "web_tools\\markdownify\\src\\index.ts",
+      "category": "web_tools",
+      "entry_point": "index.ts",
+      "files_count": 7,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "playwright",
+      "path": "web_tools\\playwright\\index.js",
+      "category": "web_tools",
+      "entry_point": "index.js",
+      "files_count": 22,
+      "status": "unknown",
+      "quality": "unknown",
+      "description": "Browser automation and web scraping toolkit using Playwright",
+      "inputs": [],
+      "outputs": [],
+      "dependencies": []
+    },
+    {
+      "name": "src",
+      "path": "web_tools\\playwright\\src\\index.ts",
+      "category": "web_tools",
+      "entry_point": "index.ts",
+      "files_count": 6,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "logging",
+      "path": "web_tools\\playwright\\src\\logging\\index.ts",
+      "category": "web_tools",
+      "entry_point": "index.ts",
+      "files_count": 4,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "monitoring",
+      "path": "web_tools\\playwright\\src\\monitoring\\index.ts",
+      "category": "web_tools",
+      "entry_point": "index.ts",
+      "files_count": 3,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "rate-limiting",
+      "path": "web_tools\\playwright\\src\\rate-limiting\\index.ts",
+      "category": "web_tools",
+      "entry_point": "index.ts",
+      "files_count": 3,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "sse",
+      "path": "web_tools\\playwright\\src\\sse\\index.ts",
+      "category": "web_tools",
+      "entry_point": "index.ts",
+      "files_count": 3,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "tools",
+      "path": "web_tools\\playwright\\src\\tools\\index.ts",
+      "category": "web_tools",
+      "entry_point": "index.ts",
+      "files_count": 1,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "api",
+      "path": "web_tools\\playwright\\src\\tools\\api\\index.ts",
+      "category": "web_tools",
+      "entry_point": "index.ts",
+      "files_count": 3,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "browser",
+      "path": "web_tools\\playwright\\src\\tools\\browser\\index.ts",
+      "category": "web_tools",
+      "entry_point": "index.ts",
+      "files_count": 11,
+      "status": "unknown",
+      "quality": "unknown"
+    },
+    {
+      "name": "codegen",
+      "path": "web_tools\\playwright\\src\\tools\\codegen\\index.ts",
+      "category": "web_tools",
+      "entry_point": "index.ts",
+      "files_count": 4,
+      "status": "unknown",
+      "quality": "unknown"
+    }
+  ]
+}

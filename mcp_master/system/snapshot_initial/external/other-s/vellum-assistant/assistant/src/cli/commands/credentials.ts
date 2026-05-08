@@ -1,0 +1,985 @@
+import type { Command } from "commander";
+
+import {
+  fetchManagedCatalog,
+  type ManagedCredentialDescriptor,
+} from "../../credential-execution/managed-catalog.js";
+import { cliIpcCall } from "../../ipc/cli-client.js";
+import { syncManualTokenConnection } from "../../oauth/manual-token-connection.js";
+import {
+  disconnectOAuthProvider,
+  getConnectionByProvider,
+  listConnections,
+  type OAuthConnectionRow,
+} from "../../oauth/oauth-store.js";
+import type { CredentialPromptResult } from "../../runtime/routes/credential-prompt-routes.js";
+import { credentialKey } from "../../security/credential-key.js";
+import {
+  getActiveBackendInfoAsync,
+  getSecureKeyAsync,
+  getSecureKeyResultAsync,
+} from "../../security/secure-keys.js";
+import {
+  assertMetadataWritable,
+  type CredentialMetadata,
+  deleteCredentialMetadata,
+  getCredentialMetadata,
+  getCredentialMetadataById,
+  listCredentialMetadata,
+  upsertCredentialMetadata,
+} from "../../tools/credentials/metadata-store.js";
+import {
+  deleteSecureKeyViaDaemon,
+  setSecureKeyViaDaemon,
+} from "../lib/daemon-credential-client.js";
+import { log } from "../logger.js";
+import { shouldOutputJson, writeOutput } from "../output.js";
+
+// ---------------------------------------------------------------------------
+// Format-aware error output
+// ---------------------------------------------------------------------------
+
+/**
+ * Write an error message respecting the output format. In JSON mode, emit a
+ * structured `{ ok: false, error }` object to stdout. In human mode, write
+ * plain text to stderr so the assistant (LLM) doesn't receive JSON that it
+ * might misinterpret as data.
+ */
+function writeError(cmd: Command, message: string): void {
+  if (shouldOutputJson(cmd)) {
+    writeOutput(cmd, { ok: false, error: message });
+  } else {
+    process.stderr.write(`Error: ${message}\n`);
+  }
+}
+
+// ---------------------------------------------------------------------------
+// CES shell lockdown guard
+// ---------------------------------------------------------------------------
+
+/**
+ * Returns true when the current process is running inside an untrusted shell
+ * (CES shell lockdown active). CLI commands that reveal raw secrets must
+ * check this and fail deterministically.
+ */
+function isUntrustedShell(): boolean {
+  return process.env.VELLUM_UNTRUSTED_SHELL === "1";
+}
+
+/** Error message for commands blocked by CES shell lockdown. */
+const UNTRUSTED_SHELL_ERROR =
+  "This command is not available in untrusted shell mode. " +
+  "Raw secret access is restricted when running under CES shell lockdown.";
+
+// ---------------------------------------------------------------------------
+// Shared helpers
+// ---------------------------------------------------------------------------
+
+/**
+ * Scrub a secret value for display. Shows `****` + last 4 characters for
+ * secrets longer than 4 chars, `****` for secrets 4 chars or fewer, and
+ * `(not set)` when no secret is stored.
+ */
+function scrubSecret(secret: string | undefined): string {
+  if (secret == null || secret.length === 0) return "(not set)";
+  if (secret.length <= 4) return "****";
+  return "****" + secret.slice(-4);
+}
+
+/**
+ * Safely look up an OAuth connection for a credential service.
+ * Returns undefined when the oauth-store has no data or the tables
+ * haven't been created yet (pre-migration).
+ */
+function safeGetConnectionByProvider(
+  service: string,
+): OAuthConnectionRow | undefined {
+  try {
+    return getConnectionByProvider(service);
+  } catch {
+    return undefined;
+  }
+}
+
+/**
+ * Safely list all OAuth connections. Returns an empty array when the
+ * oauth-store has no data or the tables haven't been created yet.
+ */
+function safeListConnections(): OAuthConnectionRow[] {
+  try {
+    return listConnections();
+  } catch {
+    return [];
+  }
+}
+
+/**
+ * Build a structured credential output object suitable for both `inspect`
+ * and `list` responses. Produces an identical shape for every credential.
+ * Optionally enriches with data from the oauth-store when a matching
+ * connection exists.
+ */
+function buildCredentialOutput(
+  metadata: CredentialMetadata,
+  secret: string | undefined,
+  connection?: OAuthConnectionRow,
+): Record<string, unknown> {
+  const output: Record<string, unknown> = {
+    ok: true,
+    service: metadata.service,
+    field: metadata.field,
+    credentialId: metadata.credentialId,
+    scrubbedValue: scrubSecret(secret),
+    hasSecret: secret != null && secret.length > 0,
+    alias: metadata.alias ?? null,
+    usageDescription: metadata.usageDescription ?? null,
+    allowedTools: metadata.allowedTools,
+    allowedDomains: metadata.allowedDomains,
+    createdAt: new Date(metadata.createdAt).toISOString(),
+    updatedAt: new Date(metadata.updatedAt).toISOString(),
+    injectionTemplateCount: metadata.injectionTemplates?.length ?? 0,
+    grantedScopes: connection ? JSON.parse(connection.grantedScopes) : null,
+    expiresAt: connection?.expiresAt
+      ? new Date(connection.expiresAt).toISOString()
+      : null,
+  };
+
+  if (connection) {
+    output.oauthConnectionId = connection.id;
+    output.oauthAccountInfo = connection.accountInfo ?? null;
+    output.oauthStatus = connection.status;
+    output.oauthHasRefreshToken = connection.hasRefreshToken === 1;
+    output.oauthLabel = connection.label ?? null;
+  }
+
+  return output;
+}
+
+/**
+ * Print a human-readable view of a single credential to the logger.
+ */
+function printCredentialHuman(output: Record<string, unknown>): void {
+  log.info(`  ${output.service}:${output.field}`);
+  log.info(`    ID:          ${output.credentialId}`);
+  log.info(`    Value:       ${output.scrubbedValue}`);
+  if (output.alias) log.info(`    Label:       ${output.alias}`);
+  if (output.usageDescription)
+    log.info(`    Description: ${output.usageDescription}`);
+  if (
+    Array.isArray(output.allowedTools) &&
+    (output.allowedTools as string[]).length > 0
+  )
+    log.info(
+      `    Tools:       ${(output.allowedTools as string[]).join(", ")}`,
+    );
+  if (
+    Array.isArray(output.allowedDomains) &&
+    (output.allowedDomains as string[]).length > 0
+  )
+    log.info(
+      `    Domains:     ${(output.allowedDomains as string[]).join(", ")}`,
+    );
+  log.info(`    Created:     ${output.createdAt}`);
+  log.info(`    Updated:     ${output.updatedAt}`);
+  if ((output.injectionTemplateCount as number) > 0)
+    log.info(`    Templates:   ${output.injectionTemplateCount}`);
+
+  // OAuth connection enrichment
+  if (output.oauthStatus) {
+    log.info(`    OAuth:       ${output.oauthStatus}`);
+    if (output.oauthAccountInfo)
+      log.info(`    Account:     ${output.oauthAccountInfo}`);
+    if (output.oauthLabel) log.info(`    OAuth Label: ${output.oauthLabel}`);
+    log.info(`    Refresh:     ${output.oauthHasRefreshToken ? "yes" : "no"}`);
+  }
+}
+
+/**
+ * Build a structured output object for a platform-managed credential descriptor.
+ * Never includes token values — only handle references and non-secret metadata.
+ */
+function buildManagedCredentialOutput(
+  descriptor: ManagedCredentialDescriptor,
+): Record<string, unknown> {
+  return {
+    ok: true,
+    source: "platform",
+    handle: descriptor.handle,
+    provider: descriptor.provider,
+    connectionId: descriptor.connectionId,
+    accountInfo: descriptor.accountInfo,
+    grantedScopes: descriptor.grantedScopes,
+    status: descriptor.status,
+  };
+}
+
+/**
+ * Print a human-readable view of a platform-managed credential to the logger.
+ */
+function printManagedCredentialHuman(output: Record<string, unknown>): void {
+  log.info(`  [platform-managed] ${output.provider}`);
+  log.info(`    Handle:      ${output.handle}`);
+  log.info(`    Status:      ${output.status}`);
+  if (output.accountInfo) log.info(`    Account:     ${output.accountInfo}`);
+  if (
+    Array.isArray(output.grantedScopes) &&
+    (output.grantedScopes as string[]).length > 0
+  )
+    log.info(
+      `    Scopes:      ${(output.grantedScopes as string[]).join(", ")}`,
+    );
+}
+
+// ---------------------------------------------------------------------------
+// Command registration
+// ---------------------------------------------------------------------------
+
+export function registerCredentialsCommand(program: Command): void {
+  const credential = program
+    .command("credentials")
+    .description(
+      "Manage credentials in the encrypted vault (API keys, tokens, passwords)",
+    )
+    .option("--json", "Machine-readable compact JSON output");
+
+  credential.addHelpText(
+    "after",
+    `
+Credentials are identified by --service and --field flags, matching the
+storage convention used internally (credential/{service}/{field}):
+
+  --service twilio --field account_sid        Twilio account SID
+  --service twilio --field auth_token         Twilio auth token
+  --service telegram --field bot_token        Telegram bot token
+  --service slack_channel --field bot_token   Slack channel bot token
+  --service github --field token              GitHub personal access token
+
+Secrets are stored in AES-256-GCM encrypted storage. Metadata (policy,
+timestamps, labels) is tracked separately and never contains secret values.
+
+Examples:
+  $ assistant credentials list
+  $ assistant credentials list --search twilio
+  $ assistant credentials set --service twilio --field account_sid AC1234567890
+  $ assistant credentials inspect --service twilio --field account_sid
+  $ assistant credentials reveal --service twilio --field account_sid
+  $ assistant credentials delete --service twilio --field auth_token`,
+  );
+
+  // -------------------------------------------------------------------------
+  // list
+  // -------------------------------------------------------------------------
+
+  credential
+    .command("list")
+    .description("List all stored credentials with metadata and masked values")
+    .option(
+      "--search <query>",
+      "Filter credentials by substring match on service, field, label, or description",
+    )
+    .addHelpText(
+      "after",
+      `
+Lists all credentials in the vault. Each entry includes the same fields as
+"inspect" — scrubbed value, timestamps, policy, and metadata.
+
+The --search flag filters results by case-insensitive substring match against
+the credential's service name, field name, label, or description. For example, --search
+twilio matches twilio:account_sid, twilio:auth_token, and twilio:phone_number.
+
+Returns an array of credential objects. Empty array if no credentials exist
+or none match the search query.
+
+Examples:
+  $ assistant credentials list
+  $ assistant credentials list --search twilio
+  $ assistant credentials list --search bot_token
+  $ assistant credentials list --json`,
+    )
+    .action(async (opts: { search?: string }, cmd: Command) => {
+      try {
+        let allMetadata = listCredentialMetadata();
+
+        if (opts.search) {
+          const query = opts.search.toLowerCase();
+          allMetadata = allMetadata.filter((m) => {
+            const service = m.service.toLowerCase();
+            const field = m.field.toLowerCase();
+            const alias = (m.alias ?? "").toLowerCase();
+            const description = (m.usageDescription ?? "").toLowerCase();
+            return (
+              service.includes(query) ||
+              field.includes(query) ||
+              alias.includes(query) ||
+              description.includes(query)
+            );
+          });
+        }
+
+        // Build a lookup of oauth connections keyed by provider for enrichment.
+        // listConnections() returns rows in no guaranteed order, so we compare
+        // createdAt to keep the most recent active connection per provider —
+        // matching the behaviour of getConnectionByProvider() used by inspect.
+        const allConnections = safeListConnections();
+        const connectionsByProvider = new Map<string, OAuthConnectionRow>();
+        for (const conn of allConnections) {
+          if (conn.status !== "active") continue;
+          const existing = connectionsByProvider.get(conn.provider);
+          if (!existing || conn.createdAt > existing.createdAt) {
+            connectionsByProvider.set(conn.provider, conn);
+          }
+        }
+
+        const credentials = await Promise.all(
+          allMetadata.map(async (m) => {
+            const secret = await getSecureKeyAsync(
+              credentialKey(m.service, m.field),
+            );
+            const connection = connectionsByProvider.get(m.service);
+            return buildCredentialOutput(m, secret, connection);
+          }),
+        );
+
+        // Fetch platform-managed credentials (best-effort — errors do not
+        // break local listing). Filter by search query if provided.
+        const managedResult = await fetchManagedCatalog();
+        let managedOutputs: Record<string, unknown>[] = [];
+        if (managedResult.ok && managedResult.descriptors.length > 0) {
+          let descriptors = managedResult.descriptors;
+          if (opts.search) {
+            const query = opts.search.toLowerCase();
+            descriptors = descriptors.filter(
+              (d) =>
+                d.provider.toLowerCase().includes(query) ||
+                d.handle.toLowerCase().includes(query) ||
+                (d.accountInfo ?? "").toLowerCase().includes(query),
+            );
+          }
+          managedOutputs = descriptors.map(buildManagedCredentialOutput);
+        }
+
+        if (shouldOutputJson(cmd)) {
+          writeOutput(cmd, {
+            ok: true,
+            credentials,
+            managedCredentials: managedOutputs,
+          });
+        } else {
+          const totalCount = credentials.length + managedOutputs.length;
+          if (totalCount === 0) {
+            log.info("No credentials found");
+          } else {
+            if (credentials.length > 0) {
+              log.info(`${credentials.length} local credential(s):\n`);
+              for (const cred of credentials) {
+                printCredentialHuman(cred);
+                log.info("");
+              }
+            }
+            if (managedOutputs.length > 0) {
+              log.info(
+                `${managedOutputs.length} platform-managed credential(s):\n`,
+              );
+              for (const managed of managedOutputs) {
+                printManagedCredentialHuman(managed);
+                log.info("");
+              }
+            }
+          }
+        }
+      } catch (err) {
+        const message = err instanceof Error ? err.message : String(err);
+        writeError(cmd, message);
+        process.exitCode = 1;
+      }
+    });
+
+  // -------------------------------------------------------------------------
+  // status
+  // -------------------------------------------------------------------------
+
+  credential
+    .command("status")
+    .description("Show the active credential backend and its configuration")
+    .addHelpText(
+      "after",
+      `
+Shows which credential storage backend this process is using and backend-specific
+path or connection details. Run this to diagnose credential lookup mismatches —
+for example, when the CLI and the daemon are reading from different stores.
+
+Backend types:
+  encrypted-store   Direct file read from keys.enc (standalone CLI, no daemon)
+  ces-rpc           Delegates to the running CES process via stdio RPC (daemon)
+  ces-http          Delegates to CES sidecar over HTTP (containerized/Docker mode)
+
+Also shows the CREDENTIAL_SECURITY_DIR, GATEWAY_SECURITY_DIR, and
+VELLUM_WORKSPACE_DIR env vars so you can confirm which instance directory this
+process is scoped to.
+
+Examples:
+  $ assistant credentials status
+  $ assistant credentials status --json`,
+    )
+    .action(async (_opts: Record<string, unknown>, cmd: Command) => {
+      try {
+        const info = await getActiveBackendInfoAsync();
+
+        if (shouldOutputJson(cmd)) {
+          writeOutput(cmd, { ok: true, ...info });
+        } else {
+          log.info(`Backend: ${info.backend}`);
+          if (info.backend === "encrypted-store") {
+            log.info(
+              `  Store path:  ${info.storePath} [${info.storeExists ? "exists" : "missing"}]`,
+            );
+            log.info(
+              `  Key path:    ${info.storeKeyPath} [${info.storeKeyExists ? "exists" : "missing"}]`,
+            );
+          } else if (info.backend === "ces-rpc") {
+            log.info(`  RPC ready:   ${info.ready}`);
+          } else if (info.backend === "ces-http") {
+            log.info(`  URL:         ${info.url}`);
+          }
+        }
+      } catch (err) {
+        const message = err instanceof Error ? err.message : String(err);
+        writeError(cmd, message);
+        process.exitCode = 1;
+      }
+    });
+
+  // -------------------------------------------------------------------------
+  // set
+  // -------------------------------------------------------------------------
+
+  credential
+    .command("set <value>")
+    .description("Store a secret and create or update its metadata")
+    .requiredOption("--service <service>", "Service namespace (e.g. google)")
+    .requiredOption("--field <field>", "Field name (e.g. client_secret)")
+    .option("--label <label>", 'Human-friendly label (e.g. "prod", "work")')
+    .option("--description <description>", "What this credential is used for")
+    .option(
+      "--allowed-tools <tools>",
+      "Comma-separated tool names that may use this credential",
+    )
+    .addHelpText(
+      "after",
+      `
+Arguments:
+  value   The secret value to store
+
+If the credential already exists, the secret is overwritten and metadata is
+updated with any provided flags. Omitted flags leave existing metadata intact.
+
+Examples:
+  $ assistant credentials set --service twilio --field account_sid AC1234567890
+  $ assistant credentials set --service fal --field api_key key_live_abc --label "fal-prod" --description "Image generation"
+  $ assistant credentials set --service github --field token ghp_abc --allowed-tools "bash,host_bash"`,
+    )
+    .action(
+      async (
+        value: string,
+        opts: {
+          service: string;
+          field: string;
+          label?: string;
+          description?: string;
+          allowedTools?: string;
+        },
+        cmd: Command,
+      ) => {
+        try {
+          const { service, field } = opts;
+
+          assertMetadataWritable();
+
+          const setResult = await setSecureKeyViaDaemon(
+            "credential",
+            `${service}:${field}`,
+            value,
+          );
+          if (!setResult.ok) {
+            const detail = setResult.error ? `: ${setResult.error}` : "";
+            writeError(
+              cmd,
+              `Failed to store credential ${service}:${field}${detail}`,
+            );
+            process.exitCode = 1;
+            return;
+          }
+
+          const allowedTools = opts.allowedTools
+            ? opts.allowedTools.split(",").map((t) => t.trim())
+            : undefined;
+
+          const metadata = upsertCredentialMetadata(service, field, {
+            alias: opts.label,
+            usageDescription: opts.description,
+            allowedTools,
+          });
+          await syncManualTokenConnection(service);
+
+          if (shouldOutputJson(cmd)) {
+            writeOutput(cmd, {
+              ok: true,
+              credentialId: metadata.credentialId,
+              service,
+              field,
+            });
+          } else {
+            log.info(
+              `Stored credential ${service}:${field} (${metadata.credentialId})`,
+            );
+          }
+        } catch (err) {
+          const message = err instanceof Error ? err.message : String(err);
+          writeError(cmd, message);
+          process.exitCode = 1;
+        }
+      },
+    );
+
+  // -------------------------------------------------------------------------
+  // delete
+  // -------------------------------------------------------------------------
+
+  credential
+    .command("delete")
+    .description("Remove a secret and its metadata from the vault")
+    .requiredOption("--service <service>", "Service namespace")
+    .requiredOption("--field <field>", "Field name")
+    .addHelpText(
+      "after",
+      `
+Deletes both the encrypted secret and all associated metadata (policy,
+timestamps, injection templates). This action cannot be undone.
+
+Examples:
+  $ assistant credentials delete --service twilio --field auth_token
+  $ assistant credentials delete --service github --field token`,
+    )
+    .action(async (opts: { service: string; field: string }, cmd: Command) => {
+      try {
+        const { service, field } = opts;
+
+        assertMetadataWritable();
+
+        const deleteResult = await deleteSecureKeyViaDaemon(
+          "credential",
+          `${service}:${field}`,
+        );
+        if (deleteResult.result === "error") {
+          const detail = deleteResult.error ? `: ${deleteResult.error}` : "";
+          writeError(
+            cmd,
+            `Failed to delete credential ${service}:${field}${detail}`,
+          );
+          process.exitCode = 1;
+          return;
+        }
+
+        const metadataDeleted = deleteCredentialMetadata(service, field);
+
+        // Also clean up the OAuth connection and new-format secure keys.
+        // disconnectOAuthProvider is a no-op when no connection exists.
+        let oauthResult: "disconnected" | "not-found" | "error" = "not-found";
+        try {
+          oauthResult = await disconnectOAuthProvider(service);
+        } catch {
+          // Best-effort — OAuth tables may not exist yet
+        }
+
+        if (oauthResult === "error") {
+          writeError(
+            cmd,
+            "Failed to disconnect OAuth provider — please try again",
+          );
+          process.exitCode = 1;
+          return;
+        }
+
+        if (
+          deleteResult.result !== "deleted" &&
+          !metadataDeleted &&
+          oauthResult !== "disconnected"
+        ) {
+          writeError(cmd, "Credential not found");
+          process.exitCode = 1;
+          return;
+        }
+
+        if (shouldOutputJson(cmd)) {
+          writeOutput(cmd, { ok: true, service, field });
+        } else {
+          log.info(`Deleted credential ${service}:${field}`);
+        }
+      } catch (err) {
+        const message = err instanceof Error ? err.message : String(err);
+        writeError(cmd, message);
+        process.exitCode = 1;
+      }
+    });
+
+  // -------------------------------------------------------------------------
+  // inspect
+  // -------------------------------------------------------------------------
+
+  credential
+    .command("inspect [id]")
+    .description("Show metadata and a masked preview of a stored credential")
+    .option("--service <service>", "Service namespace")
+    .option("--field <field>", "Field name")
+    .addHelpText(
+      "after",
+      `
+Arguments:
+  id   (optional) Credential UUID for lookup by ID
+
+Shows everything known about a credential without revealing the secret value.
+The secret is masked to show only the last 4 characters (e.g. ****c123).
+
+Displayed fields include: label, creation/update timestamps, allowed tools,
+allowed domains, OAuth2 scopes, account info, and injection template count.
+
+Use --service and --field to look up by service/field, or pass a UUID as a
+positional argument. One of the two forms is required.
+
+Examples:
+  $ assistant credentials inspect --service twilio --field account_sid
+  $ assistant credentials inspect 7a3b1c2d-4e5f-6789-abcd-ef0123456789
+  $ assistant credentials inspect --json --service slack_channel --field bot_token`,
+    )
+    .action(
+      async (
+        id: string | undefined,
+        opts: { service?: string; field?: string },
+        cmd: Command,
+      ) => {
+        try {
+          let metadata: CredentialMetadata | undefined;
+          let storageKey: string;
+          let service: string | undefined;
+          let field: string | undefined;
+
+          if (opts.service && opts.field) {
+            service = opts.service;
+            field = opts.field;
+            metadata = getCredentialMetadata(service, field);
+            storageKey = credentialKey(service, field);
+          } else if (id) {
+            metadata = getCredentialMetadataById(id);
+            if (metadata) {
+              storageKey = credentialKey(metadata.service, metadata.field);
+              service = metadata.service;
+              field = metadata.field;
+            } else {
+              // No metadata found by UUID, and we can't determine the storage key
+              writeError(cmd, "Credential not found");
+              process.exitCode = 1;
+              return;
+            }
+          } else {
+            writeError(
+              cmd,
+              "Either --service and --field flags or a credential UUID is required",
+            );
+            process.exitCode = 1;
+            return;
+          }
+
+          const { value: secret, unreachable } =
+            await getSecureKeyResultAsync(storageKey);
+
+          if (!metadata && (secret == null || secret.length === 0)) {
+            if (unreachable) {
+              writeError(
+                cmd,
+                "Credential store is unreachable — ensure the assistant is running",
+              );
+            } else {
+              writeError(cmd, "Credential not found");
+            }
+            process.exitCode = 1;
+            return;
+          }
+
+          // If we have a secret but no metadata, we still need metadata for the output.
+          // This can happen if someone stored a key directly without going through the
+          // credential set command. Build a minimal output in that case.
+          if (!metadata) {
+            if (shouldOutputJson(cmd)) {
+              writeOutput(cmd, {
+                ok: true,
+                service: service,
+                field: field,
+                credentialId: null,
+                scrubbedValue: scrubSecret(secret),
+                hasSecret: secret != null && secret.length > 0,
+                alias: null,
+                usageDescription: null,
+                allowedTools: [],
+                allowedDomains: [],
+                createdAt: null,
+                updatedAt: null,
+                injectionTemplateCount: 0,
+              });
+            } else {
+              log.info(`  ${service}:${field}`);
+              log.info(`    Value:       ${scrubSecret(secret)}`);
+              log.info("    (no metadata record)");
+            }
+            return;
+          }
+
+          const connection = safeGetConnectionByProvider(metadata.service);
+          const output = buildCredentialOutput(metadata, secret, connection);
+
+          if (unreachable && (secret == null || secret.length === 0)) {
+            output.scrubbedValue = "(credential store unreachable)";
+            output.brokerUnreachable = true;
+          }
+
+          if (shouldOutputJson(cmd)) {
+            writeOutput(cmd, output);
+          } else {
+            printCredentialHuman(output);
+            if (unreachable && (secret == null || secret.length === 0)) {
+              log.info(
+                "    \u26A0 Credential store is unreachable — ensure the assistant is running",
+              );
+            }
+          }
+        } catch (err) {
+          const message = err instanceof Error ? err.message : String(err);
+          writeError(cmd, message);
+          process.exitCode = 1;
+        }
+      },
+    );
+
+  // -------------------------------------------------------------------------
+  // reveal
+  // -------------------------------------------------------------------------
+
+  credential
+    .command("reveal [id]")
+    .description("Print the plaintext value of a credential")
+    .option("--service <service>", "Service namespace")
+    .option("--field <field>", "Field name")
+    .addHelpText(
+      "after",
+      `
+Arguments:
+  id   (optional) Credential UUID for lookup by ID
+
+Prints the raw secret value to stdout for piping into other tools. In JSON
+mode the value is returned as {"ok": true, "value": "..."}. In human mode
+only the bare secret is printed (no labels or decoration) so it can be
+captured with shell substitution.
+
+Use --service and --field to look up by service/field, or pass a UUID as a
+positional argument. One of the two forms is required.
+
+Examples:
+  $ assistant credentials reveal --service twilio --field auth_token
+  $ assistant credentials reveal 7a3b1c2d-4e5f-6789-abcd-ef0123456789
+  $ assistant credentials reveal --json --service twilio --field account_sid
+  $ export TWILIO_TOKEN=$(assistant credentials reveal --service twilio --field auth_token)`,
+    )
+    .action(
+      async (
+        id: string | undefined,
+        opts: { service?: string; field?: string },
+        cmd: Command,
+      ) => {
+        try {
+          // CES shell lockdown: deny raw secret reveal in untrusted shells.
+          if (isUntrustedShell()) {
+            writeError(cmd, UNTRUSTED_SHELL_ERROR);
+            process.exitCode = 1;
+            return;
+          }
+
+          let storageKey: string;
+
+          if (opts.service && opts.field) {
+            storageKey = credentialKey(opts.service, opts.field);
+          } else if (id) {
+            const metadata = getCredentialMetadataById(id);
+            if (metadata) {
+              storageKey = credentialKey(metadata.service, metadata.field);
+            } else {
+              writeError(cmd, "Credential not found");
+              process.exitCode = 1;
+              return;
+            }
+          } else {
+            writeError(
+              cmd,
+              "Either --service and --field flags or a credential UUID is required",
+            );
+            process.exitCode = 1;
+            return;
+          }
+
+          const { value: secret, unreachable } =
+            await getSecureKeyResultAsync(storageKey);
+
+          if (secret == null || secret.length === 0) {
+            if (unreachable) {
+              writeError(
+                cmd,
+                "Credential store is unreachable — ensure the assistant is running",
+              );
+            } else {
+              writeError(cmd, "Credential not found");
+            }
+            process.exitCode = 1;
+            return;
+          }
+
+          if (shouldOutputJson(cmd)) {
+            writeOutput(cmd, { ok: true, value: secret });
+          } else {
+            process.stdout.write(secret + "\n");
+          }
+        } catch (err) {
+          const message = err instanceof Error ? err.message : String(err);
+          writeError(cmd, message);
+          process.exitCode = 1;
+        }
+      },
+    );
+
+  // -------------------------------------------------------------------------
+  // prompt
+  // -------------------------------------------------------------------------
+
+  credential
+    .command("prompt")
+    .description(
+      "Securely prompt the user for a credential via the app UI and store it",
+    )
+    .requiredOption("--service <service>", "Service namespace (e.g. sentry)")
+    .requiredOption("--field <field>", "Field name (e.g. auth_token)")
+    .requiredOption("--label <label>", "Display label for the prompt UI")
+    .option("--description <description>", "Context shown in the prompt UI")
+    .option("--placeholder <placeholder>", "Placeholder text for the input")
+    .option(
+      "--allowed-domains <domains>",
+      "Comma-separated domains where this credential may be used",
+    )
+    .option(
+      "--allowed-tools <tools>",
+      "Comma-separated tool names that may use this credential",
+    )
+    .option(
+      "--injection-templates <json>",
+      "JSON array of injection template objects",
+    )
+    .addHelpText(
+      "after",
+      `
+Opens a secure credential input prompt in the user's connected app (desktop,
+web, etc.). The user enters the secret through the UI — it never passes through
+the conversation or CLI output. On success the credential is stored in the
+encrypted vault with the specified metadata.
+
+Requires the assistant to be running with at least one connected client.
+
+Examples:
+  $ assistant credentials prompt --service sentry --field auth_token \\
+      --label "Sentry Auth Token" --placeholder "sntrys_..." \\
+      --allowed-domains "sentry.io" \\
+      --injection-templates '[{"hostPattern":"sentry.io","injectionType":"header","headerName":"Authorization","valuePrefix":"Bearer "}]'`,
+    )
+    .action(
+      async (
+        opts: {
+          service: string;
+          field: string;
+          label: string;
+          description?: string;
+          placeholder?: string;
+          allowedDomains?: string;
+          allowedTools?: string;
+          injectionTemplates?: string;
+        },
+        cmd: Command,
+      ) => {
+        try {
+          const allowedDomains = opts.allowedDomains
+            ? opts.allowedDomains.split(",").map((d) => d.trim())
+            : undefined;
+          const allowedTools = opts.allowedTools
+            ? opts.allowedTools.split(",").map((t) => t.trim())
+            : undefined;
+
+          let injectionTemplates: unknown[] | undefined;
+          if (opts.injectionTemplates) {
+            try {
+              injectionTemplates = JSON.parse(opts.injectionTemplates);
+              if (!Array.isArray(injectionTemplates)) {
+                writeError(cmd, "--injection-templates must be a JSON array");
+                process.exitCode = 1;
+                return;
+              }
+            } catch {
+              writeError(cmd, "--injection-templates must be valid JSON");
+              process.exitCode = 1;
+              return;
+            }
+          }
+
+          // The server-side handler waits up to permissionTimeoutSec (default
+          // 300s) for the user to enter the credential. Give the IPC call a
+          // generous budget so it doesn't time out before the prompt resolves.
+          const PROMPT_TIMEOUT_MS = 310_000; // 5 min + 10s buffer
+          const ipc = await cliIpcCall<CredentialPromptResult>(
+            "credentials_prompt",
+            {
+              body: {
+                service: opts.service,
+                field: opts.field,
+                label: opts.label,
+                description: opts.description,
+                placeholder: opts.placeholder,
+                allowedDomains,
+                allowedTools,
+                injectionTemplates,
+              },
+            },
+            { timeoutMs: PROMPT_TIMEOUT_MS },
+          );
+
+          if (!ipc.ok) {
+            writeError(cmd, ipc.error ?? "Failed to connect to the assistant");
+            process.exitCode = 1;
+            return;
+          }
+
+          if (!ipc.result?.ok) {
+            writeError(cmd, ipc.result?.error ?? "Credential prompt failed");
+            process.exitCode = 1;
+            return;
+          }
+
+          if (shouldOutputJson(cmd)) {
+            writeOutput(cmd, {
+              ok: true,
+              service: opts.service,
+              field: opts.field,
+            });
+          } else {
+            log.info(`Stored credential ${opts.service}:${opts.field}`);
+          }
+        } catch (err) {
+          const message = err instanceof Error ? err.message : String(err);
+          writeError(cmd, message);
+          process.exitCode = 1;
+        }
+      },
+    );
+}

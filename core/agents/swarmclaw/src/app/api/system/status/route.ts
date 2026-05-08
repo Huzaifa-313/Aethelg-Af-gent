@@ -1,0 +1,14 @@
+# MERGED FROM: mythos/swarmclaw-main
+# DATE: 2026-05-08T06:26:25.045Z
+
+import { NextResponse } from 'next/server'
+import { getDaemonHealthSummarySnapshot } from '@/lib/server/daemon/controller'
+import packageJson from '../../../../../package.json'
+
+export async function GET() {
+  const summary = await getDaemonHealthSummarySnapshot()
+  return NextResponse.json({
+    ...summary,
+    version: packageJson.version,
+  })
+}

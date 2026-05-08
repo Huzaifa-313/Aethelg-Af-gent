@@ -1,0 +1,22 @@
+[package]
+name = "piko-api"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "API client for PikoClaw"
+repository.workspace = true
+
+[dependencies]
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+anyhow.workspace = true
+reqwest.workspace = true
+tokio.workspace = true
+tokio-util.workspace = true
+futures-util.workspace = true
+tracing.workspace = true
+piko-types.workspace = true
+piko-config.workspace = true
+async-stream = "0.3"
+uuid = { workspace = true }

@@ -1,0 +1,15 @@
+archivesBaseName = 'service-soup'
+
+dependencies {
+    if (incremental_build) {
+        compile "com.exactpro.sf:service-itch:${artifactCoreVersion}"
+    } else {
+        compile project(':BackEnd:Service:service-itch')
+    }
+    testCompile group: 'org.jetbrains.kotlin', name: 'kotlin-test-junit', version: "${kotlin_version}"
+    testRuntime 'org.apache.derby:derby:10.14.2.0'
+}
+
+serviceLoader {
+    serviceInterface 'com.exactpro.sf.externalapi.codec.IExternalCodecFactory'
+}

@@ -1,0 +1,178 @@
+# ============================================================
+# MCP MASTER - SELF-GROWING INTELLIGENT ECOSYSTEM CONFIG
+# ============================================================
+# This is the central configuration file for the entire
+# self-growing ecosystem. All components read from here.
+# Version: 1.0.0
+# ============================================================
+
+ecosystem:
+  name: "MCP Master Self-Growing Ecosystem"
+  version: "1.0.0"
+  mode: "production"  # production | development | dry_run
+  
+  # ----------------------------------------------------------
+  # PATHS
+  # ----------------------------------------------------------
+  paths:
+    master_dir: "./"
+    ecosystem_dir: "./ecosystem"
+    logs_dir: "./logs"
+    retired_dir: "./retired"
+    registry_file: "./registry/tool_registry.json"
+    gaps_file: "./ecosystem/gaps.json"
+    intelligence_file: "./ecosystem/intelligence.json"
+    ports_file: "./ports.json"
+    installations_log: "./logs/installations.log"
+    quarantine_dir: "./retired/quarantine"
+
+  # ----------------------------------------------------------
+  # NEED DETECTION ENGINE
+  # ----------------------------------------------------------
+  need_detection:
+    enabled: true
+    scan_interval_hours: 1
+    min_gap_confidence: 0.7
+    max_gaps_tracked: 100
+    keyword_categories:
+      - "database"
+      - "web_scraping"
+      - "api_integration"
+      - "file_processing"
+      - "machine_learning"
+      - "natural_language"
+      - "automation"
+      - "security"
+      - "monitoring"
+      - "cloud"
+    
+  # ----------------------------------------------------------
+  # TOOL HUNTER
+  # ----------------------------------------------------------
+  tool_hunter:
+    enabled: true
+    sources:
+      github:
+        enabled: true
+        search_keywords:
+          - "mcp-server"
+          - "mcp-tool"
+          - "model-context-protocol"
+        max_results_per_query: 20
+        rate_limit_delay: 2  # seconds between requests
+      pypi:
+        enabled: true
+        search_keywords:
+          - "mcp"
+          - "model-context-protocol"
+        max_results_per_query: 15
+      npm:
+        enabled: true
+        search_keywords:
+          - "mcp-server"
+          - "@modelcontextprotocol"
+        max_results_per_query: 15
+      huggingface:
+        enabled: true
+        search_keywords:
+          - "mcp"
+          - "model-context-protocol"
+        max_results_per_query: 10
+    
+  # ----------------------------------------------------------
+  # EVALUATOR
+  # ----------------------------------------------------------
+  evaluator:
+    enabled: true
+    min_quality_score: 75
+    test_timeout_seconds: 30
+    sandbox_enabled: true
+    scoring_weights:
+      functionality: 0.30
+      security: 0.25
+      performance: 0.20
+      documentation: 0.15
+      maintenance: 0.10
+    
+  # ----------------------------------------------------------
+  # AUTO INSTALLER
+  # ----------------------------------------------------------
+  auto_installer:
+    enabled: true
+    backup_before_install: true
+    rollback_on_failure: true
+    max_install_attempts: 3
+    install_timeout_minutes: 10
+    
+  # ----------------------------------------------------------
+  # AGENT FACTORY
+  # ----------------------------------------------------------
+  agent_factory:
+    enabled: true
+    max_agents: 50
+    default_agent_timeout: 60
+    template_dir: "./ecosystem/agent_templates"
+    
+  # ----------------------------------------------------------
+  # DAILY UPGRADE
+  # ----------------------------------------------------------
+  daily_upgrade:
+    enabled: true
+    schedule: "02:00"  # 2 AM daily
+    max_upgrades_per_day: 5
+    backup_before_upgrade: true
+    
+  # ----------------------------------------------------------
+  # LEARNING NETWORK
+  # ----------------------------------------------------------
+  learning_network:
+    enabled: true
+    pattern_min_frequency: 3
+    max_patterns_stored: 500
+    share_interval_hours: 24
+    
+  # ----------------------------------------------------------
+  # SAFETY GUARDIAN
+  # ----------------------------------------------------------
+  safety_guardian:
+    enabled: true
+    quarantine_threshold: 0.3
+    max_quarantine_size_mb: 500
+    scan_interval_minutes: 5
+    anomaly_detection:
+      enabled: true
+      sensitivity: "medium"  # low | medium | high
+      max_false_positive_rate: 0.05
+    
+  # ----------------------------------------------------------
+  # DASHBOARD
+  # ----------------------------------------------------------
+  dashboard:
+    enabled: true
+    refresh_interval_seconds: 5
+    max_log_lines: 100
+    theme: "dark"
+
+  # ----------------------------------------------------------
+  # LOGGING
+  # ----------------------------------------------------------
+  logging:
+    level: "INFO"  # DEBUG | INFO | WARNING | ERROR
+    format: "%(asctime)s [%(levelname)s] %(name)s: %(message)s"
+    max_log_size_mb: 50
+    max_log_files: 5
+    
+  # ----------------------------------------------------------
+  # NOTIFICATIONS
+  # ----------------------------------------------------------
+  notifications:
+    enabled: true
+    channels:
+      - "console"
+      - "log"
+    on_events:
+      - "new_gap_detected"
+      - "tool_installed"
+      - "tool_quarantined"
+      - "upgrade_completed"
+      - "anomaly_detected"

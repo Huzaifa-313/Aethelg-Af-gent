@@ -1,0 +1,8 @@
+{
+  "name": "fetch",
+  "description": "Web fetch and scraping tool",
+  "category": "web_tools",
+  "keywords": ["web", "fetch", "scrape", "http", "download"],
+  "server": "node",
+  "args": ["index.js"]
+}

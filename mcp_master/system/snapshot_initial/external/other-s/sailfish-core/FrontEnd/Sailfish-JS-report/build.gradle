@@ -1,0 +1,117 @@
+/******************************************************************************
+ * Copyright 2009-2019 Exactpro (Exactpro Systems Limited)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ******************************************************************************/
+ 
+ /*	To get production build files, run './gradlew build'.
+*	Files will be located at build folder (index.html and bundle.js)
+*/
+buildscript {
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+  dependencies {
+      classpath "com.github.node-gradle:gradle-node-plugin:2.2.4"
+  }
+}
+
+apply plugin: 'com.github.node-gradle.node'
+
+ext {
+    node_modules    = file("node_modules")
+    npmPackageInfo  = file("package.json")
+    npmDir          = file("${project.buildDir}/nodejs")
+}
+
+
+defaultTasks 'zipData'
+
+node {
+    version = '10.1.0'
+    npmVersion = '6.10.3'
+    distBaseUrl = 'http://nodejs.org/dist'
+    // If true, it will download node using above parameters.
+    // If false, it will try to use globally installed node.
+    download = true
+
+    workDir = npmDir
+}
+
+task installDependencies(type: NpmTask) {
+    inputs.file("${project.projectDir}/package-lock.json")
+    outputs.dir(node_modules)
+
+    // running 'npm ci', same as 'npm install', but uses package-lock.json instead of package.json
+    args = ['ci']
+
+    // disables core-js postinstall ads
+    environment "ADBLOCK": true
+}
+
+task buildProd(type: NpmTask, dependsOn: ['installDependencies', 'runTests']) {
+    inputs.file("${project.projectDir}/jest.config.js")
+    inputs.file("${project.projectDir}/package.json")
+    inputs.file("${project.projectDir}/package-lock.json")
+    inputs.file("${project.projectDir}/postcss.config.js")
+    inputs.file("${project.projectDir}/tsconfig.json")
+    inputs.file("${project.projectDir}/webpack.config.js")
+    inputs.dir("${project.projectDir}/src")
+    outputs.dir("${project.buildDir}/out")
+
+    args = ['run', 'build']
+}
+
+task buildDev(type: NpmTask, dependsOn: 'installDependencies') {
+	args = ['run', 'dev-build']
+}
+
+task devServer(type: NpmTask, dependsOn: 'installDependencies') {
+	args = ['start']
+}
+
+task runTests(type: NpmTask, dependsOn: 'installDependencies') {
+    // we use jest with '--no-cache' option, because there are some bugs, related to invalidating jest's cache
+    // when using TS const enums
+    args = ['run', 'test:ci']
+}
+
+task zipData(type: Zip, dependsOn: 'buildProd') {
+    classifier = "data"
+
+    includeEmptyDirs = false
+    duplicatesStrategy = 'EXCLUDE'
+
+    from file("${project.buildDir}/out")
+}
+
+clean {
+    delete project.buildDir
+    delete node_modules
+}
+
+publishing {
+    publications {
+        MavenJava(MavenPublication) {
+            artifact zipData
+            pom {
+                version = project.version
+                artifactId = project.name
+                groupId = project.group
+                packaging = 'zip'
+            }
+        }
+    }
+}

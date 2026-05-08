@@ -1,0 +1,259 @@
+/*
+ * Copyright 2009-2024 Exactpro (Exactpro Systems Limited)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.exactpro.sf.util;
+
+import static com.exactpro.sf.util.LogUtils.LOG4J_PROPERTIES_FILE_NAME;
+import static com.exactpro.sf.util.LogUtils.setConfigLocation;
+
+import java.io.File;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.util.List;
+import java.util.Objects;
+
+import org.apache.commons.configuration2.HierarchicalConfiguration;
+import org.apache.commons.configuration2.builder.fluent.Configurations;
+import org.apache.commons.configuration2.ex.ConfigurationException;
+import org.apache.commons.configuration2.XMLConfiguration;
+import org.apache.commons.configuration2.tree.ImmutableNode;
+import org.junit.Assert;
+import org.junit.BeforeClass;
+import org.mockito.ArgumentMatchers;
+import org.mockito.Mockito;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.exactpro.sf.aml.script.ActionContext;
+import com.exactpro.sf.center.SFContextSettings;
+import com.exactpro.sf.center.impl.SFLocalContext;
+import com.exactpro.sf.center.impl.SfInstanceInfo;
+import com.exactpro.sf.common.messages.IMessage;
+import com.exactpro.sf.common.messages.structures.IDictionaryStructure;
+import com.exactpro.sf.common.messages.structures.loaders.IDictionaryStructureLoader;
+import com.exactpro.sf.common.messages.structures.loaders.XmlDictionaryStructureLoader;
+import com.exactpro.sf.common.services.ServiceInfo;
+import com.exactpro.sf.common.services.ServiceName;
+import com.exactpro.sf.comparison.ComparatorSettings;
+import com.exactpro.sf.comparison.ComparisonResult;
+import com.exactpro.sf.comparison.ComparisonUtil;
+import com.exactpro.sf.comparison.MessageComparator;
+import com.exactpro.sf.configuration.IDataManager;
+import com.exactpro.sf.configuration.IDictionaryManager;
+import com.exactpro.sf.configuration.IEnvironmentManager;
+import com.exactpro.sf.configuration.workspace.DefaultWorkspaceDispatcherBuilder;
+import com.exactpro.sf.configuration.workspace.DefaultWorkspaceLayout;
+import com.exactpro.sf.configuration.workspace.FolderType;
+import com.exactpro.sf.configuration.workspace.IWorkspaceDispatcher;
+import com.exactpro.sf.scriptrunner.DebugController;
+import com.exactpro.sf.scriptrunner.IConnectionManager;
+import com.exactpro.sf.scriptrunner.IReportStats;
+import com.exactpro.sf.scriptrunner.IScriptConfig;
+import com.exactpro.sf.scriptrunner.IScriptReport;
+import com.exactpro.sf.scriptrunner.ScriptContext;
+import com.exactpro.sf.scriptrunner.ScriptProgress;
+import com.exactpro.sf.scriptrunner.ScriptRunException;
+import com.exactpro.sf.scriptrunner.StatusType;
+import com.exactpro.sf.services.IServiceContext;
+import com.exactpro.sf.services.ServiceMarshalManager;
+import com.exactpro.sf.storage.IMessageStorage;
+import com.exactpro.sf.storage.IServiceStorage;
+
+public class AbstractTest {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(AbstractTest.class);
+
+	protected static final String BIN_FOLDER_PATH = "build/test-results";
+
+	protected static final File BASE_DIR = new File((System.getProperty("basedir") == null) ? "." : System.getProperty("basedir"));
+	protected static final File SAILFISH_DICTIONARY_PATH = new File("cfg/dictionaries/");
+	protected static final String WORKSPACE_FOLDER = BIN_FOLDER_PATH + File.separator + "workspace" + File.separator;
+
+    protected static IServiceContext serviceContext;
+    protected static IWorkspaceDispatcher workspaceDispatcher;
+
+	private static boolean isLoggingAlreadyConfigured;
+	private static boolean isAlreadyConfigured;
+
+    private static final String DEFAULT_CFG_FILENAME = "sf.cfg.xml";
+
+    public static class TestWorkspaceLayout extends DefaultWorkspaceLayout {
+
+    	@Override
+    	public String getPath(File root, FolderType folderType) {
+    		switch (folderType) {
+    		case CFG:
+				return root.toPath().resolve("cfg").toString();
+			case MATRIX:
+				return root.getPath();
+			case CSV:
+				return WORKSPACE_FOLDER + "csv";
+			case LOGS:
+				return WORKSPACE_FOLDER + "logs";
+			case REPORT:
+				return WORKSPACE_FOLDER + "report";
+			case TEST_LIBRARY:
+    			return WORKSPACE_FOLDER + "test_library";
+			case ROOT:
+				return root.getPath();
+			default:
+    			return super.getPath(root, folderType);
+    		}
+    	}
+    }
+
+    @BeforeClass
+    public static void initTestToolsTestCase() throws Throwable {
+		synchronized(LOGGER) {
+		    try {
+    			if(!isLoggingAlreadyConfigured) {
+                    setConfigLocation(Objects.requireNonNull(AbstractTest.class.getClassLoader().getResource(LOG4J_PROPERTIES_FILE_NAME)).getFile());
+    			}
+		    } finally {
+		        isLoggingAlreadyConfigured = true;
+		    }
+		    try {
+		        if (!isAlreadyConfigured) {
+		            workspaceDispatcher = new DefaultWorkspaceDispatcherBuilder()
+                        .addWorkspaceLayer(new File(BASE_DIR.getAbsolutePath(), "src/main/workspace"), new TestWorkspaceLayout())
+                    	.addWorkspaceLayer(new File(BASE_DIR.getAbsolutePath(), "src/gen/workspace"), new TestWorkspaceLayout())
+                    	.addWorkspaceLayer(new File(BASE_DIR.getAbsolutePath(), "src/provided/workspace"), new TestWorkspaceLayout())
+                    	.addWorkspaceLayer(new File(BASE_DIR.getAbsolutePath(), "src/test/workspace"), new TestWorkspaceLayout())
+                    	.addWorkspaceLayer(new File(BASE_DIR.getAbsolutePath(), "src/testgen/workspace"), new TestWorkspaceLayout())
+							.addWorkspaceLayer(new File(BASE_DIR.getAbsolutePath(), "src/main/plugin"), new TestWorkspaceLayout())
+							.addWorkspaceLayer(new File(BASE_DIR.getAbsolutePath(), "src/gen/plugin"), new TestWorkspaceLayout())
+							.addWorkspaceLayer(new File(BASE_DIR.getAbsolutePath(), "src/provided/plugin"), new TestWorkspaceLayout())
+							.addWorkspaceLayer(new File(BASE_DIR.getAbsolutePath(), "src/test/plugin"), new TestWorkspaceLayout())
+							.addWorkspaceLayer(new File(BASE_DIR.getAbsolutePath(), "src/testgen/plugin"), new TestWorkspaceLayout())
+						.addWorkspaceLayer(Files.createTempDirectory("sf-tests").toFile(), DefaultWorkspaceLayout.getInstance())
+                    	.build();
+
+					SFContextSettings settings = new SFContextSettings();
+                    settings.setConfig(loadDefaultEnvironment(workspaceDispatcher));
+                    settings.setCompilerClassPath(System.getProperty("java.class.path"));
+                    serviceContext = SFLocalContext.createContext(workspaceDispatcher, settings, new SfInstanceInfo("localhost", 80, "sfgui")).getServiceContext();
+                    serviceContext = Mockito.spy(serviceContext);
+
+                    Mockito.doAnswer(invocation -> {
+                        ServiceName serviceName = invocation.getArgument(0);
+                        return new ServiceInfo(serviceName.toString(), serviceName);
+                    }).when(serviceContext).lookupService(ArgumentMatchers.any(ServiceName.class));
+		        }
+		    } catch (Exception e) {
+	            LOGGER.error(e.getMessage(), e);
+	            throw e;
+		    } finally {
+		        isAlreadyConfigured = true;
+		    }
+		}
+	}
+
+	public static void equals(IMessage msg, IMessage result) {
+        equals(msg, result, new ComparatorSettings());
+    }
+
+    public static void equals(IMessage msg, IMessage result, ComparatorSettings settings) {
+        ComparisonResult comparisonResult = MessageComparator.compare(msg, result, settings);
+
+        Assert.assertNotNull(comparisonResult);
+        if (LOGGER.isDebugEnabled()) { LOGGER.debug(comparisonResult.toString()); }
+        Assert.assertEquals("NA status", 0, ComparisonUtil.getResultCount(comparisonResult, StatusType.NA));
+        Assert.assertEquals("FAILED status", 0, ComparisonUtil.getResultCount(comparisonResult, StatusType.FAILED));
+        Assert.assertEquals("PASSED status", getFieldCount(msg), ComparisonUtil.getResultCount(comparisonResult, StatusType.PASSED));
+    }
+
+	protected static HierarchicalConfiguration<ImmutableNode> loadDefaultEnvironment(IWorkspaceDispatcher wd) {
+		try {
+			File file = wd.getFile(FolderType.CFG, DEFAULT_CFG_FILENAME);
+			return new Configurations().fileBased(XMLConfiguration.class, file);
+		} catch (ConfigurationException e) {
+			throw new ScriptRunException("Exception during configuration loading", e);
+		} catch (Exception e) {
+			LOGGER.error("Exception during environment initialization", e);
+			throw new ScriptRunException("Exception during environment initialization", e);
+		}
+	}
+
+	protected IDictionaryStructure loadMessageDictionary(InputStream inputStream) {
+	    IDictionaryStructureLoader loader = new XmlDictionaryStructureLoader();
+	    return loader.load(inputStream);
+	}
+
+    /**
+     * Creates {@link ScriptContext} mock suitable to be used for {@link ActionContext} init
+     */
+    protected ScriptContext getScriptContext() {
+        ScriptContext scriptContext = Mockito.mock(ScriptContext.class);
+        IScriptReport scriptReport = Mockito.mock(IScriptReport.class);
+        IReportStats reportStats = Mockito.mock(IReportStats.class);
+        IEnvironmentManager environmentManager = Mockito.mock(IEnvironmentManager.class);
+        IConnectionManager connectionManager = Mockito.mock(IConnectionManager.class);
+        IWorkspaceDispatcher workspaceDispatcher = Mockito.mock(IWorkspaceDispatcher.class);
+        IScriptConfig scriptConfig = Mockito.mock(IScriptConfig.class);
+        DebugController debugController = Mockito.mock(DebugController.class);
+        IDictionaryManager dictionaryManager = Mockito.mock(IDictionaryManager.class);
+        IMessageStorage messageStorage = Mockito.mock(IMessageStorage.class);
+        IServiceStorage serviceStorage = Mockito.mock(IServiceStorage.class);
+        IDataManager dataManager = Mockito.mock(IDataManager.class);
+        Logger logger = Mockito.mock(Logger.class);
+        ScriptProgress progress = Mockito.mock(ScriptProgress.class);
+        ServiceMarshalManager marshalManager = Mockito.mock(ServiceMarshalManager.class);
+
+        Mockito.when(scriptContext.getScriptConfig()).thenReturn(scriptConfig);
+        Mockito.when(scriptContext.getReport()).thenReturn(scriptReport);
+        Mockito.when(scriptContext.getEnvironmentManager()).thenReturn(environmentManager);
+        Mockito.when(scriptContext.getWorkspaceDispatcher()).thenReturn(workspaceDispatcher);
+        Mockito.when(scriptContext.getDebugController()).thenReturn(debugController);
+        Mockito.when(scriptContext.getDictionaryManager()).thenReturn(dictionaryManager);
+        Mockito.when(scriptContext.getDataManager()).thenReturn(dataManager);
+        Mockito.when(scriptContext.getScriptProgress()).thenReturn(progress);
+        Mockito.when(scriptContext.getServiceMarshalManager()).thenReturn(marshalManager);
+        Mockito.when(environmentManager.getConnectionManager()).thenReturn(connectionManager);
+        Mockito.when(environmentManager.getMessageStorage()).thenReturn(messageStorage);
+        Mockito.when(environmentManager.getServiceStorage()).thenReturn(serviceStorage);
+        Mockito.when(scriptConfig.getReportFolder()).thenReturn(BIN_FOLDER_PATH);
+        Mockito.when(scriptConfig.getLogger()).thenReturn(logger);
+        Mockito.when(scriptReport.getReportStats()).thenReturn(reportStats);
+
+        return scriptContext;
+    }
+
+    private static int getFieldCount(IMessage message) {
+        int all = 0;
+        for (String fieldName : message.getFieldNames()) {
+            Object field = message.getField(fieldName);
+
+            if (field instanceof IMessage) {
+                all += getFieldCount((IMessage) field);
+                continue;
+            }
+
+            if (field instanceof List<?>) {
+                for (Object nested : (List<?>)field) {
+                    if(nested == null) continue; // FIXME: null values in list aren't checked
+                    if (nested instanceof IMessage) {
+                        all += getFieldCount((IMessage) nested);
+                    } else {
+                        all++;
+                    }
+                }
+                continue;
+            }
+
+            all++;
+        }
+        return all;
+    }
+}

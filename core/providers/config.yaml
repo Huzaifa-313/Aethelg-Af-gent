@@ -1,0 +1,262 @@
+# Aethelgard Provider Engine – Master Configuration
+# All provider API keys are read from environment variables by default.
+# Set `api_key_env` to the name of the environment variable that holds the key.
+
+providers:
+  openai:
+    name: "OpenAI"
+    class: "core.providers.implementations.openai.OpenAIProvider"
+    api_key_env: "OPENAI_API_KEY"
+    endpoint: "https://api.openai.com/v1"
+    requires_proxy: false
+    enabled: true
+
+  anthropic:
+    name: "Anthropic"
+    class: "core.providers.implementations.anthropic.AnthropicProvider"
+    api_key_env: "ANTHROPIC_API_KEY"
+    endpoint: "https://api.anthropic.com/v1"
+    requires_proxy: false
+    enabled: true
+
+  google:
+    name: "Google"
+    class: "core.providers.implementations.google.GoogleProvider"
+    api_key_env: "GOOGLE_API_KEY"
+    endpoint: "https://generativelanguage.googleapis.com/v1beta"
+    requires_proxy: false
+    enabled: true
+
+  groq:
+    name: "Groq"
+    class: "core.providers.implementations.groq.GroqProvider"
+    api_key_env: "GROQ_API_KEY"
+    endpoint: "https://api.groq.com/openai/v1"
+    requires_proxy: false
+    enabled: true
+
+  perplexity:
+    name: "Perplexity"
+    class: "core.providers.implementations.perplexity.PerplexityProvider"
+    api_key_env: "PERPLEXITY_API_KEY"
+    endpoint: "https://api.perplexity.ai"
+    requires_proxy: false
+    enabled: true
+
+  mistral:
+    name: "Mistral"
+    class: "core.providers.implementations.mistral.MistralProvider"
+    api_key_env: "MISTRAL_API_KEY"
+    endpoint: "https://api.mistral.ai/v1"
+    requires_proxy: false
+    enabled: true
+
+  together:
+    name: "Together AI"
+    class: "core.providers.implementations.together.TogetherProvider"
+    api_key_env: "TOGETHER_API_KEY"
+    endpoint: "https://api.together.xyz/v1"
+    requires_proxy: false
+    enabled: true
+
+  deepseek:
+    name: "DeepSeek"
+    class: "core.providers.implementations.deepseek.DeepSeekProvider"
+    api_key_env: "DEEPSEEK_API_KEY"
+    endpoint: "https://api.deepseek.com/v1"
+    requires_proxy: false
+    enabled: true
+
+  cohere:
+    name: "Cohere"
+    class: "core.providers.implementations.cohere.CohereProvider"
+    api_key_env: "COHERE_API_KEY"
+    endpoint: "https://api.cohere.ai/v1"
+    requires_proxy: false
+    enabled: true
+
+  replicate:
+    name: "Replicate"
+    class: "core.providers.implementations.replicate.ReplicateProvider"
+    api_key_env: "REPLICATE_API_KEY"
+    endpoint: "https://api.replicate.com/v1"
+    requires_proxy: false
+    enabled: true
+
+  huggingface:
+    name: "Hugging Face"
+    class: "core.providers.implementations.huggingface.HuggingFaceProvider"
+    api_key_env: "HUGGINGFACE_API_KEY"
+    endpoint: "https://api-inference.huggingface.co"
+    requires_proxy: false
+    enabled: true
+
+  nvidia:
+    name: "NVIDIA"
+    class: "core.providers.implementations.nvidia.NvidiaProvider"
+    api_key_env: "NVIDIA_API_KEY"
+    endpoint: "https://integrate.api.nvidia.com/v1"
+    requires_proxy: false
+    enabled: true
+
+  # China / Asia Region (often need proxy)
+  zhipu:
+    name: "Zhipu AI (GLM)"
+    class: "core.providers.implementations.zhipu.ZhipuProvider"
+    api_key_env: "ZHIPU_API_KEY"
+    endpoint: "https://open.bigmodel.cn/api/paas/v4"
+    requires_proxy: true
+    enabled: false
+
+  qwen:
+    name: "Qwen (Alibaba Tongyi)"
+    class: "core.providers.implementations.qwen.QwenProvider"
+    api_key_env: "QWEN_API_KEY"
+    endpoint: "https://dashscope.aliyuncs.com/api/v1"
+    requires_proxy: true
+    enabled: false
+
+  baichuan:
+    name: "Baichuan"
+    class: "core.providers.implementations.baichuan.BaichuanProvider"
+    api_key_env: "BAICHUAN_API_KEY"
+    endpoint: "https://api.baichuan-ai.com/v1"
+    requires_proxy: true
+    enabled: false
+
+  moonshot:
+    name: "Moonshot (Kimi)"
+    class: "core.providers.implementations.moonshot.MoonshotProvider"
+    api_key_env: "MOONSHOT_API_KEY"
+    endpoint: "https://api.moonshot.cn/v1"
+    requires_proxy: true
+    enabled: false
+
+  tencent:
+    name: "Tencent Hunyuan"
+    class: "core.providers.implementations.tencent.TencentProvider"
+    api_key_env: "TENCENT_API_KEY"
+    endpoint: "https://hunyuan.tencentcloudapi.com"
+    requires_proxy: true
+    enabled: false
+
+  01ai:
+    name: "01.AI (Yi)"
+    class: "core.providers.implementations.yi.YiProvider"
+    api_key_env: "YI_API_KEY"
+    endpoint: "https://api.01.ai/v1"
+    requires_proxy: true
+    enabled: false
+
+  minimax:
+    name: "MiniMax"
+    class: "core.providers.implementations.minimax.MiniMaxProvider"
+    api_key_env: "MINIMAX_API_KEY"
+    endpoint: "https://api.minimax.chat/v1"
+    requires_proxy: true
+    enabled: false
+
+  xverse:
+    name: "XVERSE"
+    class: "core.providers.implementations.xverse.XverseProvider"
+    api_key_env: "XVERSE_API_KEY"
+    endpoint: "https://api.xverse.cn/v1"
+    requires_proxy: true
+    enabled: false
+
+  # Open‑source local / self‑hosted
+  ollama:
+    name: "Ollama"
+    class: "core.providers.implementations.ollama.OllamaProvider"
+    api_key_env: "OLLAMA_API_KEY"
+    endpoint: "http://localhost:11434/v1"
+    requires_proxy: false
+    enabled: true
+
+  llamacpp:
+    name: "Llama.cpp"
+    class: "core.providers.implementations.llamacpp.LlamaCppProvider"
+    api_key_env: "LLAMACPP_API_KEY"
+    endpoint: "http://localhost:8080/v1"
+    requires_proxy: false
+    enabled: false
+
+  vllm:
+    name: "vLLM"
+    class: "core.providers.implementations.vllm.VLLMProvider"
+    api_key_env: "VLLM_API_KEY"
+    endpoint: "http://localhost:8000/v1"
+    requires_proxy: false
+    enabled: false
+
+  localai:
+    name: "LocalAI"
+    class: "core.providers.implementations.localai.LocalAIProvider"
+    api_key_env: "LOCALAI_API_KEY"
+    endpoint: "http://localhost:8080/v1"
+    requires_proxy: false
+    enabled: false
+
+  # Specialised
+  fireworks:
+    name: "Fireworks AI"
+    class: "core.providers.implementations.fireworks.FireworksProvider"
+    api_key_env: "FIREWORKS_API_KEY"
+    endpoint: "https://api.fireworks.ai/inference/v1"
+    requires_proxy: false
+    enabled: true
+
+  anyscale:
+    name: "Anyscale"
+    class: "core.providers.implementations.anyscale.AnyscaleProvider"
+    api_key_env: "ANYSCALE_API_KEY"
+    endpoint: "https://api.endpoints.anyscale.com/v1"
+    requires_proxy: false
+    enabled: false
+
+  leptonai:
+    name: "Lepton AI"
+    class: "core.providers.implementations.leptonai.LeptonAIProvider"
+    api_key_env: "LEPTONAI_API_KEY"
+    endpoint: "https://api.lepton.ai/v1"
+    requires_proxy: false
+    enabled: false
+
+  runpod:
+    name: "RunPod"
+    class: "core.providers.implementations.runpod.RunPodProvider"
+    api_key_env: "RUNPOD_API_KEY"
+    endpoint: "https://api.runpod.ai/v2"
+    requires_proxy: false
+    enabled: false
+
+  openrouter:
+    name: "OpenRouter"
+    class: "core.providers.implementations.openrouter.OpenRouterProvider"
+    api_key_env: "OPENROUTER_API_KEY"
+    endpoint: "https://openrouter.ai/api/v1"
+    requires_proxy: false
+    enabled: true
+
+  # Custom / template
+  custom_template:
+    name: "Custom Template"
+    class: "core.providers.implementations.custom_template.CustomTemplateProvider"
+    api_key_env: "CUSTOM_API_KEY"
+    endpoint: "https://your-custom-endpoint.com/v1"
+    requires_proxy: false
+    enabled: false
+
+# Default provider to use when none specified
+default_provider: "openai"
+
+# Model cache settings
+model_cache:
+  refresh_interval_hours: 24
+  cache_file: "core/providers/models_cache.json"
+
+# Proxy settings
+proxy:
+  list_file: "core/providers/proxy_list.yaml"
+  auto_setup: true
+  hunter_enabled: true

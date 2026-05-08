@@ -1,0 +1,32 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <Preference
+        app:key="navigation.server"
+        android:icon="@drawable/ic_server"
+        app:fragment="app.callgate.android.ui.settings.ServerSettingsFragment"
+        app:summary="@string/port_credentials_etc"
+        app:title="@string/server_dotdotdot" />
+
+    <Preference
+        app:key="navigation.webhooks"
+        android:icon="@drawable/ic_webhook"
+        app:fragment="app.callgate.android.ui.settings.WebhooksSettingsFragment"
+        app:summary="@string/retries_signing_etc"
+        app:title="@string/webhooks_dotdotdot" />
+
+    <PreferenceCategory app:title="@string/general">
+        <SwitchPreference
+            app:key="general.autostart"
+            app:title="@string/autostart" />
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/information">
+        <Preference
+            android:icon="@drawable/ic_info"
+            android:key="transient.app_version"
+            android:title="@string/app_version_build"
+            app:persistent="false"
+            app:selectable="false" />
+    </PreferenceCategory>
+
+</PreferenceScreen>

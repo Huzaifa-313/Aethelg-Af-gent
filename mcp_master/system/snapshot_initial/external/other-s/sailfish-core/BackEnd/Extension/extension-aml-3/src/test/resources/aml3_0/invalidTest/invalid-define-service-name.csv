@@ -1,0 +1,7 @@
+#description,#service_name,#reference,#action
+,,,test case start
+empty service name and reference,,,DefineServiceName
+non-existent service,nonexistent,%{ref},DefineServiceName
+invalid reference format,fake,ref,DefineServiceName
+invalid reference format,fake,%{r e f},DefineServiceName
+,,,test case end

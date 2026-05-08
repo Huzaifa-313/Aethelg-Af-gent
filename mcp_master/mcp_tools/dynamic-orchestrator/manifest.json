@@ -1,0 +1,37 @@
+{
+  "name": "dynamic-orchestrator",
+  "description": "Dynamic tool orchestration and management system",
+  "category": "mcp_tools",
+  "keywords": ["dynamic", "orchestration", "tool", "management", "scaling"],
+  "server": "node",
+  "args": ["index.js"],
+  "tools": [
+    {
+      "name": "orchestrator_scale",
+      "description": "Scale the number of active tools based on demand",
+      "args": {
+        "minActiveTools": "number",
+        "maxActiveTools": "number"
+      }
+    },
+    {
+      "name": "orchestrator_health",
+      "description": "Check the health of active tools",
+      "args": {}
+    },
+    {
+      "name": "orchestrator_register",
+      "description": "Register a new tool with the orchestrator",
+      "args": {
+        "tool": "object"
+      }
+    },
+    {
+      "name": "orchestrator_deregister",
+      "description": "Deregister a tool from the orchestrator",
+      "args": {
+        "toolName": "string"
+      }
+    }
+  ]
+}

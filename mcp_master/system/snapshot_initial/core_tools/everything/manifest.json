@@ -1,0 +1,8 @@
+{
+  "name": "everything",
+  "description": "Universal file search tool using Everything (Windows)",
+  "category": "file_tools",
+  "keywords": ["file", "search", "everything", "universal", "windows"],
+  "server": "node",
+  "args": ["index.js"]
+}

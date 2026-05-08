@@ -1,0 +1,17 @@
+# AETHELGARD MERGED FILE
+# Origin Repository: G-Labs-Automation-v2.0.9-win
+# Original Path: playwright\driver\package\.local-browsers\chromium-1208\chrome-win64\resources\accessibility\reading_mode_gdocs_helper\content.js
+# Merge Date: 2026-05-07T19:25:34.505012
+# ---
+
+"use strict";
+// Copyright 2024 The Chromium Authors
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+// TODO(b:272150598): Investigate sharing this with
+// ../embedded_a11y_helper/content.ts.
+(function () {
+    const s = document.createElement('script');
+    s.src = chrome.runtime.getURL('reading_mode_gdocs_helper/gdocs_script.js');
+    document.documentElement.appendChild(s);
+})();

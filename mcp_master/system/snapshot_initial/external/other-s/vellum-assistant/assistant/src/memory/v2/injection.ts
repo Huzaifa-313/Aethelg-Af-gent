@@ -1,0 +1,471 @@
+// ---------------------------------------------------------------------------
+// Memory v2 — Per-turn injection block builder
+// ---------------------------------------------------------------------------
+//
+// Drop-in replacement for v1's `injectMemoryBlock()` (graph/conversation-graph-memory.ts).
+// Implements §5 of the design doc:
+//
+//   1. Hydrate prior activation state for the conversation.
+//   2. Build the in-memory edge index from concept-page frontmatter.
+//   3. Select the per-turn candidate set (prior-state survivors ∪ ANN top-K).
+//   4. Compute own activation A_o over the candidates.
+//   5. Apply 2-hop spreading activation along directed edges (incoming) → A.
+//   6. Pick top-K by activation; subtract everInjected to get the injection delta.
+//   7. If no new slugs, render nothing — caller leaves the prior cached
+//      attachments on prior user messages exactly as Anthropic prompt caching
+//      requires.
+//   8. Otherwise render a `<memory>` block scoped to the *new* slugs
+//      ordered by activation (descending) and persist the updated state +
+//      everInjected list (with `currentTurn` annotated) so future turns can
+//      append-inject cache-stably.
+//
+// Append-only on user messages: callers prepend `block` onto the *current*
+// user message only — prior turns' attachments are left alone. This keeps the
+// cached prefix bytes-identical across turns.
+
+import type { AssistantConfig } from "../../config/types.js";
+import { getLogger } from "../../util/logger.js";
+import { getWorkspaceDir } from "../../util/platform.js";
+import type { DrizzleDb } from "../db-connection.js";
+import {
+  type MemoryV2ConceptRowRecord,
+  recordMemoryV2ActivationLog,
+} from "../memory-v2-activation-log-store.js";
+import {
+  computeOwnActivation,
+  selectCandidates,
+  selectInjections,
+  spreadActivation,
+} from "./activation.js";
+import { hydrate, save } from "./activation-store.js";
+import { getEdgeIndex } from "./edge-index.js";
+import { readPage, renderPageContent } from "./page-store.js";
+import { getSkillCapability, isSkillSlug } from "./skill-store.js";
+import type { ActivationState, EverInjectedEntry } from "./types.js";
+
+const log = getLogger("memory-v2-injection");
+
+// ---------------------------------------------------------------------------
+// Public types
+// ---------------------------------------------------------------------------
+
+/**
+ * Discriminator the wiring layer (`conversation-graph-memory.ts`) sets to
+ * tell the v2 injector which call site is asking. Both modes currently share
+ * the same block layout (mirroring v1 which also wraps both flows in
+ * `<memory>...</memory>`); the parameter exists so future tuning
+ * can shape the conversation-start block without touching the call site.
+ */
+export type InjectMemoryV2Mode = "context-load" | "per-turn";
+
+export interface InjectMemoryV2BlockParams {
+  /** SQLite database handle for activation_state hydrate/save. */
+  database: DrizzleDb;
+  /** Conversation key for hydrate/save. */
+  conversationId: string;
+  /** Caller-tracked turn number, persisted with each new everInjected entry. */
+  currentTurn: number;
+  /** Latest user message text (the turn that triggered this call). */
+  userMessage: string;
+  /** Prior assistant message text (empty string at conversation start). */
+  assistantMessage: string;
+  /** NOW context (autoloaded essentials/threads/recent or NOW.md). */
+  nowText: string;
+  /** Resolved messageId to persist on the activation_state row. */
+  messageId: string;
+  /**
+   * Whether the caller is doing a fresh context-load (turn 1 / post-compaction)
+   * or a per-turn append injection. Currently informational — both modes
+   * produce the same block layout — but accepted so callers don't have to
+   * change when the layouts diverge.
+   */
+  mode?: InjectMemoryV2Mode;
+  config: AssistantConfig;
+  signal?: AbortSignal;
+}
+
+export interface InjectMemoryV2BlockResult {
+  /**
+   * Inner content for the `<memory>` block, ready for the caller to wrap
+   * exactly once at injection time — or `null` when nothing new is eligible
+   * for injection. `null` is the cache-stable default: the caller adds
+   * nothing to the new user message and prior attachments stay
+   * byte-identical.
+   */
+  block: string | null;
+  /**
+   * Slugs that were freshly attached on this turn. Empty when `block` is
+   * null. Returned for telemetry / debug logging by the call site.
+   */
+  toInject: string[];
+}
+
+// ---------------------------------------------------------------------------
+// Implementation
+// ---------------------------------------------------------------------------
+
+/**
+ * Compute the per-turn activation update for a conversation, persist the new
+ * state, and return a renderable injection block scoped to the *new* slugs
+ * since the last turn (or `null` when nothing new is eligible).
+ *
+ * The function is idempotent in shape but mutating in effect: it always
+ * writes a fresh activation_state row even when `block` is null, so the
+ * `epsilon`-trimmed sparse state stays current and `currentTurn` advances.
+ */
+export async function injectMemoryV2Block(
+  params: InjectMemoryV2BlockParams,
+): Promise<InjectMemoryV2BlockResult> {
+  const {
+    database,
+    conversationId,
+    currentTurn,
+    userMessage,
+    assistantMessage,
+    nowText,
+    messageId,
+    config,
+    signal,
+  } = params;
+
+  const workspaceDir = getWorkspaceDir();
+
+  // (1) Hydrate. Missing rows are normal at conversation start — proceed
+  // with an effective empty prior state so the first turn can still inject.
+  throwIfAborted(signal);
+  const priorState = await hydrate(database, conversationId);
+
+  // (2) Topology. `getEdgeIndex` walks concept-page frontmatter and caches
+  // the result module-locally; an empty workspace yields an empty index.
+  throwIfAborted(signal);
+  const edgeIndex = await getEdgeIndex(workspaceDir);
+
+  // (3) Candidate set: prior-state survivors above epsilon ∪ ANN top-50.
+  // `selectCandidates` also returns `fromPrior` / `fromAnn` provenance sets so
+  // telemetry can attribute each candidate back to its source.
+  throwIfAborted(signal);
+  const { candidates, fromPrior, fromAnn } = await selectCandidates({
+    priorState,
+    userText: userMessage,
+    assistantText: assistantMessage,
+    nowText,
+    config,
+    signal,
+  });
+
+  // (4) Own activation: A_o = d·prev + c_user·sim_u + c_a·sim_a + c_now·sim_n.
+  throwIfAborted(signal);
+  const { activation: ownActivation, breakdown: ownBreakdown } =
+    await computeOwnActivation({
+      candidates,
+      priorState,
+      userText: userMessage,
+      assistantText: assistantMessage,
+      nowText,
+      config,
+      signal,
+    });
+
+  // (5) Spreading activation across the edge graph (k, hops from config).
+  throwIfAborted(signal);
+  const { k, hops, top_k, epsilon } = config.memory.v2;
+  const { final: finalActivation, contribution: spreadContribution } =
+    spreadActivation(ownActivation, edgeIndex, k, hops);
+
+  // (6) Pick top-K by activation. Per-turn turns subtract everInjected for the
+  // injection delta (cache-stable append-only); context-load renders the
+  // entire top-K because it's a fresh load (turn 1 / post-compaction) where
+  // prior cached attachments don't exist or have been thrown away. The user
+  // message gets a complete top-K dump alongside the static
+  // essentials/threads/recent block, then per-turn turns just add deltas.
+  const mode = params.mode ?? "per-turn";
+  const priorEverInjected: readonly EverInjectedEntry[] =
+    priorState?.everInjected ?? [];
+  const { topNow, toInject } = selectInjections({
+    A: finalActivation,
+    priorEverInjected,
+    topK: top_k,
+  });
+  const slugsToRender = mode === "context-load" ? topNow : toInject;
+
+  // Build the next persisted state regardless of whether we render anything:
+  // even on a "no new injection" turn, prior-state activations decay via the
+  // candidate-set carry-forward and need to be rewritten so `epsilon`-trimmed
+  // slugs drop out of consideration next turn.
+  const nextState: Record<string, number> = {};
+  for (const [slug, value] of finalActivation) {
+    if (value > epsilon) nextState[slug] = value;
+  }
+
+  // Mark every rendered slug as ever-injected so future per-turn deltas don't
+  // re-attach the same content. On context-load this is the full top-K (we
+  // just rendered all of them); on per-turn it's just the newly added slugs.
+  // We append rather than reset so that compaction-driven eviction
+  // (`evictCompactedTurns`) is the only path that can re-enable a previously-
+  // injected slug. Skill slugs (`skills/<id>`) participate in this dedup just
+  // like concept slugs — once attached on a turn, the cached attachment lives
+  // on that user message and the agent keeps seeing it across subsequent turns
+  // until compaction evicts the turn.
+  const everInjectedSet = new Set(priorEverInjected.map((entry) => entry.slug));
+  const newlyInjected = slugsToRender.filter(
+    (slug) => !everInjectedSet.has(slug),
+  );
+  const nextEverInjected: EverInjectedEntry[] = [
+    ...priorEverInjected,
+    ...newlyInjected.map((slug) => ({ slug, turn: currentTurn })),
+  ];
+
+  const nextActivationState: ActivationState = {
+    messageId,
+    state: nextState,
+    everInjected: nextEverInjected,
+    currentTurn,
+    updatedAt: Date.now(),
+  };
+
+  await save(database, conversationId, nextActivationState);
+
+  // Render before recording telemetry so the activation log can mark slugs
+  // whose backing file is gone — those are no-op renders that would otherwise
+  // be indistinguishable from successful "injected" rows in the log.
+  // `renderInjectionBlock` itself short-circuits on empty inputs.
+  const { block, missingSlugs } = await renderInjectionBlock(
+    workspaceDir,
+    slugsToRender,
+  );
+  const missingSlugSet = new Set(missingSlugs);
+  if (missingSlugs.length > 0) {
+    log.warn(
+      {
+        conversationId,
+        turn: currentTurn,
+        missingSlugs,
+        renderedCount: slugsToRender.length - missingSlugs.length,
+      },
+      "Memory v2 injection skipped slugs whose page was missing on disk — Qdrant index may be stale; consider reembed",
+    );
+  }
+
+  // Record per-turn activation telemetry. Failures are warn-logged and never
+  // block memory injection.
+  const toInjectSet = new Set(toInject);
+  const renderedSet = new Set(slugsToRender);
+  const conceptRows: MemoryV2ConceptRowRecord[] = [...candidates].map(
+    (slug) => {
+      const breakdown = ownBreakdown.get(slug);
+      const inPrior = fromPrior.has(slug);
+      const inAnn = fromAnn.has(slug);
+      // Status reflects what was rendered for *this* turn:
+      //   - context-load: cache was wiped (turn 1 / post-compaction), so
+      //     `slugsToRender = topNow` and every rendered slug is freshly
+      //     injected on this turn. `in_context` is unreachable because there
+      //     is no prior cached attachment for the inspector to point at.
+      //   - per-turn: cached attachments from prior turns are still on the
+      //     user message, so prior-everInjected slugs are `in_context` and
+      //     the delta (`toInject`) is `injected`.
+      // `page_missing` overrides any "would-have-been-injected" status when
+      // `readPage` returned null for the slug — telemetry surfaces stale
+      // ANN/edge entries instead of silently masquerading as a successful
+      // injection.
+      let status: MemoryV2ConceptRowRecord["status"];
+      if (mode === "context-load") {
+        status = renderedSet.has(slug) ? "injected" : "not_injected";
+      } else if (everInjectedSet.has(slug)) {
+        status = "in_context";
+      } else if (toInjectSet.has(slug)) {
+        status = "injected";
+      } else {
+        status = "not_injected";
+      }
+      if (status === "injected" && missingSlugSet.has(slug)) {
+        status = "page_missing";
+      }
+      return {
+        slug,
+        finalActivation: finalActivation.get(slug) ?? 0,
+        ownActivation: ownActivation.get(slug) ?? 0,
+        priorActivation: breakdown?.priorContribution ?? 0,
+        simUser: breakdown?.simUser ?? 0,
+        simAssistant: breakdown?.simAssistant ?? 0,
+        simNow: breakdown?.simNow ?? 0,
+        simUserRerankBoost: breakdown?.simUserRerankBoost ?? 0,
+        simAssistantRerankBoost: breakdown?.simAssistantRerankBoost ?? 0,
+        inRerankPool: breakdown?.inRerankPool ?? false,
+        spreadContribution: spreadContribution.get(slug) ?? 0,
+        source:
+          inPrior && inAnn ? "both" : inPrior ? "prior_state" : "ann_top50",
+        status,
+      };
+    },
+  );
+  conceptRows.sort((a, b) => b.finalActivation - a.finalActivation);
+
+  const v2Cfg = config.memory.v2;
+  try {
+    recordMemoryV2ActivationLog({
+      conversationId,
+      turn: currentTurn,
+      mode,
+      concepts: conceptRows,
+      config: {
+        d: v2Cfg.d,
+        c_user: v2Cfg.c_user,
+        c_assistant: v2Cfg.c_assistant,
+        c_now: v2Cfg.c_now,
+        k: v2Cfg.k,
+        hops: v2Cfg.hops,
+        top_k: v2Cfg.top_k,
+        epsilon: v2Cfg.epsilon,
+      },
+    });
+  } catch (err) {
+    log.warn(
+      { err, conversationId, turn: currentTurn },
+      "Failed to record memory v2 activation telemetry — continuing",
+    );
+  }
+
+  return { block, toInject: newlyInjected };
+}
+
+function throwIfAborted(signal: AbortSignal | undefined): void {
+  if (signal?.aborted) {
+    throw new DOMException("Aborted", "AbortError");
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Internal helpers
+// ---------------------------------------------------------------------------
+
+interface RenderInjectionBlockResult {
+  /**
+   * Inner content for the `<memory>` block (concept-page sections + optional
+   * skills suffix), or `null` when both the concept-page list and the skill
+   * list collapse to empty after cache misses (no on-disk pages, no
+   * resolvable skill ids). Returned unwrapped so the caller can wrap it
+   * exactly once at injection time, matching v1's contract: callers that
+   * cache the value (`lastInjectedBlock`) or persist it (`memoryInjectedBlock`
+   * in message metadata) re-wrap on use, and storing the wrapped form here
+   * caused a double wrap on reinject after compaction and on rehydrate from
+   * DB.
+   */
+  block: string | null;
+  /**
+   * Slugs that `readPage` returned null for. Surfaced so the caller can
+   * mark them in the activation log (`status: "page_missing"`) and emit
+   * a warning — silent drops here previously masked stale Qdrant /
+   * edge-index entries that pointed at pages no longer on disk.
+   */
+  missingSlugs: string[];
+}
+
+/**
+ * Leading instruction line emitted at the top of every non-empty injection
+ * block. Tells the agent that what follows are page summaries and that it
+ * should read the underlying file when a summary looks relevant. Pages
+ * without a `summary` field render in full instead — the agent treats
+ * those as inline content and doesn't need to follow up.
+ */
+const INJECTION_HEADER =
+  "**CRITICAL:** These are page summaries. Read the page file if it looks relevant.";
+
+/**
+ * Render the inner content of the `<memory>` block for a list of slugs.
+ * The caller wraps the result in `<memory>...</memory>` exactly once at
+ * injection time.
+ *
+ * The slug list is partitioned by prefix: slugs starting with `skills/`
+ * resolve to a `SkillEntry` via `getSkillCapability` and render under the
+ * trailing `### Skills You Can Use` subsection; everything else is read
+ * from disk via `readPage` and rendered as a concept-page section.
+ *
+ * Concept pages are read in parallel via `readPage`. Pages whose file has
+ * gone missing between selection and render (e.g. consolidation deleted
+ * them, folder reorg renamed the slug) are dropped from the rendered
+ * block but reported back via `missingSlugs` so callers can surface the
+ * divergence.
+ *
+ * Skill slugs whose entry the cache no longer knows (e.g. uninstalled
+ * mid-run) are silently dropped, mirroring the missing-pages behavior but
+ * without entering `missingSlugs` — the skill catalog is the source of
+ * truth for skill availability, not on-disk concept pages, so a missing
+ * skill is an expected catalog-level outcome rather than a stale-index
+ * bug.
+ *
+ * Each concept-page section is rendered as a path header followed by either
+ * the page's `summary` (when present in frontmatter) or the full page (the
+ * fallback for pages predating the summary field). Skills sit at the end
+ * under `### Skills You Can Use`, unchanged. The leading `**CRITICAL:**`
+ * line tells the agent how to read the block.
+ *
+ *   **CRITICAL:** These are page summaries. Read the page file if it looks relevant.
+ *
+ *   # memory/concepts/<concept-slug-1>.md
+ *   <summary-1>
+ *
+ *   # memory/concepts/<concept-slug-2>.md
+ *   ---
+ *   edges:
+ *     - <neighbor-slug>
+ *   ref_files:
+ *     - <path/to/asset>
+ *   ---
+ *   <body-2>
+ *
+ *   ### Skills You Can Use
+ *   - <skill-1 content>
+ *   - <skill-2 content>
+ */
+async function renderInjectionBlock(
+  workspaceDir: string,
+  slugs: string[],
+): Promise<RenderInjectionBlockResult> {
+  const conceptSlugs = slugs.filter((s) => !isSkillSlug(s));
+  const skillSlugs = slugs.filter((s) => isSkillSlug(s));
+
+  const pages = await Promise.all(
+    conceptSlugs.map(async (slug) => {
+      const page = await readPage(workspaceDir, slug);
+      return { slug, page };
+    }),
+  );
+
+  const sections: string[] = [];
+  const missingSlugs: string[] = [];
+  for (const { slug, page } of pages) {
+    if (!page) {
+      missingSlugs.push(slug);
+      continue;
+    }
+    const summary = page.frontmatter.summary?.trim();
+    const path = `memory/concepts/${slug}.md`;
+    if (summary && summary.length > 0) {
+      sections.push(`# ${path}\n${summary}`);
+      continue;
+    }
+    // Fallback: page predates the `summary` field (or the field was set to
+    // empty). Render the full page — frontmatter + body — so retrieval
+    // still surfaces the same content the agent saw before this change.
+    const content = renderPageContent(page).trim();
+    if (content.length === 0) continue;
+    sections.push(`# ${path}\n${content}`);
+  }
+
+  const skillLines: string[] = [];
+  for (const slug of skillSlugs) {
+    const entry = getSkillCapability(slug);
+    if (!entry) continue;
+    skillLines.push(`- ${entry.content} → use skill_load to activate`);
+  }
+  if (skillLines.length > 0) {
+    sections.push(`### Skills You Can Use\n${skillLines.join("\n")}`);
+  }
+
+  if (sections.length === 0) return { block: null, missingSlugs };
+
+  return {
+    block: `${INJECTION_HEADER}\n\n${sections.join("\n\n")}`,
+    missingSlugs,
+  };
+}

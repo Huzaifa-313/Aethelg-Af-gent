@@ -1,0 +1,11 @@
+subprojects {
+    version = artifactCoreVersion
+    writeBuildInfo.dependsOn.add('assemble')
+    build.dependsOn.add('writeBuildInfo')
+}
+
+// Setting this property to true will make the publish tasks
+// skip this module (in our case, the root module):
+tasks.withType(PublishToMavenRepository).all { publishTask ->
+    publishTask.enabled = false
+}

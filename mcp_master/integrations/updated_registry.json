@@ -1,0 +1,784 @@
+{
+  "version": "2.0.0",
+  "last_updated": "2026-05-06T17:15:00.000Z",
+  "integration_phase": "Phase 8 - External AI Projects",
+  "tools": {
+    "everything": {
+      "name": "everything",
+      "description": "Universal file search tool using Everything (Windows)",
+      "category": "file_tools",
+      "keywords": ["file", "search", "everything", "universal", "windows"],
+      "server": "node",
+      "args": ["index.js"],
+      "tools": [
+        {
+          "name": "everything_search",
+          "description": "Search for files using Everything",
+          "args": {
+            "query": "string",
+            "limit": "number"
+          }
+        }
+      ],
+      "performance": {
+        "usage_count": 0,
+        "last_used": null,
+        "avg_response_time_ms": 0,
+        "success_rate": 1.0,
+        "health": "healthy"
+      },
+      "core_tool": true
+    },
+    "fetch": {
+      "name": "fetch",
+      "description": "Web fetch and scraping tool",
+      "category": "web_tools",
+      "keywords": ["web", "fetch", "scrape", "http", "download"],
+      "server": "node",
+      "args": ["index.js"],
+      "tools": [
+        {
+          "name": "fetch_url",
+          "description": "Fetch content from a URL",
+          "args": {
+            "url": "string",
+            "format": ["text", "html", "markdown"]
+          }
+        }
+      ],
+      "performance": {
+        "usage_count": 0,
+        "last_used": null,
+        "avg_response_time_ms": 0,
+        "success_rate": 1.0,
+        "health": "healthy"
+      },
+      "core_tool": true
+    },
+    "filesystem": {
+      "name": "filesystem",
+      "description": "File system operations",
+      "category": "file_tools",
+      "keywords": ["file", "read", "write", "directory", "path"],
+      "server": "node",
+      "args": ["index.js"],
+      "tools": [
+        {
+          "name": "read_file",
+          "description": "Read a file",
+          "args": {
+            "path": "string"
+          }
+        },
+        {
+          "name": "write_file",
+          "description": "Write to a file",
+          "args": {
+            "path": "string",
+            "content": "string"
+          }
+        },
+        {
+          "name": "list_directory",
+          "description": "List directory contents",
+          "args": {
+            "path": "string"
+          }
+        }
+      ],
+      "performance": {
+        "usage_count": 0,
+        "last_used": null,
+        "avg_response_time_ms": 0,
+        "success_rate": 1.0,
+        "health": "healthy"
+      },
+      "core_tool": true
+    },
+    "git": {
+      "name": "git",
+      "description": "Git operations",
+      "category": "dev_tools",
+      "keywords": ["git", "version", "control", "repository", "commit"],
+      "server": "node",
+      "args": ["index.js"],
+      "tools": [
+        {
+          "name": "git_status",
+          "description": "Check git status",
+          "args": {
+            "path": "string"
+          }
+        },
+        {
+          "name": "git_commit",
+          "description": "Commit changes",
+          "args": {
+            "path": "string",
+            "message": "string"
+          }
+        },
+        {
+          "name": "git_push",
+          "description": "Push to remote",
+          "args": {
+            "path": "string"
+          }
+        }
+      ],
+      "performance": {
+        "usage_count": 0,
+        "last_used": null,
+        "avg_response_time_ms": 0,
+        "success_rate": 1.0,
+        "health": "healthy"
+      },
+      "core_tool": true
+    },
+    "memory": {
+      "name": "memory",
+      "description": "Memory and context management",
+      "category": "core",
+      "keywords": ["memory", "context", "store", "retrieve"],
+      "server": "node",
+      "args": ["index.js"],
+      "tools": [
+        {
+          "name": "store_memory",
+          "description": "Store information in memory",
+          "args": {
+            "key": "string",
+            "value": "string"
+          }
+        },
+        {
+          "name": "retrieve_memory",
+          "description": "Retrieve information from memory",
+          "args": {
+            "key": "string"
+          }
+        },
+        {
+          "name": "search_memory",
+          "description": "Search memory",
+          "args": {
+            "query": "string"
+          }
+        }
+      ],
+      "performance": {
+        "usage_count": 0,
+        "last_used": null,
+        "avg_response_time_ms": 0,
+        "success_rate": 1.0,
+        "health": "healthy"
+      },
+      "core_tool": true
+    },
+    "sequentialthinking": {
+      "name": "sequentialthinking",
+      "description": "Sequential thinking and reasoning",
+      "category": "core",
+      "keywords": ["think", "reason", "logic", "step", "sequential"],
+      "server": "node",
+      "args": ["index.js"],
+      "tools": [
+        {
+          "name": "think",
+          "description": "Think through a problem",
+          "args": {
+            "problem": "string"
+          }
+        },
+        {
+          "name": "reason",
+          "description": "Reason about something",
+          "args": {
+            "topic": "string"
+          }
+        }
+      ],
+      "performance": {
+        "usage_count": 0,
+        "last_used": null,
+        "avg_response_time_ms": 0,
+        "success_rate": 1.0,
+        "health": "healthy"
+      },
+      "core_tool": true
+    },
+    "time": {
+      "name": "time",
+      "description": "Time and date utilities",
+      "category": "core",
+      "keywords": ["time", "date", "clock", "timer"],
+      "server": "node",
+      "args": ["index.js"],
+      "tools": [
+        {
+          "name": "get_current_time",
+          "description": "Get current time",
+          "args": {}
+        },
+        {
+          "name": "format_date",
+          "description": "Format a date",
+          "args": {
+            "date": "string",
+            "format": "string"
+          }
+        }
+      ],
+      "performance": {
+        "usage_count": 0,
+        "last_used": null,
+        "avg_response_time_ms": 0,
+        "success_rate": 1.0,
+        "health": "healthy"
+      },
+      "core_tool": true
+    },
+    "firecrawl": {
+      "name": "firecrawl",
+      "description": "Web scraping with Firecrawl",
+      "category": "web_tools",
+      "keywords": ["web", "scrape", "crawl", "firecrawl"],
+      "server": "node",
+      "args": ["index.js"],
+      "tools": [
+        {
+          "name": "scrape_url",
+          "description": "Scrape a URL",
+          "args": {
+            "url": "string"
+          }
+        },
+        {
+          "name": "crawl_website",
+          "description": "Crawl a website",
+          "args": {
+            "url": "string",
+            "limit": "number"
+          }
+        }
+      ],
+      "performance": {
+        "usage_count": 0,
+        "last_used": null,
+        "avg_response_time_ms": 0,
+        "success_rate": 1.0,
+        "health": "healthy"
+      }
+    },
+    "playwright": {
+      "name": "playwright",
+      "description": "Browser automation with Playwright",
+      "category": "web_tools",
+      "keywords": ["browser", "automation", "playwright", "web"],
+      "server": "node",
+      "args": ["index.js"],
+      "tools": [
+        {
+          "name": "navigate",
+          "description": "Navigate to a URL",
+          "args": {
+            "url": "string"
+          }
+        },
+        {
+          "name": "click",
+          "description": "Click an element",
+          "args": {
+            "selector": "string"
+          }
+        }
+      ],
+      "performance": {
+        "usage_count": 0,
+        "last_used": null,
+        "avg_response_time_ms": 0,
+        "success_rate": 1.0,
+        "health": "healthy"
+      }
+    },
+    "db-universal": {
+      "name": "db-universal",
+      "description": "Universal database connector",
+      "category": "database_tools",
+      "keywords": ["database", "sql", "query", "db"],
+      "server": "node",
+      "args": ["index.js"],
+      "tools": [
+        {
+          "name": "query",
+          "description": "Execute a SQL query",
+          "args": {
+            "query": "string"
+          }
+        }
+      ],
+      "performance": {
+        "usage_count": 0,
+        "last_used": null,
+        "avg_response_time_ms": 0,
+        "success_rate": 1.0,
+        "health": "healthy"
+      }
+    },
+    "mongodb": {
+      "name": "mongodb",
+      "description": "MongoDB database operations",
+      "category": "database_tools",
+      "keywords": ["mongodb", "nosql", "database", "document"],
+      "server": "node",
+      "args": ["index.js"],
+      "tools": [
+        {
+          "name": "find",
+          "description": "Find documents",
+          "args": {
+            "collection": "string",
+            "filter": "object"
+          }
+        },
+        {
+          "name": "insert",
+          "description": "Insert a document",
+          "args": {
+            "collection": "string",
+            "document": "object"
+          }
+        }
+      ],
+      "performance": {
+        "usage_count": 0,
+        "last_used": null,
+        "avg_response_time_ms": 0,
+        "success_rate": 1.0,
+        "health": "healthy"
+      }
+    },
+    "ruflo": {
+      "name": "ruflo",
+      "description": "Ruflow workflow automation",
+      "category": "automation",
+      "keywords": ["workflow", "automation", "ruflo"],
+      "server": "node",
+      "args": ["index.js"],
+      "tools": [
+        {
+          "name": "run_workflow",
+          "description": "Run a workflow",
+          "args": {
+            "workflow_id": "string"
+          }
+        }
+      ],
+      "performance": {
+        "usage_count": 0,
+        "last_used": null,
+        "avg_response_time_ms": 0,
+        "success_rate": 1.0,
+        "health": "healthy"
+      }
+    },
+    "dynamic-orchestrator": {
+      "name": "dynamic-orchestrator",
+      "description": "Dynamic task orchestration",
+      "category": "orchestration",
+      "keywords": ["orchestrate", "dynamic", "task", "workflow"],
+      "server": "node",
+      "args": ["index.js"],
+      "tools": [
+        {
+          "name": "orchestrate",
+          "description": "Orchestrate a task",
+          "args": {
+            "task": "string"
+          }
+        }
+      ],
+      "performance": {
+        "usage_count": 0,
+        "last_used": null,
+        "avg_response_time_ms": 0,
+        "success_rate": 1.0,
+        "health": "healthy"
+      }
+    },
+    "fastmcp": {
+      "name": "fastmcp",
+      "description": "Fast MCP server",
+      "category": "core",
+      "keywords": ["mcp", "fast", "server"],
+      "server": "node",
+      "args": ["index.js"],
+      "tools": [
+        {
+          "name": "fast_mcp",
+          "description": "Fast MCP operation",
+          "args": {
+            "operation": "string"
+          }
+        }
+      ],
+      "performance": {
+        "usage_count": 0,
+        "last_used": null,
+        "avg_response_time_ms": 0,
+        "success_rate": 1.0,
+        "health": "healthy"
+      }
+    },
+    "metoro": {
+      "name": "metoro",
+      "description": "Metoro monitoring",
+      "category": "monitoring",
+      "keywords": ["monitor", "metoro", "metrics"],
+      "server": "node",
+      "args": ["index.js"],
+      "tools": [
+        {
+          "name": "get_metrics",
+          "description": "Get metrics",
+          "args": {
+            "metric": "string"
+          }
+        }
+      ],
+      "performance": {
+        "usage_count": 0,
+        "last_used": null,
+        "avg_response_time_ms": 0,
+        "success_rate": 1.0,
+        "health": "healthy"
+      }
+    },
+    "kubernetes": {
+      "name": "kubernetes",
+      "description": "Kubernetes operations",
+      "category": "devops",
+      "keywords": ["kubernetes", "k8s", "container", "orchestration"],
+      "server": "node",
+      "args": ["index.js"],
+      "tools": [
+        {
+          "name": "kubectl",
+          "description": "Run kubectl command",
+          "args": {
+            "command": "string"
+          }
+        }
+      ],
+      "performance": {
+        "usage_count": 0,
+        "last_used": null,
+        "avg_response_time_ms": 0,
+        "success_rate": 1.0,
+        "health": "healthy"
+      }
+    },
+    "openjarvis-web-search": {
+      "name": "openjarvis-web-search",
+      "description": "Web search via OpenJarvis (Tavily + DuckDuckGo)",
+      "category": "search",
+      "keywords": ["search", "web", "tavily", "duckduckgo", "openjarvis"],
+      "source": "openjarvis",
+      "server": "python",
+      "args": ["integrations/openjarvis_mcp_adapter.py"],
+      "tools": [
+        {
+          "name": "web_search",
+          "description": "Search the web for current information",
+          "args": {
+            "query": "string",
+            "max_results": "number"
+          }
+        }
+      ],
+      "performance": {
+        "usage_count": 0,
+        "last_used": null,
+        "avg_response_time_ms": 0,
+        "success_rate": 1.0,
+        "health": "healthy"
+      },
+      "metadata": {
+        "requires_api_key": "TAVILY_API_KEY",
+        "fallback": "duckduckgo",
+        "integration_phase": "Phase 8"
+      }
+    },
+    "openjarvis-connectors": {
+      "name": "openjarvis-connectors",
+      "description": "Service connectors (Gmail, Slack, Notion, etc.)",
+      "category": "connectors",
+      "keywords": ["gmail", "slack", "notion", "github", "dropbox", "spotify", "connector"],
+      "source": "openjarvis",
+      "server": "python",
+      "args": ["integrations/connector_system.py"],
+      "tools": [
+        {
+          "name": "gmail_sync",
+          "description": "Sync Gmail emails",
+          "args": {
+            "query": "string"
+          }
+        },
+        {
+          "name": "slack_sync",
+          "description": "Sync Slack messages",
+          "args": {
+            "channel": "string"
+          }
+        },
+        {
+          "name": "notion_sync",
+          "description": "Sync Notion pages",
+          "args": {
+            "page_id": "string"
+          }
+        }
+      ],
+      "performance": {
+        "usage_count": 0,
+        "last_used": null,
+        "avg_response_time_ms": 0,
+        "success_rate": 1.0,
+        "health": "healthy"
+      },
+      "metadata": {
+        "connectors": ["gmail", "slack", "notion", "github", "dropbox", "spotify", "weather"],
+        "integration_phase": "Phase 8"
+      }
+    },
+    "openclaude-web-search": {
+      "name": "openclaude-web-search",
+      "description": "Web search with multiple providers (OpenClaude)",
+      "category": "search",
+      "keywords": ["search", "web", "openclaude", "provider"],
+      "source": "openclaude",
+      "server": "python",
+      "args": ["integrations/openclaude_tool_adapters.py"],
+      "tools": [
+        {
+          "name": "web_search",
+          "description": "Search the web using multiple providers",
+          "args": {
+            "query": "string",
+            "max_results": "number"
+          }
+        }
+      ],
+      "performance": {
+        "usage_count": 0,
+        "last_used": null,
+        "avg_response_time_ms": 0,
+        "success_rate": 1.0,
+        "health": "healthy"
+      },
+      "metadata": {
+        "providers": ["tavily", "duckduckgo"],
+        "integration_phase": "Phase 8"
+      }
+    },
+    "openclaude-web-fetch": {
+      "name": "openclaude-web-fetch",
+      "description": "Fetch web content with Firecrawl support (OpenClaude)",
+      "category": "web_tools",
+      "keywords": ["fetch", "web", "scrape", "firecrawl", "openclaude"],
+      "source": "openclaude",
+      "server": "python",
+      "args": ["integrations/openclaude_tool_adapters.py"],
+      "tools": [
+        {
+          "name": "web_fetch",
+          "description": "Fetch content from a URL",
+          "args": {
+            "url": "string",
+            "prompt": "string"
+          }
+        }
+      ],
+      "performance": {
+        "usage_count": 0,
+        "last_used": null,
+        "avg_response_time_ms": 0,
+        "success_rate": 1.0,
+        "health": "healthy"
+      },
+      "metadata": {
+        "supports_firecrawl": true,
+        "integration_phase": "Phase 8"
+      }
+    },
+    "openclaude-bash": {
+      "name": "openclaude-bash",
+      "description": "Bash execution with security validation (OpenClaude)",
+      "category": "system",
+      "keywords": ["bash", "shell", "command", "execute", "openclaude"],
+      "source": "openclaude",
+      "server": "python",
+      "args": ["integrations/openclaude_tool_adapters.py"],
+      "tools": [
+        {
+          "name": "bash",
+          "description": "Execute bash commands safely",
+          "args": {
+            "command": "string",
+            "timeout": "number"
+          }
+        }
+      ],
+      "performance": {
+        "usage_count": 0,
+        "last_used": null,
+        "avg_response_time_ms": 0,
+        "success_rate": 1.0,
+        "health": "healthy"
+      },
+      "metadata": {
+        "security_validated": true,
+        "integration_phase": "Phase 8"
+      }
+    },
+    "openclaude-file-edit": {
+      "name": "openclaude-file-edit",
+      "description": "File editing with safe operations (OpenClaude)",
+      "category": "file_tools",
+      "keywords": ["file", "edit", "read", "write", "openclaude"],
+      "source": "openclaude",
+      "server": "python",
+      "args": ["integrations/openclaude_tool_adapters.py"],
+      "tools": [
+        {
+          "name": "file_read",
+          "description": "Read a file",
+          "args": {
+            "path": "string"
+          }
+        },
+        {
+          "name": "file_write",
+          "description": "Write to a file",
+          "args": {
+            "path": "string",
+            "content": "string"
+          }
+        },
+        {
+          "name": "file_edit",
+          "description": "Edit a file",
+          "args": {
+            "path": "string",
+            "old_string": "string",
+            "new_string": "string"
+          }
+        }
+      ],
+      "performance": {
+        "usage_count": 0,
+        "last_used": null,
+        "avg_response_time_ms": 0,
+        "success_rate": 1.0,
+        "health": "healthy"
+      },
+      "metadata": {
+        "safe_operations": true,
+        "integration_phase": "Phase 8"
+      }
+    },
+    "openmanus-coordinator": {
+      "name": "openmanus-coordinator",
+      "description": "Multi-agent task coordinator (OpenManus)",
+      "category": "orchestration",
+      "keywords": ["agent", "coordinator", "multi-agent", "task", "openmanus"],
+      "source": "openmanus",
+      "server": "python",
+      "args": ["integrations/multi_agent_coordinator.py"],
+      "tools": [
+        {
+          "name": "create_task",
+          "description": "Create a new task",
+          "args": {
+            "task_id": "string",
+            "description": "string"
+          }
+        },
+        {
+          "name": "execute_task",
+          "description": "Execute a task",
+          "args": {
+            "task_id": "string"
+          }
+        },
+        {
+          "name": "get_agent_status",
+          "description": "Get agent status",
+          "args": {
+            "agent_id": "string"
+          }
+        }
+      ],
+      "performance": {
+        "usage_count": 0,
+        "last_used": null,
+        "avg_response_time_ms": 0,
+        "success_rate": 1.0,
+        "health": "healthy"
+      },
+      "metadata": {
+        "agents": ["planner", "executor", "tool_user", "researcher", "coder"],
+        "integration_phase": "Phase 8"
+      }
+    },
+    "enhanced-learning": {
+      "name": "enhanced-learning",
+      "description": "Enhanced learning network with pattern recognition",
+      "category": "learning",
+      "keywords": ["learn", "pattern", "skill", "optimization", "intelligence"],
+      "source": "enhanced",
+      "server": "python",
+      "args": ["integrations/enhanced_learning.py"],
+      "tools": [
+        {
+          "name": "record_interaction",
+          "description": "Record an interaction for learning",
+          "args": {
+            "agent_id": "string",
+            "tool_name": "string",
+            "success": "boolean",
+            "duration": "number"
+          }
+        },
+        {
+          "name": "get_recommendations",
+          "description": "Get tool recommendations",
+          "args": {
+            "agent_id": "string",
+            "task_description": "string"
+          }
+        },
+        {
+          "name": "optimize_skill",
+          "description": "Optimize a skill",
+          "args": {
+            "skill_name": "string",
+            "traces": "array"
+          }
+        }
+      ],
+      "performance": {
+        "usage_count": 0,
+        "last_used": null,
+        "avg_response_time_ms": 0,
+        "success_rate": 1.0,
+        "health": "healthy"
+      },
+      "metadata": {
+        "supports_cross_agent_sharing": true,
+        "integration_phase": "Phase 8"
+      }
+    }
+  }
+}

@@ -1,0 +1,19 @@
+[package]
+name = "piko-skills"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Skills and slash command support for PikoClaw"
+repository.workspace = true
+
+[dependencies]
+serde.workspace = true
+serde_json.workspace = true
+toml.workspace = true
+thiserror.workspace = true
+anyhow.workspace = true
+tokio.workspace = true
+tracing.workspace = true
+directories.workspace = true
+piko-types.workspace = true
+piko-config.workspace = true

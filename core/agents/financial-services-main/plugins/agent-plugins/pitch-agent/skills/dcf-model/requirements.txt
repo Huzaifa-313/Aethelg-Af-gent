@@ -1,0 +1,10 @@
+# MERGED FROM: mythos/financial-services-main
+# DATE: 2026-05-08T06:01:53.195Z
+
+# DCF Model Builder - Python Dependencies
+
+# Excel file handling
+openpyxl>=3.0.0
+
+# HTTP requests
+requests>=2.28.0

@@ -1,0 +1,14 @@
+@import "src/app/styles/_colors.scss";
+@import "src/app/styles/variables.scss";
+
+.root-page {
+	box-sizing: border-box;
+	width: 100%;
+	padding-left: $sidebarWidthDefault;
+
+	&__content {
+		padding: 0 20px 20px;
+		margin: auto;
+		box-sizing: content-box;
+	}
+}

@@ -1,0 +1,39 @@
+FINAL CLEANUP MANIFEST
+======================
+Generated: 2026-05-08T09:54:00Z
+
+Items to be permanently deleted from c:\Users\Hashmi\Desktop\mycoder\:
+(All except core\ and mcp_master\)
+
+FILES (10):
+  1. add_autogen_headers.py          (890 bytes)
+  2. add_crewai_headers.py           (1,456 bytes)
+  3. add_header.py                    (5,131 bytes)
+  4. add_langgraph_headers.py        (861 bytes)
+  5. scan_merged_files.py            (3,333 bytes)
+  6. scan_output.txt                 (8,665 bytes)
+  7. test_orchestrator.py            (908 bytes)
+  8. verify_merge.py                  (631 bytes)
+  9. _cleanup_report.md              (2,736 bytes)
+ 10. _mythos_merge_log.md            (6,014 bytes)
+
+FOLDERS (16):
+  1. -p\                             (temp folder)
+  2. autogen-main\                   (agent framework repo)
+  3. BrowserOS-dev\                  (browser automation repo)
+  4. CORAL-main\                     (self-evolution repo)
+  5. crewAI-main\                    (agent framework repo)
+  6. extraction\                      (analysis data)
+  7. fazm-main\                      (terminal automation repo)
+  8. GenericAgent-main\              (generic agent repo)
+  9. hermes-agent-main\              (self-evolution repo)
+ 10. langgraph-main\                 (stateful graph repo)
+ 11. MetaClaw-main\                  (self-evolution repo)
+ 12. mythos\                         (old mythos folder)
+ 13. open-interpreter-main\           (code interpreter repo)
+ 14. skyvern-main\                   (browser automation repo)
+ 15. suna-main\                      (generic agent repo)
+ 16. UFO-main\                       (agent framework repo)
+ 17. _safety\                         (external safety folder)
+
+TOTAL: 26 items to delete

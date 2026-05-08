@@ -1,0 +1,95 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/piko-types",
+    "crates/piko-config",
+    "crates/piko-api",
+    "crates/piko-tools",
+    "crates/piko-permissions",
+    "crates/piko-session",
+    "crates/piko-agent",
+    "crates/piko-mcp",
+    "crates/piko-tui",
+    "crates/piko-skills",
+    "crates/piko-oauth",
+]
+
+[workspace.package]
+version = "1.0.10"
+edition = "2021"
+rust-version = "1.80"
+license = "Apache-2.0"
+description = "PikoClaw - A Rust-based AI agent framework"
+repository = "https://github.com/pikoClaw/pikoclaw"
+
+[workspace.dependencies]
+tokio = { version = "1", features = ["full"] }
+tokio-util = { version = "0.7", features = ["codec"] }
+futures-util = "0.3"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+toml = "0.8"
+reqwest = { version = "0.12", default-features = false, features = ["rustls-tls", "stream", "json"] }
+thiserror = "2"
+anyhow = "1"
+clap = { version = "4", features = ["derive", "env"] }
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+ratatui = "0.29"
+crossterm = "0.28"
+syntect = { version = "5", default-features = false, features = ["default-syntaxes", "default-themes", "regex-fancy"] }
+uuid = { version = "1", features = ["v4"] }
+chrono = { version = "0.4", features = ["serde"] }
+directories = "6"
+async-trait = "0.1"
+regex = "1"
+globset = "0.4"
+ignore = "0.4"
+async-stream = "0.3"
+base64 = "0.22"
+piko-types = { path = "crates/piko-types", version = "1.0.10" }
+piko-config = { path = "crates/piko-config", version = "1.0.10" }
+piko-api = { path = "crates/piko-api", version = "1.0.10" }
+piko-tools = { path = "crates/piko-tools", version = "1.0.10" }
+piko-permissions = { path = "crates/piko-permissions", version = "1.0.10" }
+piko-session = { path = "crates/piko-session", version = "1.0.10" }
+piko-agent = { path = "crates/piko-agent", version = "1.0.10" }
+piko-mcp = { path = "crates/piko-mcp", version = "1.0.10" }
+piko-tui = { path = "crates/piko-tui", version = "1.0.10" }
+piko-skills = { path = "crates/piko-skills", version = "1.0.10" }
+piko-oauth = { path = "crates/piko-oauth", version = "1.0.10" }
+
+[[bin]]
+name = "pikoclaw"
+path = "src/main.rs"
+
+[package]
+name = "pikoclaw"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "PikoClaw - A Rust-based AI agent CLI"
+repository.workspace = true
+
+[dependencies]
+anyhow.workspace = true
+clap.workspace = true
+tokio.workspace = true
+tracing.workspace = true
+tracing-subscriber.workspace = true
+directories.workspace = true
+reqwest.workspace = true
+piko-types.workspace = true
+piko-config.workspace = true
+piko-api.workspace = true
+piko-agent.workspace = true
+piko-tui.workspace = true
+piko-skills.workspace = true
+piko-session.workspace = true
+piko-oauth.workspace = true
+
+[profile.release]
+strip = true
+lto = "thin"
+codegen-units = 1
+opt-level = 3

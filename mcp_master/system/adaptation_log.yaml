@@ -1,0 +1,35 @@
+# Mahoraga Self-Healing Adaptation Log
+# Tracks tool failures, rollbacks, and learning patterns
+
+metadata:
+  server_name: "Mahoraga"
+  created: "2026-05-07T14:58:39Z"
+  purpose: "Self-healing pattern learning and adaptation tracking"
+
+# Log entries
+adaptations:
+  # Example entry:
+  # - timestamp: "2026-05-07T15:00:00Z"
+  #   tool_name: "example_tool"
+  #   failure_signature: "ImportError: No module named 'requests'"
+  #   action: "rollback"
+  #   snapshot_used: "snapshot_initial"
+  #   pattern_match: false
+  #   regeneration_success: false
+  #   notes: "New failure pattern - requires manual review"
+
+# Failure patterns learned
+patterns:
+  # Example pattern:
+  # - signature: "ImportError"
+  #   fix_template: "pip install {missing_module}"
+  #   success_count: 0
+  #   last_seen: null
+
+# Statistics
+stats:
+  total_adaptations: 0
+  successful_regenerations: 0
+  rollbacks_performed: 0
+  patterns_learned: 0
+  last_updated: "2026-05-07T14:58:39Z"

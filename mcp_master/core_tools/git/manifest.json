@@ -1,0 +1,8 @@
+{
+  "name": "git",
+  "description": "Git operations (clone, commit, push, pull, branch)",
+  "category": "git_tools",
+  "keywords": ["git", "clone", "commit", "push", "pull", "branch"],
+  "server": "node",
+  "args": ["index.js"]
+}

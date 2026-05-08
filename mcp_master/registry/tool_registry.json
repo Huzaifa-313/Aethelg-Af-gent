@@ -1,0 +1,691 @@
+{
+  "version": "1.0.0",
+  "last_updated": "2026-05-06T12:49:00.000Z",
+  "tools": {
+    "everything": {
+      "name": "everything",
+      "description": "Universal file search tool using Everything (Windows)",
+      "category": "file_tools",
+      "keywords": ["file", "search", "everything", "universal", "windows"],
+      "server": "node",
+      "args": ["index.js"],
+      "tools": [
+        {
+          "name": "everything_search",
+          "description": "Search for files using Everything",
+          "args": {
+            "query": "string",
+            "limit": "number"
+          }
+        }
+      ],
+      "performance": {
+        "usage_count": 0,
+        "last_used": null,
+        "avg_response_time_ms": 0,
+        "success_rate": 1.0,
+        "health": "healthy"
+      },
+      "core_tool": true
+    },
+    "fetch": {
+      "name": "fetch",
+      "description": "Web fetch and scraping tool",
+      "category": "web_tools",
+      "keywords": ["web", "fetch", "scrape", "http", "download"],
+      "server": "node",
+      "args": ["index.js"],
+      "tools": [
+        {
+          "name": "fetch_url",
+          "description": "Fetch content from a URL",
+          "args": {
+            "url": "string",
+            "format": ["text", "html", "markdown"]
+          }
+        }
+      ],
+      "performance": {
+        "usage_count": 0,
+        "last_used": null,
+        "avg_response_time_ms": 0,
+        "success_rate": 1.0,
+        "health": "healthy"
+      },
+      "core_tool": true
+    },
+    "filesystem": {
+      "name": "filesystem",
+      "description": "File system operations (read, write, list, delete)",
+      "category": "file_tools",
+      "keywords": ["file", "read", "write", "list", "delete", "fs"],
+      "server": "node",
+      "args": ["index.js"],
+      "tools": [
+        {
+          "name": "read",
+          "description": "Read a file",
+          "args": {
+            "filePath": "string"
+          }
+        },
+        {
+          "name": "write",
+          "description": "Write to a file",
+          "args": {
+            "filePath": "string",
+            "content": "string"
+          }
+        },
+        {
+          "name": "list",
+          "description": "List files in a directory",
+          "args": {
+            "dirPath": "string",
+            "recursive": "boolean"
+          }
+        },
+        {
+          "name": "delete",
+          "description": "Delete a file",
+          "args": {
+            "filePath": "string"
+          }
+        }
+      ],
+      "performance": {
+        "usage_count": 0,
+        "last_used": null,
+        "avg_response_time_ms": 0,
+        "success_rate": 1.0,
+        "health": "healthy"
+      },
+      "core_tool": true
+    },
+    "git": {
+      "name": "git",
+      "description": "Git operations (clone, commit, push, pull, branch)",
+      "category": "git_tools",
+      "keywords": ["git", "clone", "commit", "push", "pull", "branch"],
+      "server": "node",
+      "args": ["index.js"],
+      "tools": [
+        {
+          "name": "clone",
+          "description": "Clone a repository",
+          "args": {
+            "repoUrl": "string",
+            "dirPath": "string"
+          }
+        },
+        {
+          "name": "commit",
+          "description": "Commit changes",
+          "args": {
+            "message": "string",
+            "dirPath": "string"
+          }
+        },
+        {
+          "name": "push",
+          "description": "Push changes",
+          "args": {
+            "dirPath": "string"
+          }
+        },
+        {
+          "name": "pull",
+          "description": "Pull changes",
+          "args": {
+            "dirPath": "string"
+          }
+        },
+        {
+          "name": "branch",
+          "description": "List branches",
+          "args": {
+            "dirPath": "string"
+          }
+        }
+      ],
+      "performance": {
+        "usage_count": 0,
+        "last_used": null,
+        "avg_response_time_ms": 0,
+        "success_rate": 1.0,
+        "health": "healthy"
+      },
+      "core_tool": true
+    },
+    "memory": {
+      "name": "memory",
+      "description": "Memory management and recall for agents",
+      "category": "agent_tools",
+      "keywords": ["memory", "recall", "store", "agent"],
+      "server": "node",
+      "args": ["index.js"],
+      "tools": [
+        {
+          "name": "store",
+          "description": "Store a value in memory",
+          "args": {
+            "key": "string",
+            "value": "any"
+          }
+        },
+        {
+          "name": "recall",
+          "description": "Recall a value from memory",
+          "args": {
+            "key": "string"
+          }
+        },
+        {
+          "name": "list",
+          "description": "List all keys in memory",
+          "args": {}
+        },
+        {
+          "name": "delete",
+          "description": "Delete a key from memory",
+          "args": {
+            "key": "string"
+          }
+        }
+      ],
+      "performance": {
+        "usage_count": 0,
+        "last_used": null,
+        "avg_response_time_ms": 0,
+        "success_rate": 1.0,
+        "health": "healthy"
+      },
+      "core_tool": true
+    },
+    "sequentialthinking": {
+      "name": "sequentialthinking",
+      "description": "Sequential thinking and task breakdown for agents",
+      "category": "agent_tools",
+      "keywords": ["sequential", "thinking", "task", "breakdown", "agent"],
+      "server": "node",
+      "args": ["index.js"],
+      "tools": [
+        {
+          "name": "breakdown",
+          "description": "Break down a task into subtasks",
+          "args": {
+            "task": "string",
+            "context": "object"
+          }
+        },
+        {
+          "name": "execute",
+          "description": "Execute subtasks sequentially",
+          "args": {
+            "subtasks": "array",
+            "context": "object"
+          }
+        }
+      ],
+      "performance": {
+        "usage_count": 0,
+        "last_used": null,
+        "avg_response_time_ms": 0,
+        "success_rate": 1.0,
+        "health": "healthy"
+      },
+      "core_tool": true
+    },
+    "time": {
+      "name": "time",
+      "description": "Time and date utilities",
+      "category": "productivity_tools",
+      "keywords": ["time", "date", "now", "timestamp"],
+      "server": "node",
+      "args": ["index.js"],
+      "tools": [
+        {
+          "name": "current_time",
+          "description": "Get the current time",
+          "args": {
+            "timezone": "string"
+          }
+        },
+        {
+          "name": "current_date",
+          "description": "Get the current date",
+          "args": {
+            "timezone": "string"
+          }
+        },
+        {
+          "name": "timestamp",
+          "description": "Get the current timestamp",
+          "args": {}
+        }
+      ],
+      "performance": {
+        "usage_count": 0,
+        "last_used": null,
+        "avg_response_time_ms": 0,
+        "success_rate": 1.0,
+        "health": "healthy"
+      },
+      "core_tool": true
+    },
+    "firecrawl": {
+      "name": "firecrawl",
+      "description": "Web scraping, search, crawl, and autonomous research toolkit",
+      "category": "web_tools",
+      "keywords": ["web", "scrape", "search", "crawl", "research", "autonomous"],
+      "server": "node",
+      "args": ["src/index.js"],
+      "tools": [
+        {
+          "name": "firecrawl_scrape",
+          "description": "Scrape a URL and extract content",
+          "args": {
+            "url": "string",
+            "formats": ["markdown", "html", "text"]
+          }
+        },
+        {
+          "name": "firecrawl_search",
+          "description": "Search the web using a query",
+          "args": {
+            "query": "string",
+            "limit": "number"
+          }
+        },
+        {
+          "name": "firecrawl_crawl",
+          "description": "Crawl a URL and extract all linked pages",
+          "args": {
+            "url": "string",
+            "limit": "number",
+            "depth": "number"
+          }
+        },
+        {
+          "name": "firecrawl_extract",
+          "description": "Extract structured data from a URL",
+          "args": {
+            "url": "string",
+            "schema": "object"
+          }
+        },
+        {
+          "name": "firecrawl_agent",
+          "description": "Autonomous research agent for web-based tasks",
+          "args": {
+            "task": "string",
+            "depth": "number"
+          }
+        }
+      ],
+      "performance": {
+        "usage_count": 0,
+        "last_used": null,
+        "avg_response_time_ms": 0,
+        "success_rate": 1.0,
+        "health": "healthy"
+      },
+      "core_tool": false
+    },
+    "playwright": {
+      "name": "playwright",
+      "description": "Browser automation and web scraping toolkit using Playwright",
+      "category": "web_tools",
+      "keywords": ["browser", "automation", "web", "scraping", "testing", "chromium", "firefox", "webkit"],
+      "server": "node",
+      "args": ["src/index.js"],
+      "tools": [
+        {
+          "name": "playwright_scrape",
+          "description": "Scrape a URL using Playwright and extract content",
+          "args": {
+            "url": "string",
+            "format": ["markdown", "html", "text", "pdf"],
+            "waitFor": "string"
+          }
+        },
+        {
+          "name": "playwright_screenshot",
+          "description": "Take a screenshot of a URL using Playwright",
+          "args": {
+            "url": "string",
+            "fullPage": "boolean",
+            "device": "string"
+          }
+        },
+        {
+          "name": "playwright_pdf",
+          "description": "Generate a PDF from a URL using Playwright",
+          "args": {
+            "url": "string",
+            "format": "string"
+          }
+        },
+        {
+          "name": "playwright_test",
+          "description": "Run Playwright tests on a URL or local file",
+          "args": {
+            "target": "string",
+            "test": "string"
+          }
+        }
+      ],
+      "performance": {
+        "usage_count": 0,
+        "last_used": null,
+        "avg_response_time_ms": 0,
+        "success_rate": 1.0,
+        "health": "healthy"
+      },
+      "core_tool": false
+    },
+    "db-universal": {
+      "name": "db-universal",
+      "description": "Universal database adapter supporting multiple database systems",
+      "category": "database_tools",
+      "keywords": ["database", "sql", "nosql", "query", "adapter", "universal"],
+      "server": "node",
+      "args": ["index.js"],
+      "tools": [
+        {
+          "name": "db_query",
+          "description": "Execute a query on a database",
+          "args": {
+            "connectionString": "string",
+            "query": "string",
+            "params": "array"
+          }
+        },
+        {
+          "name": "db_execute",
+          "description": "Execute a command on a database (insert, update, delete)",
+          "args": {
+            "connectionString": "string",
+            "command": "string",
+            "params": "array"
+          }
+        },
+        {
+          "name": "db_schema",
+          "description": "Retrieve the schema of a database or table",
+          "args": {
+            "connectionString": "string",
+            "table": "string"
+          }
+        }
+      ],
+      "performance": {
+        "usage_count": 0,
+        "last_used": null,
+        "avg_response_time_ms": 0,
+        "success_rate": 1.0,
+        "health": "healthy"
+      },
+      "core_tool": false
+    },
+    "mongodb": {
+      "name": "mongodb",
+      "description": "MongoDB operations (query, insert, update, delete)",
+      "category": "database_tools",
+      "keywords": ["mongodb", "nosql", "query", "insert", "update", "delete"],
+      "server": "node",
+      "args": ["index.js"],
+      "tools": [
+        {
+          "name": "mongodb_query",
+          "description": "Query documents from a MongoDB collection",
+          "args": {
+            "connectionString": "string",
+            "collection": "string",
+            "query": "object",
+            "options": "object"
+          }
+        },
+        {
+          "name": "mongodb_insert",
+          "description": "Insert documents into a MongoDB collection",
+          "args": {
+            "connectionString": "string",
+            "collection": "string",
+            "documents": "array"
+          }
+        },
+        {
+          "name": "mongodb_update",
+          "description": "Update documents in a MongoDB collection",
+          "args": {
+            "connectionString": "string",
+            "collection": "string",
+            "query": "object",
+            "update": "object"
+          }
+        },
+        {
+          "name": "mongodb_delete",
+          "description": "Delete documents from a MongoDB collection",
+          "args": {
+            "connectionString": "string",
+            "collection": "string",
+            "query": "object"
+          }
+        }
+      ],
+      "performance": {
+        "usage_count": 0,
+        "last_used": null,
+        "avg_response_time_ms": 0,
+        "success_rate": 1.0,
+        "health": "healthy"
+      },
+      "core_tool": false
+    },
+    "ruflo": {
+      "name": "ruflo",
+      "description": "Agent coordination and workflow management tool",
+      "category": "agent_tools",
+      "keywords": ["agent", "coordination", "workflow", "management", "ruflo"],
+      "server": "node",
+      "args": ["index.js"],
+      "tools": [
+        {
+          "name": "ruflo_start",
+          "description": "Start a new agent workflow",
+          "args": {
+            "workflow": "string",
+            "params": "object"
+          }
+        },
+        {
+          "name": "ruflo_status",
+          "description": "Check the status of an agent workflow",
+          "args": {
+            "workflowId": "string"
+          }
+        },
+        {
+          "name": "ruflo_stop",
+          "description": "Stop an agent workflow",
+          "args": {
+            "workflowId": "string"
+          }
+        }
+      ],
+      "performance": {
+        "usage_count": 0,
+        "last_used": null,
+        "avg_response_time_ms": 0,
+        "success_rate": 1.0,
+        "health": "healthy"
+      },
+      "core_tool": false
+    },
+    "dynamic-orchestrator": {
+      "name": "dynamic-orchestrator",
+      "description": "Dynamic tool orchestration and management system",
+      "category": "mcp_tools",
+      "keywords": ["dynamic", "orchestration", "tool", "management", "scaling"],
+      "server": "node",
+      "args": ["index.js"],
+      "tools": [
+        {
+          "name": "orchestrator_scale",
+          "description": "Scale the number of active tools based on demand",
+          "args": {
+            "minActiveTools": "number",
+            "maxActiveTools": "number"
+          }
+        },
+        {
+          "name": "orchestrator_health",
+          "description": "Check the health of active tools",
+          "args": {}
+        },
+        {
+          "name": "orchestrator_register",
+          "description": "Register a new tool with the orchestrator",
+          "args": {
+            "tool": "object"
+          }
+        },
+        {
+          "name": "orchestrator_deregister",
+          "description": "Deregister a tool from the orchestrator",
+          "args": {
+            "toolName": "string"
+          }
+        }
+      ],
+      "performance": {
+        "usage_count": 0,
+        "last_used": null,
+        "avg_response_time_ms": 0,
+        "success_rate": 1.0,
+        "health": "healthy"
+      },
+      "core_tool": false
+    },
+    "fastmcp": {
+      "name": "fastmcp",
+      "description": "Fast MCP protocol implementation for high-performance tool execution",
+      "category": "mcp_tools",
+      "keywords": ["fast", "mcp", "protocol", "high-performance", "execution"],
+      "server": "node",
+      "args": ["index.js"],
+      "tools": [
+        {
+          "name": "fastmcp_execute",
+          "description": "Execute a tool using the Fast MCP protocol",
+          "args": {
+            "toolName": "string",
+            "args": "object"
+          }
+        },
+        {
+          "name": "fastmcp_batch",
+          "description": "Batch execute multiple tools using the Fast MCP protocol",
+          "args": {
+            "tools": "array"
+          }
+        }
+      ],
+      "performance": {
+        "usage_count": 0,
+        "last_used": null,
+        "avg_response_time_ms": 0,
+        "success_rate": 1.0,
+        "health": "healthy"
+      },
+      "core_tool": false
+    },
+    "metoro": {
+      "name": "metoro",
+      "description": "Custom metrics and observability tool",
+      "category": "custom_tools",
+      "keywords": ["metrics", "observability", "monitoring", "custom"],
+      "server": "node",
+      "args": ["index.js"],
+      "tools": [
+        {
+          "name": "metoro_collect",
+          "description": "Collect metrics from a source",
+          "args": {
+            "source": "string",
+            "metric": "string"
+          }
+        },
+        {
+          "name": "metoro_query",
+          "description": "Query collected metrics",
+          "args": {
+            "query": "string",
+            "timeRange": "string"
+          }
+        }
+      ],
+      "performance": {
+        "usage_count": 0,
+        "last_used": null,
+        "avg_response_time_ms": 0,
+        "success_rate": 1.0,
+        "health": "healthy"
+      },
+      "core_tool": false
+    },
+    "kubernetes": {
+      "name": "kubernetes",
+      "description": "Kubernetes management and diagnostics tool",
+      "category": "devops_tools",
+      "keywords": ["kubernetes", "k8s", "devops", "management", "diagnostics"],
+      "server": "node",
+      "args": ["index.js"],
+      "tools": [
+        {
+          "name": "k8s_resource_get",
+          "description": "Get Kubernetes resources",
+          "args": {
+            "resourceType": "string",
+            "resourceName": "string",
+            "namespace": "string"
+          }
+        },
+        {
+          "name": "k8s_resource_list",
+          "description": "List Kubernetes resources",
+          "args": {
+            "resourceType": "string",
+            "namespace": "string"
+          }
+        },
+        {
+          "name": "k8s_pod_analyze",
+          "description": "Analyze a Kubernetes pod",
+          "args": {
+            "podName": "string",
+            "namespace": "string"
+          }
+        },
+        {
+          "name": "k8s_deployment_analyze",
+          "description": "Analyze a Kubernetes deployment",
+          "args": {
+            "deploymentName": "string",
+            "namespace": "string"
+          }
+        }
+      ],
+      "performance": {
+        "usage_count": 0,
+        "last_used": null,
+        "avg_response_time_ms": 0,
+        "success_rate": 1.0,
+        "health": "healthy"
+      },
+      "core_tool": false
+    }
+  }
+}

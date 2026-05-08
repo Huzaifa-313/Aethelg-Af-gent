@@ -1,0 +1,194 @@
+@import "src/app/styles/_colors.scss";
+
+.at-page {
+	&__field {
+		margin-top: 20px;
+	}
+
+	.header__title {
+		width: 0;
+		white-space: nowrap;
+	}
+
+	&__header-container {
+		width: 100%;
+		display: flex;
+		padding-left: calc(47.5862% - 260px);
+	}
+
+	&__train-panel {
+		display: flex;
+		align-items: center;
+		margin-left: 20px;
+	}
+
+	&__explanatory-mark {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		margin-left: 10px;
+
+		color: $orange;
+		font-size: 100%;
+
+		width: 24px;
+		height: 24px;
+
+		border: 2px solid $orange;
+		border-radius: 100%;
+	}
+
+	&__content {
+		display: flex;
+		justify-content: space-between;
+		align-items: flex-start;
+
+		transition-property: filter;
+		transition-duration: 0.1s;
+		transition-timing-function: linear;
+	}
+
+	&__column {
+		display: inline-flex;
+		flex-direction: column;
+
+		&_position {
+			&_left {
+				width: 47.5862%;
+			}
+
+			&_right {
+				width: 51.0344%;
+			}
+		}
+	}
+
+	&__card:not(:first-child) {
+		margin-top: 20px;
+	}
+
+	&__card_filter {
+		padding-bottom: 0 !important;
+	}
+
+	.configuration-tab {
+		height: 695px;
+
+		&__container {
+			display: flex;
+			flex-direction: column;
+
+			height: 100%;
+		}
+
+		&__buttons {
+			display: flex;
+			align-items: center;
+		}
+
+		&__section-filters {
+			z-index: 0;
+			height: 50px;
+			width: 124px;
+		}
+
+		&__filters {
+			margin-top: 20px;
+			width: 100%;
+		}
+	}
+	.statistics {
+		height: 255px;
+		width: 100%;
+	}
+	.defect-submission-card {
+		height: 420px;
+		width: 100%;
+	}
+	.frequently-used-terms {
+		height: 255px;
+		width: 100%;
+	}
+	.at-page__significant-terms {
+		height: 255px;
+		width: 100%;
+	}
+
+	&__collecting-data {
+	}
+
+	.collecting-data {
+		width: 100%;
+		height: 100%;
+
+		position: fixed;
+		top: 0;
+		left: 0;
+		z-index: 5;
+
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex-direction: column;
+
+		&__message {
+			font-size: 30px;
+			line-height: 37px;
+			text-align: center;
+			color: $darkBlue;
+			margin-bottom: 25px;
+		}
+
+		&__loader {
+			margin-top: 35px;
+			width: 670px;
+			height: 20px;
+			background-color: $lightGray;
+			border-radius: 20px;
+			overflow: hidden;
+		}
+
+		&__loader-inner {
+			height: inherit;
+			background-color: $blue;
+
+			transition-property: width;
+			transition-duration: 0.5s;
+			transition-timing-function: ease-in-out;
+		}
+	}
+}
+
+@media screen and (max-width: 1600px) {
+	.at-page {
+		.configuration-tab {
+			height: 600px !important;
+		}
+		.statistics,
+		.at-page__significant-terms {
+			height: 220px !important;
+		}
+		.defect-submission-card {
+			height: 365px !important;
+		}
+		.frequently-used-terms {
+			height: 215px !important;
+		}
+	}
+}
+
+@media screen and (max-width: 1280px) {
+	.at-page {
+		.configuration-tab {
+			height: 490px !important;
+		}
+		.statistics,
+		.at-page__significant-terms,
+		.frequently-used-terms {
+			height: 180px !important;
+		}
+		.defect-submission-card {
+			height: 290px !important;
+		}
+	}
+}

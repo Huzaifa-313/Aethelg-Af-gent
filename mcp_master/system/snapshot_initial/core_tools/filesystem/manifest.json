@@ -1,0 +1,8 @@
+{
+  "name": "filesystem",
+  "description": "File system operations (read, write, list, delete)",
+  "category": "file_tools",
+  "keywords": ["file", "read", "write", "list", "delete", "fs"],
+  "server": "node",
+  "args": ["index.js"]
+}

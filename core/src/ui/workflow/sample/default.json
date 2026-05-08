@@ -1,0 +1,219 @@
+{
+    "nodes": [
+        {
+            "id": 52,
+            "type": "prompt",
+            "title": "Prompt",
+            "x": 1600.0,
+            "y": 0.0,
+            "w": 400,
+            "h": 300.0,
+            "disabled": false,
+            "skipped": false,
+            "inputs": [],
+            "outputs": [
+                "Prompt"
+            ],
+            "values": {
+                "prompt": ""
+            }
+        },
+        {
+            "id": 51,
+            "type": "video_generate",
+            "title": "T\u1ea1o Video",
+            "x": 2100.0,
+            "y": 100.0,
+            "w": 400,
+            "h": 400.0,
+            "disabled": false,
+            "skipped": false,
+            "inputs": [
+                "Prompt",
+                "\u1ea2nh \u0111\u1ea7u",
+                "\u1ea2nh cu\u1ed1i (T\u00f9y ch\u1ecdn)"
+            ],
+            "outputs": [
+                "Video"
+            ],
+            "values": {
+                "mode": "T\u1ea1o video t\u1eeb \u1ea3nh",
+                "model": "Fast [0 Credit]",
+                "ratio": "16:9 Landscape",
+                "resolution": "720p",
+                "seed_mode": "Ng\u1eabu nhi\u00ean",
+                "seed": ""
+            }
+        },
+        {
+            "id": 50,
+            "type": "frame_extract",
+            "title": "T\u00e1ch Khung H\u00ecnh",
+            "x": 1600.0,
+            "y": 400.0,
+            "w": 400,
+            "h": 100.0,
+            "disabled": false,
+            "skipped": false,
+            "inputs": [
+                "Video"
+            ],
+            "outputs": [
+                "\u1ea2nh"
+            ],
+            "values": {}
+        },
+        {
+            "id": 48,
+            "type": "video_generate",
+            "title": "T\u1ea1o Video",
+            "x": 1100.0,
+            "y": 100.0,
+            "w": 400,
+            "h": 400.0,
+            "disabled": false,
+            "skipped": false,
+            "inputs": [
+                "Prompt",
+                "Start Image",
+                "End Image (Optional)"
+            ],
+            "outputs": [
+                "Video"
+            ],
+            "values": {
+                "mode": "T\u1ea1o video t\u1eeb \u1ea3nh",
+                "model": "Fast [0 Credit]",
+                "ratio": "16:9 Landscape",
+                "resolution": "720p",
+                "seed_mode": "Ng\u1eabu nhi\u00ean",
+                "seed": ""
+            }
+        },
+        {
+            "id": 44,
+            "type": "reference",
+            "title": "\u1ea2nh tham chi\u1ebfu",
+            "x": 100.0,
+            "y": 400.0,
+            "w": 400,
+            "h": 175.0,
+            "disabled": false,
+            "skipped": false,
+            "inputs": [],
+            "outputs": [
+                "\u1ea2nh"
+            ],
+            "values": {
+                "file_path": ""
+            },
+            "ref_mode": "pro"
+        },
+        {
+            "id": 43,
+            "type": "generate",
+            "title": "T\u1ea1o \u1ea3nh",
+            "x": 600.0,
+            "y": 300.0,
+            "w": 400,
+            "h": 400.0,
+            "disabled": false,
+            "skipped": false,
+            "inputs": [
+                "Prompt",
+                "\u1ea2nh 1"
+            ],
+            "outputs": [
+                "\u1ea2nh"
+            ],
+            "values": {
+                "model": "Nano Banana 2",
+                "ratio": "16:9 Ngang",
+                "seed_mode": "Ng\u1eabu nhi\u00ean",
+                "seed": "",
+                "res_group": "1K"
+            }
+        },
+        {
+            "id": 42,
+            "type": "prompt",
+            "title": "Prompt",
+            "x": 100.0,
+            "y": 0.0,
+            "w": 400.0,
+            "h": 300.0,
+            "disabled": false,
+            "skipped": false,
+            "inputs": [],
+            "outputs": [
+                "Prompt"
+            ],
+            "values": {
+                "prompt": ""
+            }
+        },
+        {
+            "id": 60,
+            "type": "prompt",
+            "title": "Prompt",
+            "x": 600.0,
+            "y": -100.0,
+            "w": 400,
+            "h": 300.0,
+            "disabled": false,
+            "skipped": false,
+            "inputs": [],
+            "outputs": [
+                "Prompt"
+            ],
+            "values": {
+                "prompt": ""
+            }
+        }
+    ],
+    "edges": [
+        {
+            "start_node": 0,
+            "start_socket": 0,
+            "end_node": 1,
+            "end_socket": 0
+        },
+        {
+            "start_node": 2,
+            "start_socket": 0,
+            "end_node": 1,
+            "end_socket": 1
+        },
+        {
+            "start_node": 3,
+            "start_socket": 0,
+            "end_node": 2,
+            "end_socket": 0
+        },
+        {
+            "start_node": 4,
+            "start_socket": 0,
+            "end_node": 5,
+            "end_socket": 1
+        },
+        {
+            "start_node": 5,
+            "start_socket": 0,
+            "end_node": 3,
+            "end_socket": 1
+        },
+        {
+            "start_node": 6,
+            "start_socket": 0,
+            "end_node": 5,
+            "end_socket": 0
+        },
+        {
+            "start_node": 7,
+            "start_socket": 0,
+            "end_node": 3,
+            "end_socket": 0
+        }
+    ],
+    "groups": []
+}

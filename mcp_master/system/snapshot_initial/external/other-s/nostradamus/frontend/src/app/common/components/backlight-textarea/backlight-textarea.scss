@@ -1,0 +1,99 @@
+@import "src/app/styles/colors";
+
+.backlight-textarea {
+	position: relative;
+
+	// similar styles
+	&__textarea,
+	&__text {
+		width: 100%;
+		height: 409px;
+		overflow-y: auto;
+		box-sizing: border-box;
+		border-radius: 4px;
+		padding: 10px 15px;
+
+		font-size: 16px;
+		line-height: 20px;
+		color: $darkGray;
+
+		word-break: break-all;
+	}
+
+	&__placeholder,
+	&__textarea:placeholder-shown {
+		color: $gray;
+	}
+
+	&__textarea {
+		resize: none;
+		border: 1px solid $deepDarkBlue;
+		opacity: 0;
+		position: absolute;
+		z-index: 10;
+		top: 0;
+
+		&:focus {
+			opacity: 1;
+		}
+	}
+
+	&__text {
+		position: absolute;
+		top: 0;
+		white-space: pre-wrap;
+		color: transparent;
+		border: 1px solid transparent;
+
+		&:first-of-type {
+			color: $darkGray;
+		}
+
+		span {
+			border-radius: 3px;
+			position: relative;
+		}
+
+		.color-yellow {
+			color: $darkGray;
+			background-color: #f2d16d;
+		}
+
+		.color-purple {
+			background-color: #d68ae6;
+			color: white;
+		}
+
+		.color-red {
+			background-color: #f56e6e;
+			color: white;
+		}
+	}
+
+	&__backdrop {
+		background-color: $veryLightGray;
+		width: 100%;
+		height: 409px;
+		border-radius: 4px;
+	}
+}
+
+@media screen and (max-width: 1600px) {
+	.backlight-textarea {
+		&__textarea,
+		&__text,
+		&__backdrop {
+			height: 337px !important;
+		}
+	}
+}
+
+@media screen and (max-width: 1280px) {
+	.backlight-textarea {
+		&__textarea,
+		&__text,
+		&__backdrop {
+			height: 253px !important;
+		}
+	}
+}

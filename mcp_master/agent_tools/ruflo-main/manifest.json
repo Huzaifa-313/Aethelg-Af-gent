@@ -1,0 +1,32 @@
+{
+  "name": "ruflo",
+  "description": "Agent coordination and workflow management tool",
+  "category": "agent_tools",
+  "keywords": ["agent", "coordination", "workflow", "management", "ruflo"],
+  "server": "node",
+  "args": ["index.js"],
+  "tools": [
+    {
+      "name": "ruflo_start",
+      "description": "Start a new agent workflow",
+      "args": {
+        "workflow": "string",
+        "params": "object"
+      }
+    },
+    {
+      "name": "ruflo_status",
+      "description": "Check the status of an agent workflow",
+      "args": {
+        "workflowId": "string"
+      }
+    },
+    {
+      "name": "ruflo_stop",
+      "description": "Stop an agent workflow",
+      "args": {
+        "workflowId": "string"
+      }
+    }
+  ]
+}

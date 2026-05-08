@@ -1,0 +1,63 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+eggs/
+.Eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+.egg
+
+# Virtual environments
+venv/
+env/
+ENV/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+
+# Environment variables
+.env
+
+# Sensitive configuration files
+nvidia_config.json
+proxy_key.key
+keys.json
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Exclude large external projects
+mcp_master/external/claude-code/
+mcp_master/external/claude-code-info/
+mcp_master/external/claude-code-leaked/
+mcp_master/external/claude-code0/
+mcp_master/external/claude-code1/
+mcp_master/external/claude-code2/
+mcp_master/external/claude-code4/
+mcp_master/external/claude-code5/
+mcp_master/external/collection-claude-code-source-code/
+mcp_master/external/LMCache/
+mcp_master/external/other-s/
+mcp_master/external/pc-pilot-pro/
+mcp_master/external/pearai-app/
+mcp_master/external/PikoClaw/
+mcp_master/external/rotorquant/

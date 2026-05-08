@@ -1,0 +1,615 @@
+/******************************************************************************
+ * Copyright 2009-2018 Exactpro (Exactpro Systems Limited)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ******************************************************************************/
+package com.exactpro.sf.testwebgui.environment;
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Objects;
+
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.collections.MapUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.primefaces.model.DefaultTreeNode;
+import org.primefaces.model.LazyDataModel;
+import org.primefaces.model.SortOrder;
+import org.primefaces.model.TreeNode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.exactpro.sf.common.services.ServiceName;
+import com.exactpro.sf.scriptrunner.IConnectionManager;
+import com.exactpro.sf.scriptrunner.IServiceNotifyListener;
+import com.exactpro.sf.services.IService;
+import com.exactpro.sf.services.ServiceDescription;
+import com.exactpro.sf.services.ServiceStatus;
+import com.exactpro.sf.testwebgui.BeanUtil;
+import com.exactpro.sf.testwebgui.GuiSettingsProxy;
+import com.exactpro.sf.testwebgui.environment.EnvironmentNode.Type;
+
+public class ServiceNodeLazyModel<T extends EnvironmentNode> extends LazyDataModel<EnvironmentNode> {
+
+	private static final long serialVersionUID = -3562603547119046212L;
+
+	private static final Logger logger = LoggerFactory.getLogger(ServiceNodeLazyModel.class);
+	private static final Logger auditLogger = LoggerFactory.getLogger("audit");
+
+    private String currentEnvironment;
+    private final IServiceNotifyListener notifyListener;
+    private final List<EnvironmentNode> data;
+    private final List<String> serviceNamesToEdit = new ArrayList<>();
+    private ServiceEventLazyModel<ServiceEventModel> lazyEventsModel;
+
+    private EnvironmentNode severalEdit;
+
+    private TreeNode paramRoot;
+
+    private boolean showDisabled = true;
+
+    public ServiceNodeLazyModel(String currentEnvironment, IServiceNotifyListener notifyListener) {
+		this.currentEnvironment = currentEnvironment;
+        this.notifyListener = notifyListener;
+        data = new ArrayList<EnvironmentNode>();
+	}
+
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+
+    	in.defaultReadObject();
+
+    }
+
+	@Override
+    public EnvironmentNode getRowData(String rowKey) {
+		logger.info("getRowData {} invoked {}",rowKey,  BeanUtil.getUser());
+        return getEnvironmentNode(rowKey);
+    }
+
+    @Override
+    public Object getRowKey(EnvironmentNode node) {
+        return node.getName();
+    }
+
+
+	@Override
+    public void setRowIndex(int rowIndex) {
+        super.setRowIndex(rowIndex == -1 || getPageSize() == 0 ? -1 : rowIndex % getPageSize());
+    }
+
+	@Override
+	public List<EnvironmentNode> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String,Object> filters) {
+
+		logger.debug("load data");
+        data.clear();
+
+        /*if(conManager == null) {
+            return new ArrayList<EnvironmentNode>();
+        }*/
+
+        ServiceName[] serviceNames = BeanUtil.getSfContext().getConnectionManager().getServiceNames();
+        for (ServiceName serviceName: serviceNames) {
+
+            if (serviceName.getEnvironment() != null) {
+                if (!currentEnvironment.equals(serviceName.getEnvironment())) {
+                    continue;
+                }
+            } else {
+                if (!currentEnvironment.equals(ServiceName.DEFAULT_ENVIRONMENT)) {
+                    continue;
+                }
+            }
+
+            if(!isFiltered(serviceName, filters)) {
+                EnvironmentNode envNode = createServiceNode(serviceName);
+                if(!isHidden(envNode)) {
+                    data.add(envNode);
+                }
+            }
+        }
+
+        if(sortField == null) {
+            sortField = "name";
+            sortOrder = SortOrder.ASCENDING;
+        }
+        Collections.sort(data, new LazySorter(sortField, sortOrder));
+
+        int dataSize = data.size();
+        setRowCount(dataSize);
+
+        updateParamRoot();
+        if(dataSize > pageSize && pageSize != 0) {
+            if(data.size() > (first + pageSize)){
+                return data.subList(first, first + pageSize);
+            } else{
+                return data.subList(first, first + (dataSize % pageSize));
+            }
+        } else {
+            return data;
+        }
+
+	}
+
+    public void setCurrentEnvironment(String currentEnvironment) {
+        this.currentEnvironment = currentEnvironment;
+    }
+
+    public void selectServiceToEdit(String name) {
+    	auditLogger.info("selectServiceToEdit {} invoked {}", name, BeanUtil.getUser());
+        serviceNamesToEdit.clear();
+        serviceNamesToEdit.add(name);
+
+        if (name == null || name.isEmpty()) {
+            logger.error("Service name to edit is not defined");
+        }
+        load(0, 1000, null,SortOrder.ASCENDING, Collections.<String, Object>emptyMap());
+    }
+
+    public void waitServiceToEdit(String name) {
+    	logger.info("waitServiceToEdit {} invoked {}", name, BeanUtil.getUser());
+        serviceNamesToEdit.clear();
+        serviceNamesToEdit.add(name);
+
+        if (name == null || name.isEmpty()) {
+            logger.error("Service name to edit is not defined");
+        }
+    }
+
+    public void selectedServicesToEdit(EnvironmentNode[] selectedServices) {
+
+        serviceNamesToEdit.clear();
+
+    	for (EnvironmentNode service : selectedServices) {
+    		auditLogger.info("selectServiceToEdit {} invoked {}", service.getName(), BeanUtil.getUser());
+            serviceNamesToEdit.add(service.getName());
+    	}
+        load(0, 1000, null,SortOrder.ASCENDING, Collections.<String, Object>emptyMap());
+    }
+
+    private void updateParamRoot() {
+
+    	logger.info("updateParamRoot invoked {}", BeanUtil.getUser());
+
+    	TreeNode root = new DefaultTreeNode("root", null);
+
+        if(serviceNamesToEdit.isEmpty()) {
+    		this.paramRoot = root;
+    		return;
+    	}
+
+        EnvironmentNode node;
+
+        if(serviceNamesToEdit.size() > 1) {
+
+            if(severalEdit == null) {
+
+                this.severalEdit = new EnvironmentNode(Type.SERVICE, new ServiceDescription(), "Services", null, Collections.emptyList(), false, null, null, null, null, null,
+                        new ArrayList<>(), null, null);
+
+                for(String name : serviceNamesToEdit) {
+
+		        	EnvironmentNode current = getEnvironmentNode(name);
+
+		        	if (current == null) {
+		        		continue;
+		        	}
+
+                    if(severalEdit.getNodeChildren().isEmpty()) {
+
+		        		for (EnvironmentNode toClone : current.getNodeChildren()) {
+                            severalEdit.getNodeChildren().add(
+		        					new EnvironmentNode(toClone.getType(), new ServiceDescription(), toClone.getName(),
+                                            toClone.getDescription(), toClone.getEnumeratedValues(), toClone.isServiceParamRequired(), toClone.getInputMask(),
+                                            toClone.getValue(), toClone.getVariable(), toClone.getVariableSet(), toClone.getParamClassType(), null, null, toClone.getEnvironment()));
+		        		}
+
+		        	} else {
+
+                        Iterator<EnvironmentNode> iter = severalEdit.getNodeChildren().iterator();
+
+		        		while (iter.hasNext()) {
+
+		        			EnvironmentNode paramInSeveral = iter.next();
+
+		        			EnvironmentNode found = null;
+
+		        			for (EnvironmentNode param : current.getNodeChildren()) {
+
+		        				if (paramInSeveral.getName().equals(param.getName())) {
+		            				found = param;
+		            				break;
+		            			}
+		    	        	}
+
+		        			if (found == null) {
+		        				iter.remove();
+		        			} else {
+                                if(!Objects.equals(found.getValue(), paramInSeveral.getValue())) {
+		        					paramInSeveral.setValue(null);
+		        					paramInSeveral.setDifferentValues(true);
+		        				}
+		        				
+                                if(!Objects.equals(found.getVariable(), paramInSeveral.getVariable())) {
+                                    paramInSeveral.setVariable(null);
+                                    paramInSeveral.setDifferentVariables(true);
+                                }
+		        			}
+		        		}
+		        	}
+		        }
+        	}
+
+            node = severalEdit;
+
+        } else {
+            node = getEnvironmentNode(serviceNamesToEdit.get(0));
+        }
+
+        if (node != null) {
+            EnvironmentNode required = EnvironmentNode.createDefaultNode("Required", "Required parameters for starting service");
+            TreeNode requiredNode = new DefaultTreeNode("RequiredContainer", required, root);
+            requiredNode.setExpanded(true);
+
+            EnvironmentNode optional = EnvironmentNode.createDefaultNode("Optional", "Optional parameters for starting service");
+            TreeNode optionalNode = new DefaultTreeNode("OptionalContainer", optional, root);
+            optionalNode.setExpanded(true);
+
+            for (EnvironmentNode param : node.getNodeChildren()) {
+                TreeNode subParent = param.isServiceParamRequired() ? requiredNode : optionalNode;
+                new DefaultTreeNode(param, subParent);
+            }
+
+            if (requiredNode.getChildCount() == 0) {
+            	root.getChildren().remove(requiredNode);
+            }
+            if (optionalNode.getChildCount() == 0) {
+            	root.getChildren().remove(requiredNode);
+            }
+            if (root.getChildCount() == 0) {
+            	new DefaultTreeNode("OptionalContainer", "No common parameters found for selected services", root);
+            }
+        }
+
+        this.paramRoot = root;
+    }
+
+    public TreeNode getParamRoot() {
+        return paramRoot;
+    }
+
+    public ServiceEventLazyModel<ServiceEventModel> getLazyEventsModel() {
+        return lazyEventsModel;
+    }
+
+    public void setLazyEventsModel(ServiceEventLazyModel<ServiceEventModel> lazyEventsModel) {
+        this.lazyEventsModel = lazyEventsModel;
+    }
+
+    private boolean isHidden(EnvironmentNode envNode) {
+        return envNode.getServiceStatus() == ServiceStatus.DISABLED && !showDisabled;
+    }
+
+    class LazySorter implements Comparator<EnvironmentNode>
+    {
+        private final String sortField;
+
+        private final SortOrder sortOrder;
+
+        public LazySorter(String sortField, SortOrder sortOrder) {
+            this.sortField = sortField;
+            this.sortOrder = sortOrder;
+        }
+
+        @Override
+        public int compare(EnvironmentNode node1, EnvironmentNode node2) {
+            try {
+
+                int result = 0;
+                if("name".equals(sortField))
+                {
+                    result = node1.getName().compareToIgnoreCase(node2.getName());
+                } else if("serviceType".equals(sortField))
+                {
+                    result = node1.getServiceType().compareTo(node2.getServiceType());
+                } else if("status".equals(sortField))
+                {
+                    result = node1.getStatus().compareToIgnoreCase(node2.getStatus());
+                }
+                else
+                {
+                    logger.warn("Unknown column name: {}", sortField);
+                }
+
+                return sortOrder == SortOrder.ASCENDING ? result : -1 * result;
+            }
+            catch(Exception e) {
+                throw new RuntimeException();
+            }
+        }
+    }
+
+
+
+    public int getServicesCount(ServiceStatus status) {
+        if(status == null){
+            return data.size();
+        }
+        int count = 0;
+
+        for(EnvironmentNode service : data) {
+            if(service.getServiceStatus() == status) {
+                count ++;
+            }
+        }
+
+        return count;
+    }
+
+    public String getHeaderForEditDialog() {
+
+        if(serviceNamesToEdit.isEmpty()) {
+    		return "";
+    	}
+
+    	StringBuilder builder = new StringBuilder();
+
+    	logger.info("getHeaderForEditDialog invoked {}", BeanUtil.getUser());
+
+        if(serviceNamesToEdit.size() == 1) {
+
+            EnvironmentNode node = getEnvironmentNode(serviceNamesToEdit.get(0));
+
+        	if (node != null) {
+
+    	    	builder.append(node.getName())
+    	    		   .append(" (")
+    	    		   .append(node.getServiceType())
+    	    		   .append(")");
+        	}
+
+    	} else {
+
+    		int i = 0;
+            for(String name : serviceNamesToEdit) {
+
+    			builder.append(name);
+
+                if(++i < serviceNamesToEdit.size()) {
+    				builder.append(", ");
+    			}
+    		}
+    	}
+
+    	return builder.toString();
+    }
+
+    public void selectServiceForEvents(String name) {
+    	logger.info("selectServiceForEvents {} invoked {}", name, BeanUtil.getUser());
+        EnvironmentNode node = getEnvironmentNode(name);
+        if (node != null) {
+            lazyEventsModel = new ServiceEventLazyModel<>(new ServiceName(node.getEnvironment(), node.getName()));
+        }
+    }
+
+    protected boolean isFiltered(ServiceName serviceName, Map<String,Object> filters){
+        if(MapUtils.isEmpty(filters)) {
+            return false;
+        }
+        ServiceDescription description = BeanUtil.getSfContext().getConnectionManager().getServiceDescription(serviceName);
+        for(Entry<String, Object> filterProperty : filters.entrySet()) {
+            Object filterValue = filterProperty.getValue();
+            String fieldValue;
+
+            if("name".equals(filterProperty.getKey())) {
+                fieldValue = serviceName.getServiceName();
+            } else if("serviceType".equals(filterProperty.getKey())) {
+                fieldValue = description.getType().toString();
+            } else if("status".equals(filterProperty.getKey())) {
+                IService iService = BeanUtil.getSfContext().getConnectionManager().getService(serviceName);
+                fieldValue = iService.getStatus().name();
+            } else {
+                logger.error("Unknown filter property: {}", filterProperty.getKey());
+                return false;
+            }
+
+            if(StringUtils.containsIgnoreCase(fieldValue, filterValue.toString())){
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public void applyServiceSettings() {
+
+        for(String name : serviceNamesToEdit) {
+
+    		auditLogger.info("applyServiceSettings {} invoked {}", name, BeanUtil.getUser());
+
+	        EnvironmentNode serviceNode = getEnvironmentNode(name);
+
+            if(serviceNamesToEdit.size() > 1) {
+
+                if(severalEdit == null) {
+	        		return;
+	        	}
+
+                for(EnvironmentNode paramInSeveral : severalEdit.getNodeChildren()) {
+
+	        		for (EnvironmentNode param : serviceNode.getNodeChildren()) {
+
+	        			if (paramInSeveral.getName().equals(param.getName())) {
+
+	        				if (!paramInSeveral.isDifferentValues() ||
+	        						(paramInSeveral.isDifferentValues() && paramInSeveral.getValue() != null)) {
+
+	        					param.setValue(paramInSeveral.getValue());
+	        				}
+
+                            if(!paramInSeveral.isDifferentVariables() ||
+                                    (paramInSeveral.isDifferentVariables() && StringUtils.isNotBlank(paramInSeveral.getVariable()))) {
+                                param.setVariable(paramInSeveral.getVariable());
+                            }
+
+	        				break;
+	        			}
+	        		}
+	        	}
+	        }
+
+	        if(serviceNode == null) {
+	            BeanUtil.addErrorMessage("Error", "Can not find service with name: " + name + " to apply its setting");
+	            return;
+	        }
+
+	        ServiceName serviceName = new ServiceName(currentEnvironment, name);
+	        ServiceDescription serviceDescription = BeanUtil.getSfContext().getConnectionManager().getServiceDescription(serviceName);
+
+	        boolean error = false;
+
+	        EnvironmentNode serviceParam = null;
+	        try {
+	            Iterator<EnvironmentNode> iterator = serviceNode.getNodeChildren().iterator();
+	            while(iterator.hasNext()) {
+	                serviceParam = iterator.next();
+                    logger.info("update param {}: {} (variable: {})", serviceParam.getName(), serviceParam.getValue(), serviceParam.getVariable());
+	                serviceParam.updateParentProperty(serviceDescription);
+	            }
+
+	            try {
+                    serviceNode.saveParamToDataBase(BeanUtil.getSfContext().getConnectionManager(), serviceDescription);
+	            } catch (Exception e) {
+	                error = true;
+	                BeanUtil.addErrorMessage("Can not set parameters in database", "Problem with setting to " + serviceNode.getName());
+	            }
+
+	        } catch (Exception e) {
+                logger.error(e.getMessage(), e);
+	            error = true;
+	            BeanUtil.addErrorMessage("Can not set parameter", "Problem with setting to " + serviceParam.getName() + " value " + serviceParam.getValue());
+	        }
+
+	        if (error) {
+	            ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
+	            HttpServletResponse response = (HttpServletResponse) context.getResponse();
+	            response.setStatus(500);
+	        }
+    	}
+
+    	this.severalEdit = null;
+    }
+
+    public void restoreServiceSettings() {
+
+        for(String name : serviceNamesToEdit) {
+
+    		auditLogger.info("restoreServiceSettings {} invoked {}", name, BeanUtil.getUser());
+
+	        EnvironmentNode serviceNode = getEnvironmentNode(name);
+
+	        if(serviceNode == null) {
+	            BeanUtil.addErrorMessage("Error", "Can not find service with name: " + name + " to restore its settings");
+	            return;
+	        }
+
+            int index = data.indexOf(serviceNode);
+
+	        ServiceName serviceName = new ServiceName(currentEnvironment, name);
+
+	        EnvironmentNode envNode = createServiceNode(serviceName);
+            data.set(index, envNode);
+    	}
+
+    	this.severalEdit = null;
+    }
+
+    private EnvironmentNode createServiceNode(ServiceName serviceName) {
+
+        IConnectionManager connectionManager = BeanUtil.getSfContext().getConnectionManager();
+        ServiceDescription sd = connectionManager.getServiceDescription(serviceName);
+        Map<String, String> variables = sd.getVariables();
+        GuiSettingsProxy proxy = new GuiSettingsProxy(sd.getSettings());
+        List<EnvironmentNode> params = new ArrayList<>();
+        String environmentVariableSet = connectionManager.getEnvironmentVariableSet(serviceName.getEnvironment());
+        Map<String, String> variableSet = environmentVariableSet != null ? connectionManager.getVariableSet(environmentVariableSet) : null;
+
+        EnvironmentNode handlerClassParamNode = new EnvironmentNode(Type.DESCRIPTION, sd,
+                "HandlerClassName", "", Collections.emptyList(), false, null, sd.getServiceHandlerClassName(), null, null, String.class, null,
+                notifyListener, null);
+
+        params.add(handlerClassParamNode);
+
+        for (String name : proxy.getParameterNames()) {
+
+            if (proxy.isShowElement(name) && proxy.haveWriteMethod(name)) {
+
+                EnvironmentNode paramNode = new EnvironmentNode(
+                        Type.PARAMETER,
+                        sd,
+                        name,
+                        proxy.getParameterDescription(name),
+                        proxy.getEnumeratedValues(name),
+                        proxy.checkRequiredParameter(name),
+                        proxy.getParameterMask(name),
+                        proxy.getParameterValue(name),
+                        variables.get(name), 
+                        variableSet,
+                        proxy.getParameterType(name),
+                        null, 
+                        notifyListener, 
+                        serviceName.getEnvironment());
+
+                params.add(paramNode);
+            }
+        }
+
+        Collections.sort(params, Collections.reverseOrder());
+
+        EnvironmentNode envNode = new EnvironmentNode(
+                Type.SERVICE, sd, sd.getName(), "", Collections.emptyList(), false, null, null, null, null, null, params,
+                notifyListener, serviceName.getEnvironment());
+
+        envNode.setStatus(connectionManager.getService(serviceName).getStatus());
+        return envNode;
+    }
+
+    private EnvironmentNode getEnvironmentNode(String serviceName) {
+        if (serviceName != null) {
+            for(EnvironmentNode node : data) {
+                if (node.getName().equals(serviceName)) {
+                    return node;
+                }
+            }
+            logger.warn("Service {} not found in the environment {}", serviceName, currentEnvironment);
+        }
+        return null;
+    }
+
+    public void setShowDisabled(boolean showDisabled) {
+        this.showDisabled = showDisabled;
+    }
+
+    public boolean isShowDisabled() {
+        return showDisabled;
+    }
+}

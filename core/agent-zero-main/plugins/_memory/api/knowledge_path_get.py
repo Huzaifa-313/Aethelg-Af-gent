@@ -1,0 +1,30 @@
+# AETHELGARD MERGED FILE
+# Origin Repository: other s
+# Original Path: agent-zero-main\plugins\_memory\api\knowledge_path_get.py
+# Merge Date: 2026-05-07T19:27:40.400394
+# ---
+
+from helpers.api import ApiHandler, Request, Response
+from helpers import files, projects
+from plugins._memory.helpers.memory import get_custom_knowledge_subdir_abs
+
+
+class GetKnowledgePath(ApiHandler):
+    async def process(self, input: dict, request: Request) -> dict | Response:
+        ctxid = input.get("ctxid", "")
+        if not ctxid:
+            raise Exception("No context id provided")
+        context = self.use_context(ctxid)
+
+        project_name = projects.get_context_project_name(context)
+        if project_name:
+            knowledge_folder = projects.get_project_meta(project_name, "knowledge")
+        else:
+            knowledge_folder = get_custom_knowledge_subdir_abs(context.agent0)
+
+        knowledge_folder = files.normalize_a0_path(knowledge_folder)
+
+        return {
+            "ok": True,
+            "path": knowledge_folder,
+        }

@@ -1,0 +1,8 @@
+{
+  "name": "sequentialthinking",
+  "description": "Sequential thinking and task breakdown for agents",
+  "category": "agent_tools",
+  "keywords": ["sequential", "thinking", "task", "breakdown", "agent"],
+  "server": "node",
+  "args": ["index.js"]
+}
