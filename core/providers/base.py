@@ -10,8 +10,8 @@ import logging
 import time
 from typing import List, Dict, Any, Optional
 
-from core.memory import memory  # Assuming a memory module exists for logging failures
-from core.providers.proxy_manager import ProxyManager
+import core.memory as memory  # Fixed import for memory package
+# ProxyManager will be imported lazily to avoid circular imports
 
 logger = logging.getLogger(__name__)
 
@@ -34,6 +34,7 @@ class BaseProvider(abc.ABC):
         self.api_key = config.get("api_key")
         self.endpoint = config.get("endpoint")
         self.requires_proxy = config.get("requires_proxy", False)
+        from core.providers.proxy_manager import ProxyManager
         self.proxy_manager = ProxyManager()
         self.session = None  # placeholder for HTTP client/session
         self._init_session()

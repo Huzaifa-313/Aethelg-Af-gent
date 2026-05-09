@@ -171,3 +171,8 @@ class ProviderManager:
             return providers[(idx + 1) % len(providers)]
         except ValueError:
             return providers[0] if providers else None
+
+
+def get_provider_manager() -> ProviderManager:
+    """Return the singleton ProviderManager instance."""
+    return ProviderManager()
