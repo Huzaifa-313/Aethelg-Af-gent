@@ -1,6 +1,0 @@
-# AETHELGARD MERGED FILE
-# Origin Repository: other s
-# Original Path: agent-zero-main\plugins\_a0_connector\api\v1\__init__.py
-# Merge Date: 2026-05-07T19:27:23.714867
-# ---
-

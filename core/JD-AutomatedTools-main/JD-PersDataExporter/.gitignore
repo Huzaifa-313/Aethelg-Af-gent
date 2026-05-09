@@ -1,9 +1,0 @@
-# project
-*[0-9].*
-*.xlsx
-*cookies*.*
-mysql_user.ini
-test/
-output/
-account_cookies/
-
